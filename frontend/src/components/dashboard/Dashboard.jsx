@@ -3,14 +3,24 @@ import { apiFetch } from '../../lib/api.js';
 import { Icon } from './icons.jsx';
 import './dashboard.css';
 import Logo from '../Logo.jsx';
+import PracticePage from './PracticePage.jsx';
 
-/* Signed-in dashboard shell: chrome only — wordmark, theme toggle, account
-   menu. No nav items, no feature surfaces, no placeholder text: every route
-   under /app renders the same empty Home until a rebuilt surface ships (new
-   surfaces get added back through the nav as they land). The 401 gate and
-   the verified sign-out stay, since they are real behavior, not content. */
+/* Signed-in dashboard shell: chrome plus the routes that have shipped —
+   Home (rebuilding) and Practice. Each rebuilt surface lands in NAV_ITEMS
+   as it ships; anything else resolves back to Home — no placeholder text,
+   no dead links. The 401 gate and the verified sign-out stay. */
 
 const THEME_KEY = 'quadly:theme';
+
+const NAV_ITEMS = [
+  { id: 'app', label: 'Home' },
+  { id: 'practice', label: 'Practice' },
+];
+
+function routeFromLocation() {
+  const seg = window.location.pathname.replace(/\/+$/, '').replace(/^\/app\/?/, '');
+  return NAV_ITEMS.some((n) => n.id === seg) ? seg : 'app';
+}
 
 function authHeaders() {
   let token = null;
@@ -44,6 +54,7 @@ export default function Dashboard() {
   const [payload, setPayload] = useState(null);
   const [theme, setTheme] = useState(() => lsGet(THEME_KEY, 'dark'));
   const [menuOpen, setMenuOpen] = useState(false);
+  const [route, setRoute] = useState(routeFromLocation);
 
   /* The dashboard request doubles as the auth gate: a 401 means the session
      is gone and the join flow takes over. No cached fallback render — a
@@ -77,8 +88,24 @@ export default function Dashboard() {
   }, [theme]);
 
   useEffect(() => {
-    document.title = 'Quadly';
+    document.title = route === 'app' ? 'Quadly — Home' : `Quadly — ${NAV_ITEMS.find((n) => n.id === route)?.label ?? 'Quadly'}`;
+  }, [route]);
+
+  useEffect(() => {
+    const sync = () => setRoute(routeFromLocation());
+    window.addEventListener('popstate', sync);
+    return () => window.removeEventListener('popstate', sync);
   }, []);
+
+  const navigate = (id) => {
+    const path = id === 'app' ? '/app' : `/app/${id}`;
+    if (window.location.pathname.replace(/\/+$/, '') !== path) {
+      window.history.pushState({}, '', path);
+    }
+    setRoute(id);
+    setMenuOpen(false);
+    window.scrollTo(0, 0);
+  };
 
   useEffect(() => {
     if (!menuOpen) return undefined;
@@ -154,6 +181,20 @@ export default function Dashboard() {
         <div className="qd-top__in">
           <a className="qd-wordmark qd-top__mark" href="/" aria-label="Quadly home site"><Logo /></a>
 
+          <nav className="qd-top__nav" aria-label="Primary">
+            {NAV_ITEMS.map((n) => (
+              <button
+                key={n.id}
+                type="button"
+                className={`qd-top__item${route === n.id ? ' is-on' : ''}`}
+                aria-current={route === n.id ? 'page' : undefined}
+                onClick={() => navigate(n.id)}
+              >
+                {n.label}
+              </button>
+            ))}
+          </nav>
+
           <span className="qd-top__spacer" />
 
           <button
@@ -198,8 +239,10 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Home is intentionally blank — content returns with the rebuilt surfaces. */}
-      <main className="qd-home" aria-label="Home" />
+      {/* Home waits on the rebuilt feed; Practice is live. */}
+      {route === 'practice'
+        ? <main className="qd-home"><PracticePage /></main>
+        : <main className="qd-home" aria-label="Home" />}
     </div>
   );
 }

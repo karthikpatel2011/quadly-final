@@ -22,3 +22,6 @@ backend/data/avatars/
 
 # 1.5 GB research evidence store (source videos) — too heavy for GitHub
 design-intelligence/media/
+
+# Daily Practice per-student engine state (answers, sets, misses)
+backend/data/daily-practice-state.json

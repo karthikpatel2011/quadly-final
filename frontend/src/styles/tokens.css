@@ -48,6 +48,7 @@
   /* Typography */
   --font-display: 'Poppins', 'Inter', system-ui, sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
+  --qd-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
 
   /* Radius */
   --radius-panel: 28px;
