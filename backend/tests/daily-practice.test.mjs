@@ -41,15 +41,19 @@ before(async () => {
   A = a.json.token;
   const ob = await api('/onboarding', { method: 'POST', token: A, body: {
     email: A_EMAIL, name: 'DP Tester', college: 'Test Univ', track: 'Software Engineering',
-    year: '3rd year', dailyTime: '30 minutes a day', selfRating: 'Know the basics',
+    year: '3rd year', dailyTime: '15 minutes a day', selfRating: 'Know the basics',
   }});
   assert.equal(ob.status, 201);
 });
 
-test('the set is deterministic, full-size, and carries no answer material', async () => {
+test('the set is deterministic, fills the practice time, and leaks nothing', async () => {
   const d1 = await api('/practice/daily', { token: A });
   assert.equal(d1.status, 200);
-  assert.equal(d1.json.total, 4, 'three new activities plus the review slot');
+  assert.ok(d1.json.total >= 4, 'at least three activities plus the review slot');
+  assert.ok(d1.json.total <= 14, 'the daily set never balloons');
+  assert.equal(d1.json.targetMinutes, 15, 'A committed to 15 minutes a day');
+  assert.ok(d1.json.servedMinutes >= 12, 'the set actually fills the committed time');
+  assert.ok(d1.json.servedMinutes <= d1.json.targetMinutes + 6, 'with one soft overflow at most');
   const ids = JSON.stringify(d1.json.items.map((i) => i.id));
   const d2 = await api('/practice/daily', { token: A });
   assert.equal(JSON.stringify(d2.json.items.map((i) => i.id)), ids, 'the set survives re-fetch');
@@ -57,6 +61,22 @@ test('the set is deterministic, full-size, and carries no answer material', asyn
   assert.ok(!blob.includes('"answerIndex"'), 'no answer keys reach the client');
   assert.ok(!blob.includes('"hints"'), 'hints never ship in the GET');
   assert.ok(!blob.includes('"expected"'), 'expected query results never ship in the GET');
+});
+
+test('a bigger practice commitment gets a bigger set', async () => {
+  const B_EMAIL = `dpb${stamp}@t.dev`;
+  const b = await api('/auth/register', { method: 'POST', body: { email: B_EMAIL, password: 'secret1', confirm: 'secret1' } });
+  const B = b.json.token;
+  const ob = await api('/onboarding', { method: 'POST', token: B, body: {
+    email: B_EMAIL, name: 'B Tester', college: 'Test Univ', track: 'Software Engineering',
+    year: '2nd year', dailyTime: '1 hour a day', selfRating: 'Know the basics',
+  }});
+  assert.equal(ob.status, 201);
+  const d = await api('/practice/daily', { token: B });
+  assert.equal(d.status, 200);
+  assert.equal(d.json.targetMinutes, 60);
+  assert.ok(d.json.servedMinutes >= 30, 'the hour-commitment set is meaningfully longer');
+  assert.ok(d.json.total > 4, 'more activities than the 15-minute baseline');
 });
 
 test('hints climb one level at a time and cap at three', async () => {
@@ -112,9 +132,9 @@ test('spaced return: a concept missed yesterday lands in the review slot', async
   const set = buildSet('spaced@test.dev', { track: 'Software Engineering' }, bank, student, 1);
   assert.ok(set.review, 'a review item is scheduled');
   assert.equal(set.review.concept, 'sql-select-where', 'the 1-day-due concept wins');
-  assert.equal(set.newActivities.length, 3);
+  assert.ok(set.newActivities.length >= 3, 'the remaining slots fill to the practice time');
   const ids = set.newActivities.map((a) => a.id).concat(set.review.id);
-  assert.equal(new Set(ids).size, 4, 'no duplicate activities in one set');
+  assert.equal(new Set(ids).size, ids.length, 'no duplicate activities in one set');
 });
 
 test('adaptive level: two good days rise, two weak days fall, mixed holds', async () => {

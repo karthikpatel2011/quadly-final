@@ -230,31 +230,51 @@ export default function PracticePage() {
       <header className="qd-p__head">
         <div>
           <p className="qd-kicker">Daily practice</p>
-          <h2 className="qd-h2">Four short activities. First try counts.</h2>
-          <p className="qd-muted">Three new, one review — about fifteen minutes, and the honest score that follows you.</p>
+          <h2 className="qd-h2">
+            {items.length} activities. First try counts.
+          </h2>
+          <p className="qd-muted">
+            {data.targetMinutes > data.servedMinutes
+              ? `Planned for your ${data.targetMinutes} minutes — today’s opening set covers ${data.servedMinutes}. The bank grows daily, and so will the sets.`
+              : 'Sized to the practice time you committed to — fresh material, your weak spots, and a review of what bit you.'}
+          </p>
         </div>
         <div className="qd-pills">
           <span className="qd-pill">Level {data.level}/3</span>
-          <span className="qd-pill">~15 min</span>
+          <span className="qd-pill">{data.servedMinutes}/{data.targetMinutes} min</span>
         </div>
       </header>
 
-      <nav className="qd-dots" aria-label="Set progress">
-        {items.map((it, i) => (
-          <button
-            key={it.id}
-            type="button"
-            className={`qd-dot${i === index ? ' is-active' : ''}${(it.answered || results[it.id]) ? ' is-done' : ''}`}
-            aria-label={`Activity ${i + 1}${it.answered || results[it.id] ? ' (answered)' : ''}`}
-            aria-current={i === index ? 'step' : undefined}
-            disabled={i > unlockedMax}
-            onClick={() => goto(i)}
-          />
-        ))}
-        <span className="qd-dots__count" aria-live="polite">{Math.min(items.filter((it) => it.answered || results[it.id]).length + 1, data.total)}/{data.total}</span>
-      </nav>
+      <div className="qd-p__grid">
+        <aside className="qd-rail" aria-label="Today’s set">
+          <p className="qd-rail__cap">Today’s set</p>
+          <ol className="qd-rail__list">
+            {items.map((it, i) => {
+              const done = Boolean(it.answered || results[it.id]);
+              return (
+                <li key={it.id}>
+                  <button
+                    type="button"
+                    className={`qd-rail__item${i === index ? ' is-current' : ''}${done ? ' is-done' : ''}`}
+                    aria-current={i === index ? 'step' : undefined}
+                    disabled={i > unlockedMax}
+                    onClick={() => goto(i)}
+                  >
+                    <span className="qd-rail__num" aria-hidden="true">{done ? '✓' : i + 1}</span>
+                    <span className="qd-rail__body">
+                      <span className="qd-rail__type">{TYPE_LABELS[it.type]}</span>
+                      <span className="qd-rail__meta">{it.minutes} min · {it.concept}</span>
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+          <p className="qd-rail__minutes">{data.servedMinutes} of {data.targetMinutes} practice minutes planned</p>
+        </aside>
 
-      {item && (
+        <div className="qd-p__main">
+          {item && (
         <section className="qd-card qd-act" aria-label={TYPE_LABELS[item.type]}>
           <div className="qd-act__kicker">
             <span className="qd-act__type">{TYPE_LABELS[item.type]}</span>
@@ -421,7 +441,9 @@ export default function PracticePage() {
             </div>
           )}
         </section>
-      )}
+          )}
+        </div>
+      </div>
     </div>
   );
 }

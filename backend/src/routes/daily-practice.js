@@ -20,11 +20,19 @@ const DATA_DIR = fileURLToPath(new URL('../../data/', import.meta.url));
 const BANK_FILE = DATA_DIR + 'practice-activities.json';
 const STATE_FILE = DATA_DIR + 'daily-practice-state.json';
 
-const SET_NEW = 3;
-const SET_REVIEW = 1;
-const SET_TOTAL = SET_NEW + SET_REVIEW;
-const GOOD_DAY = 0.75; // ≥ 3/4 first-try correct
-const WEAK_DAY = 0.5;  // ≤ 2/4
+// The daily set fills the practice time the student committed to in
+// onboarding (PRD §6: "one set a day of about 15 minutes"). Larger
+// commitments get a proportionally larger set, one soft overflow allowed.
+const MINUTES_BY_DAILYTIME = {
+  '15 minutes a day': 15,
+  '30 minutes a day': 30,
+  '45 minutes a day': 45,
+  '1 hour a day': 60,
+};
+const SET_MIN_ITEMS = 4;
+const SET_MAX_ITEMS = 14;
+const GOOD_DAY = 0.75; // ≥ 3/4 first-try correct — baseline against 4+ sets
+const WEAK_DAY = 0.5;
 const REVIEW_GAPS = [1, 3, 7];
 const LEVEL_BY_RATING = {
   'Just starting': 1,
@@ -160,6 +168,8 @@ function pickReview(student, level, bank, excludeIds) {
 }
 
 function buildSet(email, profile, bank, student, level) {
+  // The set fills the practice time the student committed to (PRD §6).
+  const target = MINUTES_BY_DAILYTIME[profile?.dailyTime] ?? 15;
   const seed = hash(`${email}::${istDayKey()}::daily-practice`);
   const excludeIds = new Set();
   const usedConcepts = new Set();
@@ -168,11 +178,9 @@ function buildSet(email, profile, bank, student, level) {
   if (review) {
     excludeIds.add(review.id);
     usedConcepts.add(review.concept);
-  } else {
-    // No concept is due yet (first days on a path): the review slot opens up
-    // as a fourth fresh activity. The queue takes over as soon as misses
-    // start aging into their 1/3/7-day windows.
   }
+  // No concept due yet (the first days): the review slot opens up as one more
+  // fresh activity. The queue takes over as misses age into 1/3/7-day windows.
 
   // Recently mastered activities go to the back of the line — previous days
   // only; today's own answers must never reshape today's set.
@@ -188,34 +196,46 @@ function buildSet(email, profile, bank, student, level) {
     || profile?.track === 'Not sure'
     || (profile?.track && a.track === profile.track));
 
+  const mins = (a) => a.minutes ?? 3;
+  const picks = [];
+  let minutes = review ? mins(review) : 0;
+  let relaxed = false;
+  const count = () => picks.length + (review ? 1 : 0);
+  const push = (a) => {
+    picks.push(a);
+    minutes += mins(a);
+    excludeIds.add(a.id);
+    usedConcepts.add(a.concept);
+  };
+
   let pool = byTrack.filter((a) => a.difficulty === level
     && !excludeIds.has(a.id) && !usedConcepts.has(a.concept));
-  let relaxed = false;
-  if (pool.length < SET_NEW) {
+  if (pool.length < SET_MIN_ITEMS) {
     relaxed = true;
     pool = byTrack.filter((a) => Math.abs(a.difficulty - level) <= 1
       && !excludeIds.has(a.id) && !usedConcepts.has(a.concept));
   }
-  // Prefer activities not recently mastered; reshuffle if that bought enough.
-  const fresh = seededShuffle(pool.filter((a) => !recentGood.has(a.id)), seed);
-  const filler = seededShuffle(
-    pool.filter((a) => recentGood.has(a.id)),
-    seed + 1,
-  );
-  let picks = [...fresh, ...filler].slice(0, SET_NEW + (review ? 0 : 1));
-  if (picks.length < SET_NEW) {
-    // Last resort: anything track-eligible regardless of difficulty/concept,
-    // so the student always has a full set.
-    picks = seededShuffle(
-      byTrack.filter((a) => !excludeIds.has(a.id) && !picks.includes(a)),
-      seed + 2,
-    ).slice(0, SET_NEW + (review ? 0 : 1) - picks.length).concat(picks).slice(0, SET_NEW + (review ? 0 : 1));
+
+  const fill = (candidates) => {
+    for (const a of candidates) {
+      if (count() >= SET_MAX_ITEMS) break;
+      if (count() >= SET_MIN_ITEMS && minutes >= target) break;
+      // One item may overshoot the target; nothing builds far past it.
+      if (count() >= SET_MIN_ITEMS && minutes + mins(a) > target + 6) break;
+      push(a);
+    }
+  };
+
+  // Prefer never-seen activities, then recently-but-not-today mastered ones,
+  // finally widen concepts/difficulty — the time still gets filled.
+  fill(seededShuffle(pool.filter((a) => !recentGood.has(a.id)), seed));
+  if (count() < SET_MIN_ITEMS || minutes < target) {
+    fill(seededShuffle(pool.filter((a) => recentGood.has(a.id)), seed + 1));
   }
-  for (const a of picks) {
-    excludeIds.add(a.id);
-    usedConcepts.add(a.concept);
+  if (count() < SET_MIN_ITEMS || minutes < target) {
+    fill(seededShuffle(byTrack.filter((a) => !excludeIds.has(a.id)), seed + 2));
   }
-  return { newActivities: picks, review, relaxed };
+  return { newActivities: picks, review, relaxed, targetMinutes: target, servedMinutes: minutes };
 }
 
 // SQL sandbox — single read-only statement, throwaway in-memory database.
@@ -361,17 +381,23 @@ router.get('/daily', async (req, res) => {
   let ids;
   let reviewId = null;
   let relaxed = false;
+  let targetMinutes = MINUTES_BY_DAILYTIME[profile.dailyTime] ?? 15;
+  let servedMinutes = 0;
   const issued = issuedSet(s, dayKey);
   if (issued) {
     ids = issued.ids.filter((id) => byId.has(id));
     reviewId = issued.reviewId && ids.includes(issued.reviewId) ? issued.reviewId : null;
     relaxed = Boolean(issued.relaxed);
+    targetMinutes = issued.targetMinutes ?? targetMinutes;
+    servedMinutes = itemsMinutes(ids, byId);
   } else {
     const built = buildSet(session.email, profile, bank, s, level);
     ids = [...built.newActivities.map((a) => a.id), ...(built.review ? [built.review.id] : [])];
     reviewId = built.review?.id ?? null;
     relaxed = built.relaxed;
-    s.sets[dayKey] = { ids, reviewId, relaxed, level, at: new Date().toISOString() };
+    targetMinutes = built.targetMinutes;
+    servedMinutes = built.servedMinutes;
+    s.sets[dayKey] = { ids, reviewId, relaxed, level, targetMinutes, at: new Date().toISOString() };
     const setKeys = Object.keys(s.sets).sort();
     while (setKeys.length > 35) delete s.sets[setKeys.shift()];
     try { await persistState(state); } catch { /* cache holds it */ }
@@ -385,8 +411,10 @@ router.get('/daily', async (req, res) => {
     ok: true,
     date: dayKey,
     minutes: 15,
-    level: issued?.level ?? level,
+    level,
     relaxed,
+    targetMinutes,
+    servedMinutes,
     total: items.length,
     items: items.map(sanitizeItem).map((v) => {
       const rec = s.done[dayKey]?.[v.id];
@@ -550,17 +578,23 @@ router.get('/daily/summary', async (req, res) => {
   const state = await getState();
   const s = studentFor(state, session.email);
   const dayKey = istDayKey();
+  const frozen = issuedSet(s, dayKey);
+  const total = frozen
+    ? frozen.ids.filter((id) => byId.has(id)).length
+    : Math.min(SET_MIN_ITEMS, bank.length);
   const { score, answered } = scoreToday(s, dayKey, byId);
   res.json({
     ok: true,
     date: dayKey,
-    total: Math.min(SET_TOTAL, bank.length),
+    total,
     answered,
     score,
-    done: bank.length > 0 && answered >= Math.min(SET_TOTAL, bank.length),
+    done: total > 0 && answered >= total,
     level: deriveLevel(s, session.account.profile || {}),
   });
 });
+
+const itemsMinutes = (ids, byId) => ids.reduce((n, id) => n + (byId.get(id)?.minutes ?? 3), 0);
 
 // Pure selection/leveling rules, exported for the engine's tests.
 export { buildSet, deriveLevel, pickReview };
