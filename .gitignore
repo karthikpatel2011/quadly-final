@@ -25,3 +25,4 @@ design-intelligence/media/
 
 # Daily Practice per-student engine state (answers, sets, misses)
 backend/data/daily-practice-state.json
+backend/data/interview-voice.json

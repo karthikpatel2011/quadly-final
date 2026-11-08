@@ -4,22 +4,42 @@ import { Icon } from './icons.jsx';
 import './dashboard.css';
 import Logo from '../Logo.jsx';
 import PracticePage from './PracticePage.jsx';
+import InterviewsPage from './InterviewsPage.jsx';
 
-/* Signed-in dashboard shell: chrome plus the routes that have shipped —
-   Home (rebuilding) and Practice. Each rebuilt surface lands in NAV_ITEMS
-   as it ships; anything else resolves back to Home — no placeholder text,
-   no dead links. The 401 gate and the verified sign-out stay. */
+/* Signed-in dashboard shell: chrome plus the routes that have shipped. The
+   Practice workspace grows one entry per landed surface; unknown routes
+   resolve back to Home — no placeholder text, no dead links. The 401 gate
+   and the verified sign-out stay. */
 
 const THEME_KEY = 'quadly:theme';
 
 const NAV_ITEMS = [
   { id: 'app', label: 'Home' },
-  { id: 'practice', label: 'Practice' },
+  {
+    id: 'practice',
+    label: 'Practice',
+    children: [
+      { id: 'practice/daily', label: 'Daily practice' },
+      { id: 'practice/interviews', label: 'Interviews' },
+    ],
+  },
 ];
 
 function routeFromLocation() {
-  const seg = window.location.pathname.replace(/\/+$/, '').replace(/^\/app\/?/, '');
-  return NAV_ITEMS.some((n) => n.id === seg) ? seg : 'app';
+  const path = window.location.pathname.replace(/\/+$/, '');
+  if (path === '' || path === '/app') return 'app';
+  const sub = path.replace(/^\/app\/?/, ''); // '' | 'practice' | 'practice/daily' | 'practice/interviews' | …
+  if (sub === 'practice') return 'practice/daily';
+  for (const n of NAV_ITEMS) {
+    if (n.children?.some((c) => c.id === sub)) return sub;
+  }
+  return 'app';
+}
+
+function navPath(id) {
+  if (id === 'app') return '/app';
+  if (id === 'practice/daily') return '/app/practice';
+  return `/app/${id}`;
 }
 
 function authHeaders() {
@@ -55,6 +75,7 @@ export default function Dashboard() {
   const [theme, setTheme] = useState(() => lsGet(THEME_KEY, 'dark'));
   const [menuOpen, setMenuOpen] = useState(false);
   const [route, setRoute] = useState(routeFromLocation);
+  const [practiceMenuOpen, setPracticeMenuOpen] = useState(false);
 
   /* The dashboard request doubles as the auth gate: a 401 means the session
      is gone and the join flow takes over. No cached fallback render — a
@@ -88,7 +109,7 @@ export default function Dashboard() {
   }, [theme]);
 
   useEffect(() => {
-    document.title = route === 'app' ? 'Quadly — Home' : `Quadly — ${NAV_ITEMS.find((n) => n.id === route)?.label ?? 'Quadly'}`;
+    document.title = route === 'app' ? 'Quadly — Home' : `Quadly — ${(NAV_ITEMS.find((n) => n.id === route.split('/')[0])?.children ?? NAV_ITEMS).find((n) => n.id === route)?.label ?? 'Quadly'}`;
   }, [route]);
 
   useEffect(() => {
@@ -97,13 +118,26 @@ export default function Dashboard() {
     return () => window.removeEventListener('popstate', sync);
   }, []);
 
+  useEffect(() => {
+    if (!menuOpen && !practiceMenuOpen) return undefined;
+    const onKey = (e) => {
+      if (e.key === 'Escape') {
+        setMenuOpen(false);
+        setPracticeMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [menuOpen, practiceMenuOpen]);
+
   const navigate = (id) => {
-    const path = id === 'app' ? '/app' : `/app/${id}`;
+    const path = navPath(id);
     if (window.location.pathname.replace(/\/+$/, '') !== path) {
       window.history.pushState({}, '', path);
     }
     setRoute(id);
     setMenuOpen(false);
+    setPracticeMenuOpen(false);
     window.scrollTo(0, 0);
   };
 
@@ -182,17 +216,51 @@ export default function Dashboard() {
           <a className="qd-wordmark qd-top__mark" href="/" aria-label="Quadly home site"><Logo /></a>
 
           <nav className="qd-top__nav" aria-label="Primary">
-            {NAV_ITEMS.map((n) => (
-              <button
-                key={n.id}
-                type="button"
-                className={`qd-top__item${route === n.id ? ' is-on' : ''}`}
-                aria-current={route === n.id ? 'page' : undefined}
-                onClick={() => navigate(n.id)}
-              >
-                {n.label}
-              </button>
-            ))}
+            {NAV_ITEMS.map((n) => {
+              if (n.children) {
+                const on = route === n.id || n.children.some((c) => c.id === route);
+                return (
+                  <div key={n.id} className="qd-topwrap">
+                    <button
+                      type="button"
+                      className={`qd-top__item${on ? ' is-on' : ''}`}
+                      aria-haspopup="menu"
+                      aria-expanded={practiceMenuOpen}
+                      onClick={() => setPracticeMenuOpen((o) => !o)}
+                    >
+                      {n.label}
+                      <span className={`qd-chev${practiceMenuOpen ? ' is-open' : ''}`} aria-hidden="true">⌄</span>
+                    </button>
+                    {practiceMenuOpen && (
+                      <div className="qd-pop qd-topwrap__pop" role="menu">
+                        {n.children.map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            role="menuitem"
+                            className={`qd-pop__item${route === c.id ? ' is-on' : ''}`}
+                            onClick={() => navigate(c.id)}
+                          >
+                            {c.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <button
+                  key={n.id}
+                  type="button"
+                  className={`qd-top__item${route === n.id ? ' is-on' : ''}`}
+                  aria-current={route === n.id ? 'page' : undefined}
+                  onClick={() => navigate(n.id)}
+                >
+                  {n.label}
+                </button>
+              );
+            })}
           </nav>
 
           <span className="qd-top__spacer" />
@@ -230,19 +298,19 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {menuOpen && (
+      {(menuOpen || practiceMenuOpen) && (
         <button
           type="button"
           className="qd-top__outside"
           aria-label="Close menu"
-          onClick={() => setMenuOpen(false)}
+          onClick={() => { setMenuOpen(false); setPracticeMenuOpen(false); }}
         />
       )}
 
-      {/* Home waits on the rebuilt feed; Practice is live. */}
-      {route === 'practice'
-        ? <main className="qd-home"><PracticePage /></main>
-        : <main className="qd-home" aria-label="Home" />}
+      {/* Home waits on the rebuilt feed; the Practice surfaces are live. */}
+      {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
+      {route === 'practice/interviews' && <main className="qd-home"><InterviewsPage /></main>}
+      {route === 'app' && <main className="qd-home" aria-label="Home" />}
     </div>
   );
 }
