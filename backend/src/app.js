@@ -19,6 +19,8 @@ import projectsRoutes from './routes/projects.js';
 import syllabusRoutes from './routes/syllabus.js';
 import launchpadRoutes from './routes/launchpad.js';
 import notificationsRoutes from './routes/notifications.js';
+// Interview sessions — the stateful AI interview simulator under /api/interviews.
+import interviewSessionsRoutes from './routes/interview-sessions.js';
 // Home front page owns /home, /posts, /reports, /profile/avatar, /moderation
 // under the /api prefix (see src/routes/home.js).
 import homeRoutes from './routes/home.js';
@@ -45,6 +47,7 @@ export function createApp() {
   app.use('/api/drive', driveRoutes);
   app.use('/api/squad', squadRoutes);
   app.use('/api/interview', interviewRoutes);
+  app.use('/api/interviews', interviewSessionsRoutes);
   app.use('/api/projects', projectsRoutes);
   app.use('/api/syllabus', syllabusRoutes);
   app.use('/api/launchpad', launchpadRoutes);

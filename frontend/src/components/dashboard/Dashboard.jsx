@@ -5,8 +5,11 @@ import './dashboard.css';
 import Logo from '../Logo.jsx';
 import PracticePage from './PracticePage.jsx';
 import ReplayPage from './ReplayPage.jsx';
-import InterviewsPage from './InterviewsPage.jsx';
-import ContestsPage from './ContestsPage.jsx';
+import ContestssPage from './ContestsPage.jsx';
+import InterviewsDashboard from './interviews/InterviewsDashboard.jsx';
+import InterviewSetup from './interviews/InterviewSetup.jsx';
+import InterviewRoom from './interviews/InterviewRoom.jsx';
+import InterviewReport from './interviews/InterviewReport.jsx';
 
 /* Signed-in dashboard shell: chrome plus the routes that have shipped. Two
    workspaces, kept deliberately separate (student's call): Practice = the
@@ -31,6 +34,7 @@ const NAV_ITEMS = [
     id: 'interviews',
     label: 'Interviews',
     children: [
+      { id: 'interviews/dash', label: 'Dashboard' },
       { id: 'interviews/mock', label: 'Mock interview' },
       { id: 'interviews/drive', label: 'Mock drive' },
     ],
@@ -43,6 +47,9 @@ const ROUTE_ALIASES = {
   'practice/contests': 'interviews/drive',
 };
 
+// Real routes that live under a group but don't need a dropdown entry.
+const EXTRA_ROUTES = new Set(['interviews/setup', 'interviews/report']);
+
 const NAV_LABELS = Object.fromEntries(NAV_ITEMS.flatMap((n) => [n, ...(n.children ?? [])]).map((n) => [n.id, n.label]));
 
 function routeFromLocation() {
@@ -51,10 +58,11 @@ function routeFromLocation() {
   const sub = path.replace(/^\/app\/?/, '');
   if (ROUTE_ALIASES[sub]) return ROUTE_ALIASES[sub];
   if (sub === 'practice') return 'practice/daily';
-  if (sub === 'interviews') return 'interviews/mock';
+  if (sub === 'interviews') return 'interviews/dash';
   for (const n of NAV_ITEMS) {
     if (n.children?.some((c) => c.id === sub)) return sub;
   }
+  if (EXTRA_ROUTES.has(sub)) return sub;
   return 'app';
 }
 
@@ -98,7 +106,7 @@ export default function Dashboard() {
   const [theme, setTheme] = useState(() => lsGet(THEME_KEY, 'dark'));
   const [menuOpen, setMenuOpen] = useState(false);
   const [route, setRoute] = useState(routeFromLocation);
-  const [practiceMenuOpen, setPracticeMenuOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState(null); // nav dropdown open per group id — one at a time
 
   /* The dashboard request doubles as the auth gate: a 401 means the session
      is gone and the join flow takes over. No cached fallback render — a
@@ -142,16 +150,16 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (!menuOpen && !practiceMenuOpen) return undefined;
+    if (!menuOpen && !openMenu) return undefined;
     const onKey = (e) => {
       if (e.key === 'Escape') {
         setMenuOpen(false);
-        setPracticeMenuOpen(false);
+        setOpenMenu(null);
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [menuOpen, practiceMenuOpen]);
+  }, [menuOpen, openMenu]);
 
   const navigate = (id) => {
     const path = navPath(id);
@@ -160,9 +168,11 @@ export default function Dashboard() {
     }
     setRoute(id);
     setMenuOpen(false);
-    setPracticeMenuOpen(false);
+    setOpenMenu(null);
     window.scrollTo(0, 0);
   };
+
+  const toggleMenu = (id) => setOpenMenu((m) => (m === id ? null : id));
 
   useEffect(() => {
     if (!menuOpen) return undefined;
@@ -232,6 +242,11 @@ export default function Dashboard() {
     );
   }
 
+  // The live interview takes over the whole viewport — no dashboard chrome.
+  if (route === 'interviews/mock') {
+    return <InterviewRoom />;
+  }
+
   return (
     <div className="qd-app" data-qd-theme={theme}>
       <header className="qd-top">
@@ -248,13 +263,13 @@ export default function Dashboard() {
                       type="button"
                       className={`qd-top__item${on ? ' is-on' : ''}`}
                       aria-haspopup="menu"
-                      aria-expanded={practiceMenuOpen}
-                      onClick={() => setPracticeMenuOpen((o) => !o)}
+                      aria-expanded={openMenu === n.id}
+                      onClick={() => toggleMenu(n.id)}
                     >
                       {n.label}
-                      <span className={`qd-chev${practiceMenuOpen ? ' is-open' : ''}`} aria-hidden="true">⌄</span>
+                      <span className={`qd-chev${openMenu === n.id ? ' is-open' : ''}`} aria-hidden="true">⌄</span>
                     </button>
-                    {practiceMenuOpen && (
+                    {openMenu === n.id && (
                       <div className="qd-pop qd-topwrap__pop" role="menu">
                         {n.children.map((c) => (
                           <button
@@ -321,19 +336,21 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {(menuOpen || practiceMenuOpen) && (
+      {(menuOpen || openMenu) && (
         <button
           type="button"
           className="qd-top__outside"
           aria-label="Close menu"
-          onClick={() => { setMenuOpen(false); setPracticeMenuOpen(false); }}
+          onClick={() => { setMenuOpen(false); setOpenMenu(null); }}
         />
       )}
 
       {/* Home waits on the rebuilt feed; the two workspaces are live. */}
       {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
       {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
-      {route === 'interviews/mock' && <main className="qd-ivrhome"><InterviewsPage /></main>}
+      {route === 'interviews/dash' && <main className="qd-ivrhome"><InterviewsDashboard /></main>}
+      {route === 'interviews/setup' && <main className="qd-ivrhome"><InterviewSetup /></main>}
+      {route === 'interviews/report' && <main className="qd-ivrhome"><InterviewReport /></main>}
       {route === 'interviews/drive' && <main className="qd-home"><ContestsPage /></main>}
       {route === 'app' && <main className="qd-home" aria-label="Home" />}
     </div>
