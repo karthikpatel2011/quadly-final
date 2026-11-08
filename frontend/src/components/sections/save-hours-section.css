@@ -1,0 +1,110 @@
+/* "Save hours" — scattered gradient chip field on black. */
+
+.save-hours {
+  position: relative;
+  min-height: 1015px;
+  background: var(--color-page);
+}
+
+.save-hours__head {
+  position: relative;
+  z-index: 1;
+  padding-top: 200px;
+}
+
+/* Chip field: anchored to the 1180px container, lower part of the section. */
+.save-hours__field {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--container);
+  height: 100%;
+}
+
+.sh-chip {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  height: 98px;
+  padding: 0 34px;
+  border-radius: var(--radius-panel);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.sh-chip__icon {
+  flex: 0 0 auto;
+}
+
+/* Row 1 */
+.sh-chip--daily3 {
+  left: 2px;
+  top: 690px;
+  background: linear-gradient(180deg, var(--chip-amber-a), var(--chip-amber-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--readiness {
+  left: 260px;
+  top: 690px;
+  transform: rotate(-64deg);
+  background: linear-gradient(180deg, var(--chip-green-a), var(--chip-green-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--streak {
+  left: 665px;
+  top: 723px;
+  transform: rotate(64deg);
+  background: linear-gradient(180deg, var(--chip-mint-a), var(--chip-mint-b));
+  color: #0b0b0b;
+}
+
+/* Row 2 */
+.sh-chip--mock {
+  left: 2px;
+  top: 794px;
+  background: linear-gradient(180deg, var(--chip-orange-a), var(--chip-orange-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--catch {
+  left: 455px;
+  top: 796px;
+  background: linear-gradient(180deg, var(--chip-lime-a), var(--chip-lime-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--doctor {
+  left: 892px;
+  top: 794px;
+  background: linear-gradient(180deg, var(--chip-blue-a), var(--chip-blue-b));
+  color: #0b0b0b;
+}
+
+/* Row 3 */
+.sh-chip--syllabus {
+  left: 128px;
+  top: 898px;
+  background: linear-gradient(180deg, var(--chip-purple-a), var(--chip-purple-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--report {
+  left: 467px;
+  top: 898px;
+  background: linear-gradient(180deg, var(--chip-sky-a), var(--chip-sky-b));
+  color: #0b0b0b;
+}
+
+.sh-chip--nudges {
+  left: 882px;
+  top: 898px;
+  background: linear-gradient(180deg, var(--chip-pink-a), var(--chip-pink-b));
+  color: #0b0b0b;
+}

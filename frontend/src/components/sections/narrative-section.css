@@ -1,0 +1,119 @@
+/* Narrative — black statement panel with diagonal streak artwork. */
+
+.narrative {
+  position: relative;
+  background: var(--color-page);
+  padding: 9px 20px;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Streak artwork — measured against the reference crop:
+   top-left (16, 10), bottom-left (16, bottom 10), right (right 16, bottom 20). */
+.narrative__art {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+}
+
+.narrative__art--tl {
+  left: 16px;
+  top: 10px;
+  width: 404px;
+}
+
+.narrative__art--bl {
+  left: 16px;
+  bottom: 10px;
+  width: 454px;
+  /* The asset's top ~40 rows baked in a heading fragment from the source
+     screenshot; the reference shows nothing there, so clip it. */
+  clip-path: inset(42px 0 0 0);
+}
+
+.narrative__art--r {
+  right: 16px;
+  bottom: 20px;
+  width: 304px;
+}
+
+/* Black bordered statement panel (bg transparent so the art shows through). */
+.narrative__panel {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container);
+  margin: 0 auto;
+  border: 1px solid rgba(255, 255, 255, 0.045);
+  border-radius: var(--radius-card);
+  padding: 40px 20px 44px;
+}
+
+/* Overlapping chip-gradient avatar circles. */
+.narrative__avatars {
+  display: flex;
+  justify-content: center;
+}
+
+.narrative__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, 0.55);
+}
+
+.narrative__avatar + .narrative__avatar {
+  margin-left: -11px;
+}
+
+.narrative__avatar--pink {
+  background: linear-gradient(135deg, var(--chip-pink-a), var(--chip-pink-b));
+}
+
+.narrative__avatar--lime {
+  background: linear-gradient(135deg, var(--chip-lime-a), var(--chip-lime-b));
+}
+
+.narrative__avatar--green {
+  background: linear-gradient(135deg, var(--chip-green-a), var(--chip-green-b));
+}
+
+.narrative__avatar--amber {
+  background: linear-gradient(135deg, var(--chip-amber-a), var(--chip-amber-b));
+}
+
+.narrative__avatar--blue {
+  background: linear-gradient(135deg, var(--chip-blue-a), var(--chip-blue-b));
+}
+
+.narrative__label {
+  margin: 22px 0 0;
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.narrative__title {
+  margin: 8px 0 0;
+  color: var(--color-text);
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 72px;
+  line-height: 1.14;
+  letter-spacing: -0.01em;
+}
+
+.narrative__cta {
+  margin-top: 28px;
+}
+
+@media (max-width: 900px) {
+  .narrative__art {
+    display: none;
+  }
+
+  .narrative__title {
+    font-size: 44px;
+  }
+}

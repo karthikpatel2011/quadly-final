@@ -1,0 +1,76 @@
+/* P03 Stridebook — scoped practice CSS. Applied lessons: S20 measured onboarding,
+   S13 dashboard actions + one visual device, S23 2-col message+evidence,
+   S24 ladder rules (single-hue ramp, 4 sizes/2 weights, on-grid spacing, mono numerals,
+   red rationed OUT), S09 color-state thinking. Light theme, cool ground, warm CTA. */
+.p03 {
+  --bg:#F2F5F4; --surface:#FFFFFF; --surface-2:#E7EDEB; --border:#D9E2DF; --border-strong:#BECBC7;
+  --ink:#12211C; --ink-2:#4A5D56; --ink-3:#6B7F77;
+  --hue-050:#EAF6F1; --hue-200:#BFE3D6; --hue-400:#5CBF9F; --hue-600:#1F8A64; --hue-700:#166349;
+  --cta:#D97B29; --cta-700:#B26217;
+  --font-text:"Public Sans",system-ui,sans-serif; --font-mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --r:10px; --r-lg:18px;
+  font-family:var(--font-text); background:var(--bg); color:var(--ink);
+  font-size:15px; line-height:1.5; min-height:100vh;
+}
+.p03, .p03 * { box-sizing:border-box; margin:0; padding:0 }
+.p03 :focus-visible { outline:3px solid var(--hue-600); outline-offset:2px }
+/* type diet: 4 sizes (26/18/13.5/11) · 2 weights (600/400) */
+.p03 .display{font-size:26px;font-weight:600;letter-spacing:-.01em;line-height:1.15}
+.p03 h2{font-size:18px;font-weight:600}
+.p03 .meta{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.p03 .stepbar{display:flex;align-items:center;gap:10px;padding:14px 24px;background:var(--surface);border-bottom:1px solid var(--border)}
+.p03 .stepbar .seg{height:4px;border-radius:99px;flex:0 0 48px;background:var(--surface-2)}
+.p03 .stepbar .seg.on{background:var(--hue-600)}
+.p03 .stepbar span{font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+.p03 .shell{max-width:980px;margin:0 auto;padding:40px 24px 72px}
+.p03 .setup{display:grid;grid-template-columns:5fr 6fr;gap:56px;align-items:start}
+.p03 .lede{color:var(--ink-2);margin:12px 0 4px;max-width:46ch}
+.p03 .why{margin-top:18px;border-top:1px dashed var(--border);padding-top:12px;color:var(--ink-3);font-size:13.5px}
+.p03 .chips{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.p03 .chip{border:1px solid var(--border-strong);background:var(--surface);border-radius:12px;padding:13px 14px;text-align:left;cursor:pointer;font:inherit;font-weight:400}
+.p03 .chip b{display:block;font-weight:600;font-size:13.5px}
+.p03 .chip span{color:var(--ink-3);font-size:12.5px}
+.p03 .chip.on{border-color:var(--hue-600);background:var(--hue-050)}
+.p03 .chip.on b{color:var(--hue-700)}
+.p03 .actions{display:flex;align-items:center;gap:14px;margin-top:26px}
+.p03 .btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:10px;padding:11px 18px;font:inherit;font-weight:600;cursor:pointer}
+.p03 .btn-primary{background:var(--cta);color:#fff}
+.p03 .btn-primary:hover{background:var(--cta-700)}
+.p03 .btn-primary[disabled]{background:var(--hue-200);color:#fff;cursor:not-allowed}
+.p03 .skip{color:var(--ink-3);font-size:13px;background:none;border:none;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.p03 .count{font-family:var(--font-mono);font-size:12px;color:var(--ink-3)}
+.p03 .prev{margin-top:16px;display:flex;gap:10px;align-items:center}
+.p03 .prev img{width:44px;height:44px;border-radius:10px;object-fit:cover}
+/* dashboard home (the aha) */
+.p03 .top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:26px;flex-wrap:wrap}
+.p03 .logo{font-weight:600;font-size:15px;letter-spacing:-.01em}
+.p03 .logo i{display:inline-block;width:12px;height:12px;border-radius:4px;background:var(--hue-600);margin-right:7px}
+.p03 .grid{display:grid;grid-template-columns:7fr 5fr;gap:14px;align-items:stretch}
+.p03 .hero{grid-column:1/-1;display:flex;gap:28px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:22px 24px}
+.p03 .arc{position:relative;width:120px;height:120px;flex:0 0 120px}
+.p03 .arc svg{transform:rotate(-90deg)}
+.p03 .arc b{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:22px}
+.p03 .arc b small{font-family:var(--font-text);font-size:11px;color:var(--ink-3);font-weight:400}
+.p03 .hero .text p{color:var(--ink-2);margin-top:6px;max-width:44ch}
+.p03 .hero .btn{margin-top:14px}
+.p03 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:18px 20px}
+.p03 .card .card-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.p03 .card .card-h a{font-size:12px;color:var(--ink-3);text-decoration:underline;text-underline-offset:3px}
+.p03 .insight{border-left:3px solid var(--hue-600);background:var(--hue-050);border-radius:0 10px 10px 0;padding:10px 14px;font-size:13.5px;margin-top:12px}
+.p03 .bars{display:flex;align-items:stretch;gap:8px;height:96px;margin-top:8px}
+.p03 .bars .col{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:6px;align-items:center}
+.p03 .bars i{display:block;width:100%;background:var(--hue-400);border-radius:6px 6px 2px 2px}
+.p03 .bars i.t{background:var(--hue-200)}
+.p03 .bars em{font-style:normal;font-family:var(--font-mono);font-size:10px;color:var(--ink-3)}
+.p03 .tag{display:inline-flex;gap:6px;align-items:center;font-family:var(--font-mono);font-size:10.5px;color:var(--ink-3);border:1px solid var(--border);border-radius:99px;padding:2px 8px}
+.p03 .rungs{list-style:none;margin-top:6px}
+.p03 .rungs li{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px dashed var(--border);font-size:13.5px}
+.p03 .rungs li:first-child{border-top:none}
+.p03 .rungs .num{font-family:var(--font-mono);color:var(--ink-2)}
+.p03 footer{color:var(--ink-3);font-size:12px;text-align:center;padding:26px 0 8px}
+@media (max-width:880px){
+  .p03 .setup{grid-template-columns:1fr;gap:24px}
+  .p03 .grid{grid-template-columns:1fr}
+  .p03 .hero{flex-direction:column;text-align:left}
+  .p03 .chips{grid-template-columns:1fr}
+}

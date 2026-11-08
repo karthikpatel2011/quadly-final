@@ -1,0 +1,259 @@
+[0:00] these are the four most important
+[0:02] foundational design principles that you
+[0:05] must know how to use if you want to be a
+[0:07] good ui designer if you can master these
+[0:10] four foundational design principles your
+[0:12] designs will go from meh to wow
+[0:20] all right what are these four
+[0:21] foundational principles that you need to
+[0:23] know well i tell you they're a giant
+[0:26] load of crap that's right the acronym of
+[0:29] the day is c-r-a-p and that stands for
+[0:32] contrast repetition alignment and
+[0:34] proximity some of you out there thought
+[0:36] i was just saying something
+[0:38] inappropriate but no it has purpose all
+[0:40] right contrast repetition alignment
+[0:42] proximity what do they mean what do they
+[0:44] do let's jump over and take a look right
+[0:46] now at our very first one and that's
+[0:48] contrast it's all about organizing your
+[0:50] design establishing hierarchy
+[0:52] emphasizing a focal point and adding
+[0:55] visual interest you can do this a lot of
+[0:58] different ways you can add contrast with
+[1:00] color with weight with size in
+[1:02] typography with imagery there's so many
+[1:05] different ways that you can do this but
+[1:07] let's look at just a few ways in our
+[1:09] demonstration today so we're going to
+[1:11] jump over to our starting file and we
+[1:14] have the start of a website or layout
+[1:16] doesn't really matter but we just don't
+[1:18] have a whole lot of contrast we have the
+[1:20] start to some contrast with a button
+[1:22] down here that has a color it kind of
+[1:23] stands out but we also have a headline
+[1:25] we have no visual interest here so we
+[1:27] want to start adding a little bit of
+[1:29] contrast in all of these areas to kind
+[1:32] of bring this layout to life the first
+[1:34] thing we can do just right here in our
+[1:36] typography is we can change this piece
+[1:39] of typography into a headline and add a
+[1:42] little bit of size a little bit of
+[1:44] weight and maybe we'll even add a little
+[1:45] bit of color so it's at 24 right now
+[1:47] let's just bump it up and make it a
+[1:49] little bit bigger 54 pixels for this one
+[1:51] it's not an exact formula it's just
+[1:54] bigger and when we do that let's also
+[1:56] take this and move this two weights from
+[1:58] medium to semi-bold now we actually have
+[2:01] some contrast between
+[2:03] this text and this text we're going to
+[2:05] bring them together a little bit so they
+[2:07] kind of go together and now we need uh
+[2:10] that says go out sewed so let's make
+[2:11] sure it says go outside but what's the
+[2:14] focal point here of this layout or
+[2:15] website what's the whole purpose of the
+[2:17] content it's most likely about bikes so
+[2:20] why don't we add a little bit more
+[2:22] interest here why don't we fill this
+[2:23] with a nice bright color and we can
+[2:26] experiment with putting it you know a
+[2:28] little bit closer to our text now we
+[2:30] have some contrast between our body copy
+[2:34] and our headline all right now we can do
+[2:36] our next thing which is add a little bit
+[2:38] of visual interest or more of a focal
+[2:40] point with our bike let's just make that
+[2:42] a little bit bigger kind of offset it
+[2:45] off the canvas here and maybe we're not
+[2:47] really focusing on alignment right now
+[2:49] but let's grab our nav items and line
+[2:51] them up and we'll just bring our button
+[2:54] up into
+[2:55] kind of our layout for our text and
+[2:57] everything put this here and this layout
+[2:59] just looks about 100 times better and
+[3:02] there's just a little bit of contrast
+[3:04] added you could add way more you could
+[3:06] do a lot more in this layout but this is
+[3:08] just the start of creating some visual
+[3:10] interest some hierarchy organizing the
+[3:12] information using our first letter in
+[3:14] our acronym c for contrast all right
+[3:17] let's talk next about repetition
+[3:19] repetition is all about increasing
+[3:21] consistency and user's ability to learn
+[3:24] your interface or your layout it reduces
+[3:27] confusion when we add repetition to our
+[3:31] layouts i'll jump back into my training
+[3:33] file and you can see we have maybe
+[3:35] another sub page of our website or a
+[3:37] different layout but we have the same
+[3:40] information it's just thrown around it
+[3:42] looks like a yard sale it looks really
+[3:44] messy so we want to add some repetition
+[3:47] and the more repetition that we can add
+[3:50] the easier it is for our user to learn
+[3:52] our interface let's just go with one
+[3:54] let's pick one and let's make everything
+[3:56] else match up a little bit right so in
+[3:58] this use case here or in this case we we
+[4:00] have a bike on the left let's bring it
+[4:02] all the way to the top let's shift it
+[4:04] around so all our bikes are facing the
+[4:06] same way let's bring this bike up to the
+[4:08] top we can try as much as we possibly
+[4:11] can to add some alignment let's grab all
+[4:14] of our kind of our cards and we'll line
+[4:16] them all to the bottom and we will
+[4:18] distribute these evenly and we might
+[4:21] need to grab all the images of our bikes
+[4:23] and line those up as well so they have
+[4:25] some even spacing
+[4:27] and now we have just a little bit of
+[4:29] repetition now it doesn't matter which
+[4:31] way you repeat you can repeat things
+[4:34] horizontally or vertically diagonally it
+[4:36] doesn't matter repetition is adding some
+[4:39] rhyme or reason some meeting some order
+[4:41] some structure to your layouts i'll tell
+[4:43] you it's going to be way better than the
+[4:45] yard sale that it was before all right
+[4:47] let's jump back over and talk about our
+[4:49] next design principle which is alignment
+[4:51] alignment organizes and groups elements
+[4:54] together it creates rhythm it brings
+[4:56] order to chaos we did that a little bit
+[4:59] with repetition but we needed to make
+[5:01] sure that things were aligned notice in
+[5:03] our practice file we went about aligning
+[5:06] things to the bottom of our typography
+[5:09] but now we have another issue here about
+[5:12] creating some
+[5:13] rhyme or reason some sense of structure
+[5:15] with our alignment now what's really
+[5:16] cool is we can grab all of our cards or
+[5:19] all of our content just like we did last
+[5:21] time distribute them and line them up
+[5:23] these are really really messy so we're
+[5:25] going to grab all of our text here and
+[5:27] make sure they're aligned on the left
+[5:29] hand edge look how much better that
+[5:30] looks and then we'll grab each of our
+[5:33] pieces of text and we will align those
+[5:36] to the center with our image of the bike
+[5:38] this one is really
+[5:40] mixed up and now we can grab all three
+[5:42] of those and we can distribute them now
+[5:44] what's great is once we group these
+[5:47] things together we can see that we've
+[5:49] actually created a series of invisible
+[5:51] accesses right these are invisible lines
+[5:54] that are running horizontally and
+[5:56] vertical in our layout we can see that
+[5:58] by drawing a rectangle here we have an
+[6:01] invisible access that's taking place
+[6:03] there right we have another one we have
+[6:04] a bunch of them actually that are
+[6:06] running
+[6:07] horizontally on the tops and bottoms of
+[6:09] each of these sections now from here it
+[6:11] doesn't matter which way we actually
+[6:14] move or rotate or annotate all the
+[6:16] elements that we've aligned because as
+[6:18] long as they are aligned on one
+[6:20] invisible axis there's still order and
+[6:22] reason we can grab all of these things
+[6:24] we can rotate them to the side and we
+[6:27] can scale all of this up and then we can
+[6:29] hide our overlay here now this may not
+[6:33] be your cup of tea as far as your layout
+[6:35] goes but it still makes sense even
+[6:37] though it's diagonal off canvas you
+[6:39] can't read it you can definitely improve
+[6:41] this layout that there is some structure
+[6:43] and rhyme and reason because now our
+[6:45] invisible accesses are still there
+[6:47] they're just rotated a different way and
+[6:49] so creating a sense of alignment
+[6:52] will organize even the messiest or
+[6:54] experimental layout that you're working
+[6:56] on let's talk about our last principle
+[6:58] of the day and that is proximity
+[7:00] proximity makes elements seem related
+[7:03] like they belong together it brings
+[7:04] understanding and meaning to multiple
+[7:07] elements by grouping them together
+[7:10] everybody loves to have a friend and so
+[7:12] all the elements in your design they'd
+[7:14] probably like to have a friend too let's
+[7:16] jump into our design file we'll head
+[7:17] over to our proximity the question
+[7:19] becomes does this headline belong to
+[7:22] this text do these buttons belong
+[7:24] together and where the heck does this
+[7:26] black friday 50 off deal where does
+[7:28] where does that live we just don't know
+[7:30] all right let's start from the top to
+[7:31] bottom and we'll start adding a little
+[7:33] bit of proximity first off we don't know
+[7:35] if these navigation elements belong
+[7:36] together so we're gonna push them over
+[7:39] just like so actually let's just grab
+[7:40] all three of them and we will tidy them
+[7:42] up
+[7:43] and we'll make sure that they are
+[7:44] distributed evenly and we can space them
+[7:47] however we want but because they have
+[7:49] even spacing and they're next to each
+[7:50] other and we group them together now
+[7:52] they all seem like they belong together
+[7:54] how about this typography or this body
+[7:56] copy does it belong to this headline it
+[7:58] does but it doesn't look like it right
+[8:00] now it looks like a distant relative
+[8:01] let's make it part of the family by
+[8:03] bringing it a little bit closer how
+[8:04] about this button we'll bring that
+[8:06] closer to the other button and maybe
+[8:07] we'll add our black friday deal text
+[8:09] right underneath it and we'll grab these
+[8:11] items group those together and that's
+[8:13] part of this layout as well let's bring
+[8:15] it up and group the whole thing together
+[8:17] we'll bring it out to the side so we add
+[8:19] some alignment to our
+[8:21] layout and let's add some visual
+[8:23] interest creating some white space but
+[8:26] some contrast and a little bit of visual
+[8:28] interest with our image and we could do
+[8:29] that a little bit more by again
+[8:31] highlighting our word bikes and changing
+[8:33] that some sort of fun contrasting color
+[8:36] this layout is about a hundred times
+[8:39] better than it was previously because
+[8:41] we've applied contrast repetition
+[8:43] alignment and now proximity all right
+[8:45] those are the four most important design
+[8:47] principles if you want to be a good ui
+[8:49] designer i hope you enjoyed the video if
+[8:51] you did make sure you leave a thumbs up
+[8:52] subscribe the channel hit the little
+[8:53] bell icon so you know when more videos
+[8:54] like this one come out if you have any
+[8:56] questions make sure you leave those down
+[8:58] in the comments check the description
+[8:59] for some helpful links let me know what
+[9:01] other design principles you think are
+[9:03] super important i would love to hear
+[9:04] from you i hope you're having an amazing
+[9:06] week hope you're designing amazing
+[9:07] things making amazing things and i hope
+[9:09] you are nailing these foundations to
+[9:12] make your designs absolutely fantastic
+[9:14] i'll see you in the next

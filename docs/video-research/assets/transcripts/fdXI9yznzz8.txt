@@ -1,0 +1,418 @@
+[0:12] Good morning everyone.
+[0:15] Today I'm going to be talking about
+[0:17] psychology in UX design. UX stands for
+[0:21] user experience.
+[0:23] Now,
+[0:24] why is it important for us to involve
+[0:27] psychology when we're talking about user
+[0:30] experience design?
+[0:31] That's because humans are
+[0:35] complicated.
+[0:37] Well, no surprise there. We all are very
+[0:40] complicated. We all are very different
+[0:42] from one another. Different in so many
+[0:45] so many ways. So, how will tech company
+[0:48] make us choose to use their application?
+[0:52] And that's actually pretty easy. That's
+[0:54] by influencing the one thing that is
+[0:57] common among all of us.
+[1:00] Well, actually that's five things and
+[1:02] that's our senses.
+[1:04] Touch, hearing, eyesight, smell, and
+[1:07] taste. These are our five senses. These
+[1:10] are the These are the senses that app
+[1:13] developers will use to influence you to
+[1:15] make decisions.
+[1:17] So, touch, hearing, and eyesight are the
+[1:20] senses that are available to app
+[1:22] developers to influence you. Smell and
+[1:24] taste You can't really influence that
+[1:27] through an app. Well, you can't smell
+[1:28] anything through your phone.
+[1:30] And I know when your friend sends you a
+[1:33] snap of the food that they're eating, it
+[1:36] would be amazing if you could lick your
+[1:38] phone and taste food, but you can't
+[1:42] really do that.
+[1:44] But, to think about it, that's a scary
+[1:46] level of technology to be honest. And
+[1:49] would you really want that?
+[1:51] All right. So, by a show of hands, from
+[1:55] a visual perspective, do you think that
+[1:58] the food on the right is more expensive?
+[2:03] All right. Do you think that the food on
+[2:05] your left is more expensive?
+[2:09] Okay. So, what can we infer from this?
+[2:12] The food on the right clearly has lesser
+[2:15] food.
+[2:17] But, since it's presented to you in a
+[2:19] beautiful manner and since it has
+[2:22] vibrant colors, it's clear to say that
+[2:26] user interface and the way it's
+[2:28] presented to you is very very important.
+[2:32] So, that leads us to
+[2:34] beautiful interface.
+[2:36] Now, how can we design beautiful
+[2:38] interface? That's by That's by following
+[2:42] two important points.
+[2:44] How much information you're trying to
+[2:46] provide and how are you trying to
+[2:48] provide that information? Let's take a
+[2:51] look at an example, shall we?
+[2:53] Let's look at this menu.
+[2:55] There's so much information in the menu.
+[2:58] It's so hard for your brain to process
+[3:00] all that information on one at at one
+[3:04] go.
+[3:05] So, that provides a certain that kind of
+[3:09] elicits a certain level of stress on
+[3:11] your brain.
+[3:13] And that is called cognitive overload.
+[3:17] Well, that doesn't look right.
+[3:20] Cognitive overload is the amount of
+[3:23] stress that you put on your brain when
+[3:25] you're trying to learn new content. So,
+[3:28] as you saw from the menu, there was just
+[3:30] way too much information that was given
+[3:32] to you at one go. So, it's pretty hard
+[3:34] for you to process all that information.
+[3:37] As you saw from the previous slide, the
+[3:39] colors were just way too bright and was
+[3:41] just off.
+[3:43] And process and colors can also
+[3:46] be pretty taxing on your mind and thus
+[3:49] making a good choice in the amount of
+[3:51] information that you're trying to
+[3:52] provide and how you're trying to provide
+[3:55] that information is very very important.
+[3:57] And that brings us to processing and
+[4:00] perception fluency. What is this? This
+[4:04] is the ease with which we can process
+[4:08] information.
+[4:10] And let me tell you I'm going to give
+[4:12] you two examples of how information is
+[4:15] being presented to you. So, these are
+[4:17] websites of two tech giants and there's
+[4:20] nothing wrong with with the design, but
+[4:22] it's just two different approaches. Both
+[4:24] of these tech companies offer similar
+[4:27] functionalities, but it's just the way
+[4:28] that they choose to portray it or
+[4:31] provide the information to you. I'm
+[4:34] pretty sure you've all been on this
+[4:35] website.
+[4:37] I hope everyone has. So, let's look at
+[4:40] this, right? There is a search bar right
+[4:43] in the middle. There are two buttons,
+[4:45] search and I'm feeling lucky. Well,
+[4:48] honestly I've been on this website a
+[4:49] billion times. I've not pressed that
+[4:52] button at all.
+[4:55] So, it's pretty clear from the layout
+[4:57] that
+[4:58] its search search engine is the primary
+[5:01] feature.
+[5:03] But, they also do offer mail, news, and
+[5:06] so many other products, which is
+[5:08] conveniently located to the top right
+[5:10] hand side corner and
+[5:12] by clicking the drop down box and you're
+[5:15] free to access it.
+[5:17] But, let's take a look at this website.
+[5:20] They offer a lot of the same features as
+[5:22] well, but they're presenting the
+[5:24] information to you like this.
+[5:27] So, the news is right there, the search
+[5:29] bar is right there, and all of the
+[5:30] information is right there. There's
+[5:32] nothing wrong with either of the
+[5:33] approaches, but it's just the way it is
+[5:36] presented to you that is different.
+[5:39] Now, I'm going to
+[5:40] ask you guys to please close your eyes
+[5:43] for a bit and try to feel the emotion.
+[5:45] Try to feel what comes to your mind when
+[5:48] I say it.
+[5:50] What do you think
+[5:52] when I say the color blue?
+[5:56] What do you think when I say the color
+[5:58] green?
+[6:01] Now, what do you think when I say the
+[6:03] color red?
+[6:07] Now, please open your eyes.
+[6:09] Let me tell you what I think, all right?
+[6:11] When I hear the color blue,
+[6:13] I think of the sky. I think of the sea.
+[6:16] It's calming. When I think about green,
+[6:19] I think about leaves. I think about open
+[6:21] fields. I think about grass and that's
+[6:24] pretty calming as well. But, when I
+[6:26] think about red, well, where do we see
+[6:29] red on a daily basis? We see red in stop
+[6:33] signs. We see red in traffic lights.
+[6:36] What does it tell us? It tells us to be
+[6:38] alert.
+[6:39] It tells us to pay attention.
+[6:41] It tells us to
+[6:44] to be alert and to notice something. And
+[6:46] that's why when notifications are
+[6:50] provided to us on our phone, it is red
+[6:54] in color. So, every time you have a
+[6:56] notification from a particular app, it's
+[6:58] going to have a badge beside it that
+[7:00] indicates that you have a notification
+[7:02] and since it's red, it's going to grab
+[7:04] your attention and that's why red is
+[7:06] being used.
+[7:08] Now,
+[7:09] how do you feel when these popular icons
+[7:12] are gray-scaled?
+[7:14] Think about it.
+[7:16] Now,
+[7:17] how do you feel about them now?
+[7:20] Don't you feel just a bit more excited
+[7:22] and a bit more happy to look at them in
+[7:25] their associated colors?
+[7:28] I do. Uh let me tell you how important
+[7:31] colors are to a company.
+[7:33] Uh over the past decade, I'm pretty sure
+[7:35] you've heard about T-Mobile, the famous
+[7:37] telecom company. They have sued many
+[7:40] companies because they have used similar
+[7:44] shades of magenta.
+[7:46] And this is how important uh companies
+[7:50] take the colors that they're associated
+[7:53] with.
+[7:55] Now, sound. Sound is another way for uh
+[7:59] apps to grab our attention and to elicit
+[8:02] involuntary behavior.
+[8:04] And let me tell you what I mean by that,
+[8:06] all right? So, there's this experiment
+[8:08] that was conducted in 1890 by a Russian
+[8:11] physiologist by the name of Ivan Pavlov.
+[8:14] So, what he discovered was was that
+[8:16] whenever he fed his dog, he used to ring
+[8:19] a bell and for over the course of a few
+[8:22] weeks, he continued doing that. And it
+[8:25] came a point where when he removed the
+[8:27] stimulus of food and he rang his bell,
+[8:30] the dog would start to salivate. Now,
+[8:32] what does this tell you? It tells you
+[8:34] that the
+[8:36] involuntary behavior of the dog of
+[8:38] salivating is now paired with the
+[8:42] ringing of a bell. And this is how an
+[8:44] involuntary behavior is associated with
+[8:47] a neutral stimulus.
+[8:49] Let me give you an example. Now, in our
+[8:51] phones,
+[8:53] when our phone rings, we involuntarily
+[8:55] flinch flinch to our phone. We reach out
+[8:58] for it and that is why it's important to
+[9:02] give a good notification sound. Let's
+[9:04] take a look at a few popular ringtones,
+[9:08] shall we?
+[9:30] Now, let's try to analyze what's common
+[9:33] among these tones.
+[9:35] They're all
+[9:37] They do They all have high frequency,
+[9:40] high pitch basically. And that's how it
+[9:44] creates us to be alert. That makes us
+[9:46] alert and that elicits involuntary
+[9:49] behavior of reaching out to our phone.
+[9:51] And just by hearing that notification
+[9:53] tones, you know whether you got a
+[9:55] message from Facebook Messenger or a
+[9:57] message or ringtone from Discord. And
+[10:01] that is the uniqueness of the apps.
+[10:04] Now, let's talk about responsiveness.
+[10:07] Humans As humans, we are habituated to
+[10:10] responsive environments, and we want the
+[10:12] applications to be more interactive with
+[10:15] us. And that's why positive
+[10:17] reinforcement are built into
+[10:20] applications. Let's take a look at how
+[10:22] it is done.
+[10:24] For example, on Instagram or any other
+[10:25] social media platform, when you like a
+[10:28] picture, it's usually accompanied by a
+[10:31] vibration or a sound. And this is
+[10:34] positive reinforcement. This makes you
+[10:38] interact with the app more. Want to
+[10:40] interact with the app more, actually.
+[10:43] And that's a good thing. But also, if
+[10:45] you dislike someone's photo or some some
+[10:49] content, you're not going to be greeted
+[10:51] with a sound or a vibration because they
+[10:53] do not want to associate that with
+[10:56] something that you'd want to do.
+[10:58] That's how positive reinforcement is
+[11:00] done. Now, let's talk about positive
+[11:02] intermittent reinforcement. Now, what is
+[11:04] this?
+[11:05] There have been many times where I've
+[11:07] opened my app, my so favorite social
+[11:10] media app, I've just swiped down to
+[11:13] refresh the app to get new content and
+[11:15] new new newsfeed, maybe.
+[11:18] But not every time do you get new
+[11:20] content.
+[11:22] This situation is paralleled with the
+[11:25] slot machine
+[11:27] in casinos. So, what do you do in a slot
+[11:29] machine? You put in a token, you pull
+[11:31] the lever, and the number start
+[11:34] spinning. 7 7 not 7. And you keep doing
+[11:38] this, you put another token, you pull
+[11:40] the lever, it spins,
+[11:43] it doesn't work out. But once in a
+[11:44] while, it is going to work out, and
+[11:46] you'll feel happy, and you're like,
+[11:47] "Okay, so if I try more, I'm going to
+[11:49] get more wins." And that is the kind of
+[11:52] habit that's being
+[11:54] paralleled over here
+[11:56] to create a sort of an addiction.
+[12:00] Now, personalization. Personalization is
+[12:02] a very very big, important part of app
+[12:05] design. So, the app should be able to
+[12:08] work better for you, basically. And how
+[12:12] is this accomplished? This is
+[12:13] accomplished by building a model of you
+[12:17] based on what you like and based on what
+[12:19] you dislike and based on your
+[12:20] interactions with the app.
+[12:22] So, let me give you an example. So, in
+[12:23] Spotify, when you first sign up and log
+[12:27] in for the first ever time, it's going
+[12:29] to ask you to
+[12:31] select five artists that you enjoy
+[12:33] listening to or three genres that you
+[12:35] enjoy listening to. And that creates a
+[12:37] base model of what your likes are. And
+[12:41] as you continue interacting with the
+[12:43] app, it would give the model will be
+[12:47] better built around you based on your
+[12:50] interactions, based on the likes, based
+[12:53] on your dislikes, based on the songs
+[12:54] that you're adding to your playlist, and
+[12:56] all of that, so as to better suggest
+[12:58] songs that you would enjoy. Ultimately,
+[13:01] the aim is to make an app that would be
+[13:05] better for you particularly to use.
+[13:09] That's the goal.
+[13:11] Now, hedonic adaptation. What is this?
+[13:14] This is
+[13:15] Let me put it in layman terms. We get
+[13:17] accustomed to positive and negative
+[13:20] stimulus.
+[13:22] So, for example, if I eat cookie dough
+[13:25] ice cream every single day for 7 days
+[13:27] straight, I'm not going to enjoy it
+[13:30] anymore.
+[13:31] I'm not going to enjoy it as much as I
+[13:32] had it on the first day.
+[13:34] And that's because that stimulus is no
+[13:37] longer providing happiness to me.
+[13:40] So, that is what hedonic adaptation is,
+[13:43] and this will can be translated in many
+[13:46] many areas in our lives.
+[13:49] There's always a genetic set point in
+[13:51] the amount of happiness that we do
+[13:53] experience on a on a constant level.
+[13:55] Good circumstances and bad circumstances
+[13:58] do come and go,
+[13:59] but that even if that happens, we would
+[14:02] return back to our genetic set point of
+[14:04] happiness.
+[14:06] So, let's take a look at this, all
+[14:07] right? This is Fortnite in season 1, and
+[14:10] this is the lobby of how it was.
+[14:12] Uh this is Fortnite in season 8.
+[14:15] Look at the amount of changes. There are
+[14:17] a lot of changes, a lot of new cool
+[14:19] dance moves, for sure.
+[14:21] But the important thing to notice is
+[14:22] that there's been all these frequent
+[14:24] updates to get to this point. And why
+[14:27] were there so many frequent updates?
+[14:29] That's so that you don't get used to how
+[14:32] the app feels. Once you get used to how
+[14:34] the app feels, you want to you want
+[14:36] something else. It's the same thing with
+[14:38] me and cookie dough ice cream. Now, I
+[14:39] I'm tired of that. I want chocolate
+[14:41] chip, maybe. So, that's how it is. So,
+[14:43] since by providing more updates, more
+[14:46] frequent updates, and changing how the
+[14:48] game feels for you, they can keep you
+[14:50] more interactive with the app.
+[14:53] So, persuasive design. This is very
+[14:55] important as well. This is one way to
+[14:57] motivate the users of the app to behave
+[15:01] in certain way that the developers want
+[15:04] you to behave.
+[15:05] You get it? So, what that means is that
+[15:10] For example, let's take
+[15:11] Let's take the example of Instagram, all
+[15:12] right? So, you've been We Sharing photos
+[15:16] online has been around for a long time.
+[15:18] But then Instagram came in, and sharing
+[15:21] photos was never more fun and never more
+[15:24] interactive and never more awesome, to
+[15:26] be honest. So, when you post a picture,
+[15:30] what happens? Your followers get
+[15:32] notified about it, and every interaction
+[15:35] that anyone has on that picture, on that
+[15:37] photo or video, you're going to be
+[15:40] notified with a prompt of a notification
+[15:42] about it. And that prompt will make you
+[15:46] personally to interact more with the
+[15:48] like or comment or anything that your
+[15:51] followers has done with your photo. And
+[15:54] that is the design of notifications to
+[15:58] make you interact with the particular
+[15:59] app more. And this is done across many
+[16:01] many apps.
+[16:04] So, all of this
+[16:06] all of the influence on our senses is to
+[16:09] ultimately target the dopamine system in
+[16:13] our brains. So, what is dopamine?
+[16:15] Dopamine is the chemical that is
+[16:16] released to make us feel happy. And the
+[16:20] ultimate part is if you feel happy about
+[16:22] using an app, you would use it more, and
+[16:24] that is what it's all about.
+[16:29] So, let's talk about social media
+[16:31] addiction cycle.
+[16:32] Let's see that What happens is when you
+[16:35] perform an action by writing a post or
+[16:38] sharing a picture, what you do is you
+[16:41] wait for a reaction. That is what all of
+[16:44] us do. I'm pretty sure the day where I
+[16:46] post a picture or photo or video, that's
+[16:50] the day when I open Instagram like 10
+[16:52] times more than any other day, just to
+[16:54] see how I'm doing, maybe.
+[16:56] So, what you do is you wait for a
+[16:58] reaction, it creates an anticipation
+[17:00] about it, and it goes on.
+[17:03] So, why is all this so important? Back
+[17:05] when phones used to look like this,
+[17:08] all you did was call and SMS, and maybe
+[17:11] play the snake game on your phone. And
+[17:13] that's pretty much it. But now, when
+[17:15] phones look like this, what you do is
+[17:17] you have 100 other apps out there which
+[17:20] are competing for your attention.
+[17:22] And all your users' attention is what
+[17:24] the companies want, and that's what apps
+[17:26] are designed for.
+[17:28] Now,
+[17:30] I want to leave you all with this quote.
+[17:32] There are only two industries that call
+[17:34] their customers users, illegal drugs and
+[17:37] software.
+[17:39] Now, that's something to think about.
+[17:41] Thank you.
+[17:44] All right.

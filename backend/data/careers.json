@@ -1,0 +1,22 @@
+[
+  {
+    "id": "job_seed1",
+    "title": "Founding Engineer (MERN, AI features)",
+    "team": "Product",
+    "type": "Full-time",
+    "location": "Hyderabad, India · hybrid",
+    "description": "Build the Quadly web app end to end: the Placement Plan feed, Catch-the-AI challenges and the interview practice flows. You would work directly with the founder on the AI agent loop. Fits a final-year or freshly graduated developer who ships fast and cares about craft.",
+    "status": "open",
+    "createdAt": "2026-10-23T00:00:00.000Z"
+  },
+  {
+    "id": "job_seed2",
+    "title": "Campus Growth Intern",
+    "team": "Growth",
+    "type": "Internship",
+    "location": "Remote (India) · part-time",
+    "description": "Own one college: grow active users through squads, contests and ambassadors. Perfect on-ramp into the Campus Lead track — the strongest interns convert into paid Campus Leads.",
+    "status": "open",
+    "createdAt": "2026-10-23T00:00:00.000Z"
+  }
+]

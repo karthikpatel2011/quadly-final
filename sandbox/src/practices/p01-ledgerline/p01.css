@@ -1,0 +1,127 @@
+.p01,
+.p01 *::before,
+.p01 *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Practice exercise 01 — original design applying design-intelligence lessons.
+   Direction: light editorial premium (warm paper ground, warm-advance CTA),
+   display serif + utility sans, deliberate monospace for invoice data. */
+.p01 {
+  /* surface scale (warm paper, per color rules: one accent, neutrals ramp) */
+  --bg:#FAF7F2; --surface:#FFFDF9; --surface-2:#F1EBE0; --border:#E4DCCC; --border-strong:#D6CCB6;
+  --ink:#1D1912; --ink-2:#57503F; --ink-3:#6E6553;
+  /* accent = warm ember, CTA-warmer-than-ground rule; state ladder default6/hover7/press8 */
+  --accent-600:#C2410C; --accent-700:#9A3412; --accent-800:#7C2D12; --accent-050:#FDF0E7;
+  /* semantic: reserved (overdue demo red do not reuse for brand) */
+  --sem-error:#B91C1C; --sem-error-bg:#FBEAEA; --sem-ok:#15803D; --sem-ok-bg:#E8F3EA;
+  /* type ramp: leading falls as size rises */
+  --font-display:"Fraunces",Georgia,serif; --font-text:"Public Sans",system-ui,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,monospace;
+  /* spacing tiers: section > component > intra (8pt) */
+  --sp-sec:96px; --sp-comp:24px; --sp-intra:8px;
+  --measure:640px; /* ~65ch at 16px */
+  --radius:10px; --radius-lg:20px;
+}
+.p01 * {margin:0;padding:0;box-sizing:border-box}
+.p01 {scroll-behavior:smooth}
+.p01 {background:var(--bg);color:var(--ink);font-family:var(--font-text);font-size:16px;line-height:1.5}
+.p01 .wrap {max-width:1120px;margin:0 auto;padding:0 32px}
+.p01 .kicker {font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-700)}
+.p01 h1 {font-family:var(--font-display);font-weight:620;font-size:54px;line-height:1.05;letter-spacing:-.015em}
+.p01 h2 {font-family:var(--font-display);font-weight:620;font-size:36px;line-height:1.15;letter-spacing:-.01em}
+.p01 p.lede {font-size:18px;line-height:1.5;color:var(--ink-2);max-width:var(--measure)}
+.p01 a {color:inherit;text-decoration:none}
+.p01:focus-visible {outline:3px solid var(--accent-600);outline-offset:2px}
+
+/* nav — one account/action element, left-aligned items */
+.p01 nav {display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.p01 .logo {font-family:var(--font-display);font-weight:620;font-size:20px}
+.p01 .navlinks {display:flex;gap:24px;font-size:14px;font-weight:500;color:var(--ink-2)}
+.p01 .btn {display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;border-radius:var(--radius);padding:12px 22px;cursor:pointer;border:none}
+.p01 .btn-primary {background:var(--accent-600);color:#fff}
+.p01 .btn-primary:hover {background:var(--accent-700)}
+.p01 .btn-primary:active {background:var(--accent-800)}
+.p01 .btn-quiet {background:transparent;color:var(--ink-2);padding:12px 14px}
+.p01 .btn-quiet:hover {color:var(--ink)}
+
+/* hero: statement + one primary action (single CTA on screen) + product-as-graphic */
+.p01 .hero {display:grid;grid-template-columns:6fr 5fr;gap:64px;align-items:center;padding:64px 0 96px}
+.p01 .hero p.lede {margin:20px 0 28px}
+.p01 .hero-actions {display:flex;gap:12px;align-items:center}
+.p01 .trust {margin-top:28px;font-size:13.5px;color:var(--ink-3)}
+.p01 .trust strong {color:var(--ink-2);font-weight:600}
+
+/* product graphic = real product UI (invoice list), tilted card motif built ORIGINAL */
+.p01 .mock {background:linear-gradient(160deg,#232019,#161310);border-radius:var(--radius-lg);padding:20px;color:#E9E4D8;
+  transform:rotate(-1.6deg);border:1px solid #3A342A;box-shadow:0 24px 60px -24px rgba(29,25,18,.45)}
+.p01 .mock-head {display:flex;justify-content:space-between;align-items:center;padding:4px 6px 14px;font-size:13px;color:#B9AF9B}
+.p01 .mock-head .mono {color:#E0B68F}
+.p01 .inv {background:#211E18;border:1px solid #35301F;border-radius:12px;overflow:hidden}
+.p01 .row {display:grid;grid-template-columns:1.4fr 1fr .9fr .8fr;gap:8px;align-items:center;padding:13px 16px;border-top:1px solid #2E2A22;font-size:13.5px}
+.p01 .row:first-child {border-top:none;background:#191712;color:#A99F8B;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.p01 .mono {font-family:var(--font-mono);font-size:12.5px}
+.p01 .pill {display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;border-radius:99px;padding:3px 10px;width:fit-content}
+.p01 .pill-paid {background:#1E3A27;color:#7DCE9B}
+.p01 .pill-due {background:#3A3224;color:#D8C08C}
+.p01 .pill-overdue {background:#43201F;color:#F09B94}
+.p01 .spark {display:flex;align-items:flex-end;gap:3px;height:56px;margin-top:14px;padding:0 6px}
+.p01 .spark i {flex:1;background:#C97C4A;border-radius:2px 2px 0 0;opacity:.85}
+.p01 .spark i.hot {background:#E58A4F}
+.p01 .mock-cap {font-size:12px;color:#A39A84;padding:10px 6px 2px}
+
+/* features: real-UI splits, left copy */
+.p01 .features {display:grid;gap:0;border-top:1px solid var(--border)}
+.p01 .feature {display:grid;grid-template-columns:5fr 6fr;gap:64px;align-items:center;padding:72px 0;border-bottom:1px solid var(--border)}
+.p01 .feature.flip {grid-template-columns:6fr 5fr}
+.p01 .feature.flip .copy {order:2}
+.p01 .copy p.lede {margin:14px 0 0;font-size:16px}
+.p01 .flist {margin:18px 0 0;padding:0;list-style:none;color:var(--ink-2);font-size:15px}
+.p01 .flist li {padding-left:22px;position:relative;margin:8px 0}
+.p01 .flist li::before {content:"→";position:absolute;left:0;color:var(--accent-700)}
+
+/* status board + reminder mini-mock (second product graphic, cool ground) */
+.p01 .board {background:#141A22;border-radius:var(--radius-lg);padding:20px;color:#DCE3EC;border:1px solid #2A3441;box-shadow:0 24px 60px -28px rgba(20,26,34,.5)}
+.p01 .stat-row {display:flex;gap:12px;margin-bottom:14px}
+.p01 .stat {flex:1;background:#1B2330;border:1px solid #2C3849;border-radius:10px;padding:12px 14px}
+.p01 .stat b {display:block;font-size:22px;font-family:var(--font-display);font-weight:500}
+.p01 .stat span {font-size:12px;color:#93A0B4}
+.p01 .remind {background:#1B2330;border:1px solid #2C3849;border-radius:10px;padding:12px 14px;font-size:13px}
+.p01 .remind .when {color:#F0B37E}
+
+/* pricing: 3 plans, price hero, deltas visible, single highlighted plan */
+.p01 .pricing {padding:96px 0}
+.p01 .pricing h2 {max-width:var(--measure)}
+.p01 .plans {display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+.p01 .plan {background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;display:flex;flex-direction:column}
+.p01 .plan.hot {border-color:var(--accent-600);box-shadow:0 12px 40px -20px rgba(194,65,12,.35);position:relative}
+.p01 .badge {position:absolute;top:-11px;left:24px;background:var(--accent-600);color:#fff;font-size:11px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:99px}
+.p01 .plan-name {font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}
+.p01 .price {font-family:var(--font-display);font-weight:620;font-size:52px;margin:10px 0 2px}
+.p01 .price small {font-family:var(--font-text);font-size:14px;font-weight:500;color:var(--ink-3)}
+.p01 .plan-sub {font-size:13.5px;color:var(--ink-3);min-height:20px}
+.p01 .plan ul {list-style:none;margin:18px 0 22px;flex:1}
+.p01 .plan li {font-size:14px;color:var(--ink-2);padding:6px 0 6px 24px;position:relative}
+.p01 .plan li::before {content:"✓";position:absolute;left:0;color:var(--sem-ok);font-weight:700}
+.p01 .plan .delta {font-size:12.5px;color:var(--ink-3);border-top:1px dashed var(--border-strong);padding-top:10px;margin-bottom:16px}
+.p01 .plan .btn {justify-content:center}
+.p01 .btn-outline {background:transparent;border:1px solid var(--border-strong);color:var(--ink)}
+.p01 .btn-outline:hover {border-color:var(--ink)}
+
+.p01 footer {border-top:1px solid var(--border);padding:36px 0 48px;color:var(--ink-3);font-size:13px}
+.p01 footer .wrap {display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.p01 footer a {text-decoration:underline;text-underline-offset:3px}
+
+@media (max-width:960px){
+  .p01 nav {padding:16px 0;gap:12px}
+  .p01 .navlinks {display:none}
+  .p01 .hero, .p01 .feature, .p01 .feature.flip {grid-template-columns:1fr;gap:36px;padding:48px 0}
+  .p01 .feature.flip .copy {order:0}
+  .p01 h1 {font-size:40px}
+  .p01 .plans {grid-template-columns:1fr}
+  .p01 .row {grid-template-columns:1.2fr 1fr;row-gap:2px}
+  .p01 .row .hide-m {display:none}
+  .p01 {--sp-sec:64px}
+}

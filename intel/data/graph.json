@@ -1,0 +1,513 @@
+{
+  "version": 1,
+  "nodes": [
+    {
+      "id": "src.01",
+      "type": "source",
+      "label": "video-01.md",
+      "data": {
+        "path": "research/video-01.md"
+      },
+      "provenance": [
+        {
+          "source": "video-01.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.02",
+      "type": "source",
+      "label": "video-02.md",
+      "data": {
+        "path": "research/video-02.md"
+      },
+      "provenance": [
+        {
+          "source": "video-02.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.03",
+      "type": "source",
+      "label": "video-03.md",
+      "data": {
+        "path": "research/video-03.md"
+      },
+      "provenance": [
+        {
+          "source": "video-03.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.04",
+      "type": "source",
+      "label": "video-04.md",
+      "data": {
+        "path": "research/video-04.md"
+      },
+      "provenance": [
+        {
+          "source": "video-04.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.05",
+      "type": "source",
+      "label": "video-05.md",
+      "data": {
+        "path": "research/video-05.md"
+      },
+      "provenance": [
+        {
+          "source": "video-05.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.06",
+      "type": "source",
+      "label": "video-06.md",
+      "data": {
+        "path": "research/video-06.md"
+      },
+      "provenance": [
+        {
+          "source": "video-06.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.07",
+      "type": "source",
+      "label": "video-07.md",
+      "data": {
+        "path": "research/video-07.md"
+      },
+      "provenance": [
+        {
+          "source": "video-07.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.08",
+      "type": "source",
+      "label": "video-08.md",
+      "data": {
+        "path": "research/video-08.md"
+      },
+      "provenance": [
+        {
+          "source": "video-08.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.09",
+      "type": "source",
+      "label": "video-09.md",
+      "data": {
+        "path": "research/video-09.md"
+      },
+      "provenance": [
+        {
+          "source": "video-09.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.10",
+      "type": "source",
+      "label": "video-10.md",
+      "data": {
+        "path": "research/video-10.md"
+      },
+      "provenance": [
+        {
+          "source": "video-10.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "src.11",
+      "type": "source",
+      "label": "video-11.md",
+      "data": {
+        "path": "research/video-11.md"
+      },
+      "provenance": [
+        {
+          "source": "video-11.md",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "dp.603010",
+      "type": "design-principle",
+      "label": "60-30-10 proportion",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-09.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-24.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-21.md (translated)",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.contrast-floors",
+      "type": "design-principle",
+      "label": "WCAG contrast floors (4.5:1 / 3:1)",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-09.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-10.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.state-ladder",
+      "type": "design-principle",
+      "label": "Color state ladder 50-900 (600/700/800/200/300)",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-09.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-04.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.typography-is-layout",
+      "type": "design-principle",
+      "label": "Typography is the layout (traffic control)",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-10.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.prod-graphics",
+      "type": "design-principle",
+      "label": "Real product graphics beat icon filler",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-01.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-06.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.dark-relight",
+      "type": "design-principle",
+      "label": "Dark mode = re-light, single warm figure",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-09.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-04.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.decision-density",
+      "type": "design-principle",
+      "label": "Density only where it changes a decision",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-07.md",
+          "kind": "explicit"
+        },
+        {
+          "source": "research/video-01.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.dead-modules",
+      "type": "design-principle",
+      "label": "Delete dead modules",
+      "data": {},
+      "provenance": [
+        {
+          "source": "research/video-01.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "dp.badges.reviews",
+      "type": "design-principle",
+      "label": "Mistake-replay due badge",
+      "data": {},
+      "provenance": [
+        {
+          "source": "docs/video-research/video-B4.md",
+          "kind": "explicit"
+        }
+      ]
+    },
+    {
+      "id": "comp.orchestrator",
+      "type": "component",
+      "label": "Bounded orchestrator loop",
+      "data": {
+        "path": "intel/src/orchestrator.js"
+      },
+      "provenance": [
+        {
+          "source": "intel/src/orchestrator.js",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "comp.graph",
+      "type": "component",
+      "label": "Knowledge-graph store",
+      "data": {
+        "path": "intel/src/graph.js"
+      },
+      "provenance": [
+        {
+          "source": "intel/src/graph.js",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "comp.memory",
+      "type": "component",
+      "label": "5-layer memory (working/episodic/semantic/procedural/project)",
+      "data": {
+        "path": "intel/src/memory.js"
+      },
+      "provenance": [
+        {
+          "source": "intel/src/memory.js",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "comp.tools",
+      "type": "component",
+      "label": "Tool registry (validate/timeout/retry)",
+      "data": {
+        "path": "intel/src/tools.js"
+      },
+      "provenance": [
+        {
+          "source": "intel/src/tools.js",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "comp.critic",
+      "type": "component",
+      "label": "Evaluation + critic checklist",
+      "data": {
+        "path": "intel/src/critic.js"
+      },
+      "provenance": [
+        {
+          "source": "intel/src/critic.js",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "id": "comp.dashboard",
+      "type": "component",
+      "label": "Quadly dashboard shell (12 pages)",
+      "data": {
+        "path": "frontend/src/components/dashboard/"
+      },
+      "provenance": [
+        {
+          "source": "frontend/src/components/dashboard/",
+          "kind": "verified"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "comp.critic",
+      "to": "dp.contrast-floors",
+      "type": "IMPLEMENTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.critic",
+      "to": "dp.603010",
+      "type": "IMPLEMENTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.dashboard",
+      "to": "dp.prod-graphics",
+      "type": "IMPLEMENTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.dashboard",
+      "to": "dp.state-ladder",
+      "type": "IMPLEMENTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.graph",
+      "to": "comp.memory",
+      "type": "SUPPORTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.orchestrator",
+      "to": "comp.tools",
+      "type": "DEPENDS_ON",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.orchestrator",
+      "to": "comp.memory",
+      "type": "DEPENDS_ON",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.orchestrator",
+      "to": "comp.graph",
+      "type": "DEPENDS_ON",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.critic",
+      "to": "comp.orchestrator",
+      "type": "SUPPORTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "comp.dashboard",
+      "to": "comp.graph",
+      "type": "SUPPORTS",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    },
+    {
+      "from": "dp.dark-relight",
+      "to": "dp.603010",
+      "type": "DERIVED_FROM",
+      "data": {},
+      "provenance": [
+        {
+          "source": "design-intelligence synthesis + docs/video-research",
+          "kind": "verified"
+        }
+      ]
+    }
+  ]
+}

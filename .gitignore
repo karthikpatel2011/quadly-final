@@ -1,0 +1,24 @@
+node_modules/
+dist/
+.env
+*.log
+.DS_Store
+
+# Never publish — personal data & runtime state (seeded content only is tracked)
+backend/data/accounts.json
+backend/data/attempts.json
+backend/data/interview-attempts.json
+backend/data/dashboard-state.json
+backend/data/onboarding-profiles.json
+backend/data/plans.json
+backend/data/home-views.json
+backend/data/post-interactions.json
+backend/data/notifications.json
+backend/data/mail.json
+backend/data/ai-profile.json
+backend/data/opportunity-tracker.json
+backend/data/ambassador-applications.json
+backend/data/avatars/
+
+# 1.5 GB research evidence store (source videos) — too heavy for GitHub
+design-intelligence/media/

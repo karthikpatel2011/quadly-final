@@ -1,0 +1,875 @@
+[0:46]  So folks, let's start with module number 1,
+[0:47] UX Psychology and Basic Laws.
+[0:50] Quick reminder before we go ahead,
+[0:53] folks, what was happening till now was that
+[0:54] your Figma knowledge and hands-on  Design systems knowledge
+[0:57] had a lot of value.
+[0:59] Meaning, if you were a good executor,
+[1:01] you would still make a lot of money.
+[1:03] In fact, those who used to code very well,
+[1:05] they would also get paid very very well.
+[1:07] Very very soon,
+[1:09] the cost of execution will go down,
+[1:11] because all these things will be automated.
+[1:14] So if someone knows how to make a website,
+[1:15] how to code, or even how to make  components on Figma,
+[1:19] they are essentially running the wrong race.
+[1:21] Because no matter what you do,
+[1:23] there will be an AI tool that will eventually automate execution.
+[1:27] So the bottom line is that ideation  matters the most.
+[1:30] If you are a good ideator,
+[1:32] then you will always be in a good job.
+[1:34] And no matter what tools come and go,
+[1:36] the first principles of UX,
+[1:38] which are the foundations of UX,
+[1:40] the way humans interact with  gadgets and interfaces,
+[1:42] that will remain the same.
+[1:44] So let's read today's model number one,
+[1:46] which is on Framing.
+[1:48] Framing says that we make very different decisions
+[1:52] based on how a fact is presented.
+[1:55] Of course, the definition is very very complicated.
+[1:57] Let's see how this really works.
+[1:59] There was a group of people
+[2:01] and each was given a bag of meat.
+[2:04] And group 1 was told
+[2:05] that the meat you are eating is 25% fat.
+[2:09] So of course,
+[2:10] they highlighted a negative thing,
+[2:12] even though that negative thing is very very low in quantity.
+[2:16] Group number 2 was told
+[2:17] that this meat is 75% lean.
+[2:20] Meaning, without emphasizing the fact,
+[2:22] they said that this is 75% lean,
+[2:24] which is basically the same fact.
+[2:26] But this time it has been framed in a very positive way.
+[2:30] Now what happened is that
+[2:31] when both the groups consumed the meat,
+[2:34] they were asked to rate the quality of their meat after consuming.
+[2:38] And turns out, those who got  the 25% fat framing,
+[2:42] meaning those who got a negative framing,
+[2:44] they rated it as 3.7 out of 7.
+[2:47] On the other hand,
+[2:48] those who got a 75% lean positive framing,
+[2:51] they rated the same meat
+[2:53] on a higher pedestal.
+[2:55] They rated it as 5.3 out of 7.
+[2:58] Which basically means
+[3:00] that different perceptions are made possible
+[3:03] by reframing the same evidence.
+[3:06] You can sell the same fact in a different way
+[3:09] and the other person will think  that this is better.
+[3:12] Now the question is that,
+[3:13] how do people use this in real life?
+[3:15] Instead of saying 20% of our flights get delayed,
+[3:19] what if you say we are 5% better  than the industry?
+[3:23] Because it is possible that these 2 sentences
+[3:25] are explaining the same fact.
+[3:27] But in the first one, you said that
+[3:29] only 20% of our flights get delayed,
+[3:31] but you focused on delaying,
+[3:33] that 20% also get delayed.
+[3:36] But when you say that we are 5%  better than the industry,
+[3:38] even though that number is really really small,
+[3:40] you are still emphasizing the fact that
+[3:42] you are better than everybody else  in the game.
+[3:45] Instead of saying save up to 25% on all purchases,
+[3:49] what if you say don't lose your 2% discount?
+[3:52] Oh, it should be 25.
+[3:54] But yeah, don't lose your 25% discount.
+[3:56] Because in the first case,
+[3:58] you are emphasizing on the fact that if you spend,
+[4:01] then you save 25%.
+[4:04] But on the other hand,
+[4:04] you are saying don't lose your 25% discount.
+[4:08] Now in India, there is a very common mentality
+[4:10] of Loss aversion.
+[4:12] Loss aversion says that
+[4:14] if I make an Instagram reel today,
+[4:17] whose hook is that you can earn Rs-10,000  by learning this thing,
+[4:21] then maybe people won't watch it.
+[4:22] If I make a hook that
+[4:24] you are losing Rs-10,000 every month  by this mistake,
+[4:28] now everyone will watch it.
+[4:30] People are not so interested in how to earn Rs-10,000.
+[4:35] There's a lot of interest in where  we are losing Rs-10,000.
+[4:39] So as default,
+[4:40] we are aversing the loss.
+[4:43] That there should be no loss.
+[4:44] We don't know whether we make a profit or not.
+[4:46] Just no one don't take anything from us.
+[4:48] Now the question is that
+[4:49] how do we use this in apps?
+[4:51] So here on the left, there an app called Gopuff
+[4:53] through which you can order groceries.
+[4:55] This is an app based out of Abroad.
+[4:57] Now I know that it will be a little pixelated  for the people in the back,
+[5:00] but those who are sitting in the middle,
+[5:01] can you see any application of this?
+[5:04] The framing thing that we are discussing.
+[5:06] The screen is in front of you.
+[5:08] Do you think anywhere in this UI
+[5:10] that they have used positive framing?
+[5:12] So on the very top, it says delivery.
+[5:14] And I think the font size is very small,
+[5:16] but basically, they have put a small notification under delivery.
+[5:19] Which says, "Delivery is on fire."
+[5:22] So delivery times are running
+[5:24] longer than usual in your area.
+[5:27] We appreciate your patience.
+[5:29] Now my question is, how do I know?
+[5:32] What if they don't have much staff?
+[5:35] And what if they are just saying
+[5:36] that the demand is too high?
+[5:37] When somebody says the demand is too high,
+[5:39] what does it mean?
+[5:40] That we got 10 orders
+[5:42] and we only have 5 people.
+[5:44] Now you have only 5 people,
+[5:46] isn't that a limitation?
+[5:48] Technically, if you're getting 10 orders,
+[5:49] then you should have 10 people.
+[5:52] But instead of saying that  we have 5 less people,
+[5:56] they say that all the people we have,
+[5:58] they are on demand.
+[6:00] So it is the same fact,
+[6:02] but presented in a better way.
+[6:04] When Uber says that there aren't any cabs,
+[6:07] then it doesn't say that there are no cabs.
+[6:08] It says all our drivers are busy.
+[6:12] So then it feels as if
+[6:14] you are trying to get them and  they are too good for you
+[6:17] because they are just busy making money.
+[6:20] On the very right side, you have another app,
+[6:22] which is a shopping app.
+[6:24] Do you see any benefit of framing there?
+[6:28] Anywhere?
+[6:28] I know that the font size is very very small.
+[6:31] But can you make out if they used framing here?
+[6:37] The subheading below early black Friday,
+[6:40] it says holiday deals are ramping up.
+[6:42] You don't want to miss out.
+[6:45] Now the question is,
+[6:46] when someone says that we are selling out,
+[6:48] is it really a very good thing?
+[6:51] Or it shows that you are not prepared to  tackle a huge customer base.
+[6:56] It is the same outcome
+[6:58] that the goods are gone.
+[7:00] OK,
+[7:01] but now it can either be that
+[7:02] the goods are so good that  they all sold out
+[7:04] or you never had the goods to cater the entire audience.
+[7:08] Before you move ahead,
+[7:10] I want to tell you about our latest learning website,
+[7:13] howtoprompt.in
+[7:14] where you can get free AI resources,
+[7:17] roadmaps and step-by-step guides
+[7:19] that will teach you everything that you need to know
+[7:21] about tools like ChatGPT and Midjourney.
+[7:28] Now, if you want to understand this psychological model in depth,
+[7:32] then the correct way to learn psychology
+[7:34] is not from a YouTube video or some course.
+[7:38] It is from research papers.
+[7:40] So a research paper can properly teach you
+[7:43] what was the case study, what was its outcome,
+[7:45] but what many people try is
+[7:46] they try to get a website,
+[7:48] find an article or a video.
+[7:50] And that is a shortcut and trust me,
+[7:52] those will not take you to the top 1%.
+[7:55] Let's come to the Second model,
+[7:57] Nostalgia Effect.
+[7:59] So what happened is
+[8:00] that this law says that, "Thinking about the past"
+[8:03] "makes us want to spend more."
+[8:06] Which is very, very strange.
+[8:08] Thinking about the past
+[8:10] makes us want to spend more.
+[8:13] So this time also there was  a very big group.
+[8:15] They split it into two parts.
+[8:17] Group number 1 was told
+[8:19] to write about a time
+[8:21] that makes you feel very nostalgic.
+[8:24] And group 2 was told
+[8:25] to write about an event
+[8:26] which is pretty neutral.
+[8:27] Tell us something about your day-to-day.
+[8:31] Then both the groups were tested
+[8:32] on their ability to spend money.
+[8:35] So when they got some memories,
+[8:37] when they wrote a little,
+[8:39] then they put them in different situations
+[8:41] just to check.
+[8:42] Whether their spending capacity will have any impact or not.
+[8:46] Group 1,
+[8:47] who wrote about their old memories,
+[8:50] they were willing to spend more
+[8:53] and save less.
+[8:56] While Group 2,
+[8:57] who wrote about their normal day to day memories,
+[9:00] they relatively desired more money.
+[9:02] They were still very careful that you know,
+[9:04] that where Rs-100 is being spent.
+[9:06] Now this is a very interesting thing.
+[9:08] But before I tell you what is happening,
+[9:11] do you guys remember these items?
+[9:15] Right.
+[9:16] Good old days.
+[9:19]  Now imagine you go to an event
+[9:21] and they relaunched it at that event.
+[9:24] Right, these things were available
+[9:27] for the entirety of your childhood.
+[9:29] Then they went away for a while.
+[9:30] And now suddenly if they relaunch them,
+[9:33] you know that you would at least
+[9:34] wait for 10-15 minutes in the queue to just get them.
+[9:36] Just to have that refresh.
+[9:38] That,
+[9:39] I just want to taste how it was.
+[9:42] Now what is the logic of this?
+[9:43] As human beings,
+[9:45] we have a bias in our minds
+[9:47] that the old days were very good.
+[9:50] OK.
+[9:51]  Even though if you compare all the metrics,
+[9:54] past versus present in terms of your lifestyle
+[9:57] and comfort and your wisdom,
+[9:59] technically you today is very good.
+[10:02] But our mind is that,
+[10:04] "No, those days were very simple."
+[10:06] "Before, things were very simple."
+[10:07] "We had no stress."
+[10:08] Maybe it was enough.
+[10:10] Today you don't even remember
+[10:12] how much stress you used to have.
+[10:14] So humans have 2 biggest conundrums.
+[10:17]  First, they are stuck to the past.
+[10:19] And second, they are anxious about the future.
+[10:22] Right, so either you are tensed about tomorrow
+[10:24] or you are feeling bad that  my past is gone.
+[10:27] So what happens is that UX designers use this very very gently
+[10:32] to infuse
+[10:33] good feeling, and good elements in their UI.
+[10:37] The vintage lenses and filters on Snapchat
+[10:41] are the most popular ones.
+[10:43] All the vintage filters on Instagram
+[10:45] they are the most popular ones.
+[10:47] Now how stupid is that if you  really think about it?
+[10:50] Companies spent millions of dollars
+[10:53] to first improve the camera.
+[10:56] Then you download an app
+[10:58] that degrades the quality.
+[11:00] Just to show off that my new camera
+[11:02] takes pictures that used to come from the old camera.
+[11:06] But you are still doing that
+[11:07] because you want to feel retro.
+[11:09] You want to feel outstanding.
+[11:10] That I am not just one of you.
+[11:12] I am somebody who is still stuck in the past.
+[11:15] Tip number 2
+[11:17] Craft memory-evoking user journeys.
+[11:20] Have you heard about Spotify's  time capsule playlist?
+[11:23] Or Rewind
+[11:25] or discovery or yearly playlist.
+[11:27] So basically what happens on Spotify is that
+[11:29] as soon as the whole year is completed,
+[11:31] Spotify makes a playlist of your best  Top-rated top plate songs.
+[11:36] And nowadays there are more playlists
+[11:37] called 2008 Bollywood,
+[11:39] 2006 Bollywood.
+[11:41] Right, and those are very popular.
+[11:44] Because listening to those songs  reminds you of a time
+[11:47] when you were just like
+[11:48] stress free.
+[11:50] So you love listening to those songs.
+[11:51] Not primarily because they are very good.
+[11:54] But also because they remind you of a time
+[11:56] which you think was better
+[11:58] than the present.
+[12:00] Let's talk about Model number 3
+[12:02] Self-expression.
+[12:04] Which says that we constantly seek out ways
+[12:07] to communicate our identity to others.
+[12:11] Now all the definitions I am giving you,
+[12:14] notice that there is a small subtext  below the definitions.
+[12:16] This is actually the research paper.
+[12:18] And I will be sharing this deck with you.
+[12:20] So going home you can actually search  for this research paper.
+[12:23] Either on ChatGPT or Google Scholar
+[12:25] to read into detail.
+[12:26] So that is why I'm mentioning it below.
+[12:28] Now this law says that
+[12:30] you should always allow your users
+[12:33] to either show who they are
+[12:35] or what they like.
+[12:37] 2 things, if you are building  a community app
+[12:39] or if you are building a social media app.
+[12:41] Now what is the logic behind this?
+[12:43] Before we get into that.
+[12:45] Have you ever wondered why people love getting tattoos?
+[12:48] Does anyone here have a tattoo?
+[12:51] So why did you get this tattoo?
+[12:53] Don't say that it is a girl's name
+[12:56] or that you got it done in love.
+[12:57] Is this it?
+[12:58] You are feeling shy.
+[13:00] For whom did you get this tattoo?
+[13:07] Correct.
+[13:08] So you like something
+[13:09] and you got a tattoo out of it.
+[13:11] To communicate either who you are  or what you like.
+[13:15] So that matters a lot.
+[13:16] And by the way,
+[13:17] getting a tattoo is very painful.
+[13:20] It hurts a lot.
+[13:21] And a tattoo is a lifetime commitment.
+[13:24] Like you can't erase it.
+[13:26] So obviously when a person  says yes to a tattoo
+[13:28] it is a huge decision.
+[13:30] An interesting way to see this is that
+[13:33] when we meet someone
+[13:34] we want to communicate something
+[13:36] in the most easiest way possible.
+[13:38] Some people use clothes.
+[13:40] Some people use hairstyle.
+[13:41] Some people use their phones, shoes,
+[13:43] whatever it is.
+[13:44] But we want to set an impression
+[13:46] as soon as somebody sees us.
+[13:48] So coming back,
+[13:49] tattoos are a very very easy way to tell somebody
+[13:52] what you like and who you are.
+[13:55] And if you look around yourself  you would realize
+[13:57] that there is self-expression
+[13:59] in almost everything that you are consuming.
+[14:03] This is a Macbook Pro.
+[14:05] OK
+[14:06] If you've read Steve Jobs' autobiography  by Walter Isaacson.
+[14:09] You would realize that a lot of people had this theory
+[14:11] theory that all the Apple products
+[14:13] are an extension of Steve Jobs' personality.
+[14:17] Because Steve Jobs by nature  was very controlling.
+[14:20] He didn't like anyone interfering his work.
+[14:23] That is why he said that
+[14:24] "Nobody should be able to open up the iPhone."
+[14:27] "Nobody should be able to open  the Macbook Pro."
+[14:30] Acer, HP, Dell, you can open any  of their laptop's battery.
+[14:33] You can easily open them.
+[14:35] They open up with a normal screwdriver.
+[14:36] Nokia, Samsung, all of their mobile batteries can be opened.
+[14:39] iPhone said no.
+[14:42] You have to use some very specific  micro screwdriver
+[14:45] to open the battery
+[14:46] and it's going to be super difficult for you
+[14:48] to even close it if you interfere.
+[14:50] Which means that
+[14:51] even though Steve Jobs is a human being
+[14:53] with like human beliefs.
+[14:54] Anything that he created
+[14:56] was sort of an extension of his personality.
+[15:00] And if you are looking at this hotel,
+[15:02] look at my clothes, look at your clothes,
+[15:04] look at the carpet.
+[15:05] Someone has designed it.
+[15:07] Now the person who is the main in his design process,
+[15:10] I can bet you that in the final output,
+[15:13] the personality of that main person has been infused.
+[15:16] So there is self-expression
+[15:17] everywhere that you see.
+[15:19] Now the question is how do we use this in apps?
+[15:22] The easiest application is Enable Themes.
+[15:25] What is the entire concept of themes?
+[15:28] Why do they introduce color schemes?
+[15:30] Why background came into Instagram?
+[15:32] Chat also got the background, right?
+[15:34] You can change the background in WhatsApp.
+[15:35] What is the logic behind these things?
+[15:39] Personalization.
+[15:40] Because people feel more attached to the app
+[15:42] when they feel that they have  made some edits to it.
+[15:46] In Spotify,
+[15:47] you can create your own playlist
+[15:49] and share it with other people.
+[15:51] And at this point they are using AI
+[15:53] to add in more songs.
+[15:55] So if you have made a playlist of 10 songs,
+[15:57] Spotify will scan those 10 songs
+[15:59] and add 11th and 12th songs by itself.
+[16:02] Now the fun part is that
+[16:03] even when you create your playlist,
+[16:05] the fact that you can share it
+[16:07] is a form of self-expression.
+[16:10] Spotify owners could have stopped it if they wanted to.
+[16:13] They could have said that  they don't want share remove it..
+[16:15] But sharing is the most pivotal feature  in a playlist.
+[16:19] Because that is how you can  share your music
+[16:21] and communicate what you like.
+[16:23] And imagine if you have made 5-6 playlists on Spotify,
+[16:26] if you have been regularly sharing it  with your friends,
+[16:28] now Spotify becomes more valuable to you.
+[16:31] If you are saving Instagram posts,
+[16:33] Instagram just keeps becoming  more valuable and valuable.
+[16:36] Because if you are liking and commenting,
+[16:38] let's say your exams are coming
+[16:39] and you have deleted Instagram,
+[16:40] you will not regret it.
+[16:41] It's just likes and comments, who cares?
+[16:44] But if you have been saving posts and reels
+[16:46] for the past 2.5 years,
+[16:47] now when you delete Instagram,
+[16:49] you will think twice.
+[16:51] That I am burning my virtual library
+[16:54] by deleting Instagram.
+[16:55] Tip number 2
+[16:57] Encourage user-generated content.
+[17:00] If you are making any app
+[17:01] and only you have the control to create content,
+[17:04] then you are doomed.
+[17:06] But if you allow other users
+[17:08] and other people of the application
+[17:10] to do something on the app,
+[17:11] then you create a loop.
+[17:13] For example,
+[17:14] Apple Memojis.
+[17:17] This is a proper, proper example  of personalization.
+[17:20] They could have had normal DPs as well.
+[17:22] But if you were to set up a Memoji  on the iPhone,
+[17:24] you would realise they have considered every single skin tone,
+[17:28] every single hairstyle,
+[17:29] every single clothing article
+[17:31] that you can possibly imagine.
+[17:33] And you must have noticed
+[17:35] when there were ads for WWDC,
+[17:37] they would show different kinds of Memojis.
+[17:40] Laughing,  smiling,
+[17:41] so they are creating a sense of joy.
+[17:44] And they are associating that joy and personalization
+[17:47] with the iPhone.
+[17:48] The link to download this presentation
+[17:50] will be in the description.
+[17:52] But there is a password for it
+[17:53] and this is the password.
+[17:54] Please make sure that you  copy this password
+[17:56] before you download the presentation.
+[17:59] Model number 2,
+[18:00] always Sell Status.
+[18:03] And this is specifically a very powerful  and useful in India.
+[18:07] Basically,
+[18:08] we constantly look for ways
+[18:10] to improve how others see us.
+[18:14] OK
+[18:15] Not even our family members  but mostly strangers.
+[18:18] We want to make sure that if a stranger looks at us,
+[18:21] we should be better looking,
+[18:23] we should be more powerful.
+[18:25] So people like to feel good about themselves
+[18:28] and your design can help them with that.
+[18:31] Starbucks
+[18:32] is the rank 1 example for this.
+[18:35] At this point,
+[18:36] majority of the people don't even drink Starbucks
+[18:39] because they like the taste.
+[18:40] It has just become a statement
+[18:42] that if we are at the airport,
+[18:44] we’ll choose a Starbucks,
+[18:45] because it just makes them feel more superior
+[18:47] and feel more cooler
+[18:49] than everybody else.
+[18:51] And how did that happen?
+[18:51] Because Starbucks has created that brand identity.
+[18:55] They have always associated themselves
+[18:57] with something which is very premium.
+[19:00] So the customer for whom being premium is an aspiration,
+[19:03] who them self may not be rich
+[19:05] but has an aspiration to become rich,
+[19:07] he is buying a Starbucks coffee,
+[19:09] buying a cheap thrill.
+[19:11] He not actually successful,
+[19:13] he may not be rich either.
+[19:15] But just for those 1-1.5 hours,
+[19:17] he is buying that sensation of aspiration.
+[19:20] That I am better than everybody else.
+[19:22] People after buying an iPhone,
+[19:24] "Where is the mirror?"
+[19:26] And there is a meme that says that
+[19:28] 90% of the iPhone selfies are taken  in front of the mirror.
+[19:31] This is how they show that  they have an iPhone.
+[19:35] In fact, a lot of people just hide their face.
+[19:38] Like it is just to show their outfit  and the phone.
+[19:42] So what does that tell us?
+[19:44] If you can't recognize that person's face,
+[19:47] then it is just a statement to say that
+[19:49] I look amazing in this outfit,
+[19:51] rank number 1.
+[19:52] Point number 2,
+[19:53] I have an iPhone with like 3 cameras, 2 cameras,
+[19:56] whatever stupid games that they are playing.
+[19:59] The question is that
+[20:00] you should not be the one who is getting  caught up in these hacks.
+[20:04] You should be the one who is creating these games.
+[20:07] Right?
+[20:08] Because now that you understand  how this works,
+[20:10] you can make something which is replicating
+[20:12] how the Apple ecosystem is replicating  for its consumers.
+[20:17] Right?
+[20:17] Where you know that if you're  making such a product,
+[20:20] the other person should feel  that if I buy one,
+[20:22] I might just become more superior.
+[20:24] I can show off to other people that I was a part of this.
+[20:28] So yes, people with iPhones take mirror selfies
+[20:30] to just showcase their style and social status.
+[20:33] Because it's not just about what you have,
+[20:35] it's also about how it makes you feel.
+[20:38] And this is something that we will cover in the second segment as well.
+[20:41] That a lot of people tell me,
+[20:42] "Ansh, we have worked so hard,"
+[20:44] "but we are still not getting promoted."
+[20:45] "We are still not making money."
+[20:47] We are very, very good at what we do.
+[20:49] Yet people don't pay us.
+[20:50] The issue is that you don't recognize the fact
+[20:53] you're not just paid for  the experiences you design,
+[20:57] but you also get paid for the experience  of working with you.
+[21:01] So people want to work with someone
+[21:03] that they find more charming and more inspiring.
+[21:06] And if you can give them that experience,
+[21:08] if you can give them assurance
+[21:10] that if I have this person on my team,
+[21:12] I am relaxed,
+[21:13] you need to sell that sensation.
+[21:15] That if you join somebody's team,
+[21:17] that major stakeholder is relaxed.
+[21:20] So let's take Instagram
+[21:21] because Instagram pulled this off really well.
+[21:25] The entire concept of followers
+[21:28] has changed the world.
+[21:29] People have made crores of money
+[21:31] just by this one single metric.
+[21:34] And people are selling fake followers also.
+[21:35] So like the game has gone to the next level.
+[21:38] And when they didn't sell blue tick,
+[21:39] at that time if you had a blue tick,
+[21:41] you were like the elitist of the elite.
+[21:43] Like at one point, this was crazy.
+[21:45] But I'm very sure that
+[21:46] they will introduce a new version of either the blue tick
+[21:48] or something else to sell more status.
+[21:51] Like that is the entire game of social media.
+[21:53] It is running on people trying to show status.
+[21:57] Let's take Airbnb.
+[21:59] What happens in Airbnb is that
+[22:00] if you list you house
+[22:02] and if you get good ratings,
+[22:03] then they call you a super host.
+[22:06] And you get a badge here on your profile
+[22:10] you can see under the name, it says super host.
+[22:13] Now, why Airbnb did this?
+[22:16] Because Airbnb knows if they make  someone a super host first,
+[22:19] that person will try hard to keep the status.
+[22:23] Because if someone is not a super host,
+[22:25] then win person can flex.
+[22:27] That I am a super host and you're not.
+[22:30] And then this person has more incentive
+[22:32] to give high-quality experiences
+[22:35] and better rooms and all of that stuff
+[22:37] that eventually helps Airbnb get more customers.
+[22:40] Now this became a cycle.
+[22:41] You make 1 super host
+[22:43] that super host in 1 random trip
+[22:45] gave 1 customer a good experience.
+[22:47] Now this custom won't come to the same city again
+[22:50] because he's a tourist.
+[22:51] Now he'll go to another city
+[22:53] the hotel owner of this second city
+[22:54] will be jealous seeing this super host,
+[22:56] then he will also work hard.
+[22:58] So what's happening now,
+[22:58] all the hosts are competing with each other
+[23:01] and the customer is getting the best to best experience.
+[23:04] It's just a UI element if you watch closely.
+[23:07] It's not a badge or a medal
+[23:08] or they don't send anything to their home.
+[23:11] It is just a badge that is selling status.
+[23:14] So you can imagine, just from a small icon,
+[23:16] from a small philosophy,
+[23:18] how much impact you can make  for an app's success.
+[23:22] But one important thing is that
+[23:23] you need to make that this status  is achievable for everyone.
+[23:27] Like iPhone.
+[23:28] Now either you're making money or not
+[23:30] or just buy it after selling a kidney,
+[23:32] but everyone can buy it.
+[23:34] Right? Whether you are buying it after mortgaging your house
+[23:37] but everyone can buy it.
+[23:39] It is essentially achievable for everyone.
+[23:41] So any experiences that you create,
+[23:44] those should be accessible to everyone.
+[23:45] It's not like
+[23:46] only the people of my community
+[23:48] or the people of this specific strata
+[23:49] or the community people with this much civil score
+[23:52] can only do it.
+[23:52] But look at Instagram.
+[23:53] Instagram is accessible to everyone.
+[23:56] An app like ET Money or Mint
+[23:59] or HDFC just launched  a brilliant app called HDFC Sky.
+[24:04] So you look at the design of HDFC Sky,
+[24:06] it is impeccable.
+[24:07] I think it's going to be the most well designed finance app.
+[24:10] So it is accessible to everyone.
+[24:13] Now another way to look at this same mental model
+[24:16] is that we strive with
+[24:17] and against one another
+[24:19] for limited resources and status.
+[24:21] Meaning, if there's a pool of resources
+[24:23] and that's a limited pool of resources,
+[24:25] so we are always ready to fight.
+[24:27] Just to get that limited resource.
+[24:30] Now in a race,
+[24:32] it is the competition
+[24:33] that pushes each runner to run faster and better.
+[24:36] Because imagine that you're in the same stadium
+[24:38] and running alone,
+[24:40] then will you have motivation then
+[24:42] or you'll get motivation when 3-4 people  are running around you?
+[24:44] Obviously, when 3-4 people are running around you.
+[24:47] That is why it is always said to do group study.
+[24:49] The entire concept of a tuition came in,
+[24:52] that you get inspired watching others
+[24:53] and you work harder.
+[24:55] So, now the question comes
+[24:57] that how can you use this in apps?
+[25:00] Because in apps,
+[25:01]  having competition can boost motivation
+[25:04] to return regularly to the app.
+[25:07] Let's take Duolingo.
+[25:08] Duolingo is an app which you can learn languages.
+[25:10] Now it also comes with maths.
+[25:12] So in Duolingo they have a very cute leaderboard.
+[25:15] And the leaderboard is designed in such a way
+[25:17] that of course you get scores,
+[25:19] but it also says that
+[25:20] top 20 advance to the next league,
+[25:22] it's for 3 days.
+[25:24] If you come then you'll get  10 points extra.
+[25:26] They have put an incentive for every single interaction.
+[25:29] For every single daily interaction you get 10 points.
+[25:32] If you came for 30 days, then 30 points,
+[25:33] whatever it is.
+[25:35] And because there is a leaderboard,
+[25:36] if there was no leaderboard board
+[25:38] then no one would chase the points.
+[25:40] The leaderboard is there
+[25:41] then the points have value.
+[25:43] Because the points have value,
+[25:44] that's why they will come back to the app.
+[25:47] Now too much competition
+[25:48] can also discourage users.
+[25:50] So just make sure
+[25:52] that your application is not  just about competition.
+[25:55] Now if I say, only the top 1% can win.
+[25:58] This is too competitive.
+[26:00] But if I say join the challenge  and unlock rewards,
+[26:03] now you are welcoming everyone.
+[26:05] That come, fight, and win something.
+[26:07] So you’re essentially inviting everybody else to the game.
+[26:11] Next model,
+[26:13] Endowed Progress Effect
+[26:15] This is very interesting.
+[26:17] It says that we reach our goals faster
+[26:21] when we have help getting started.
+[26:24] Now I’ll tell you what's its application.
+[26:27] Rather than you give someone such a challenge
+[26:30] where you can prove it like
+[26:31] you have to start from zero.
+[26:33] You can do one thing and tell him
+[26:34] that your first 2 levels are completed.
+[26:37] Now only 3 are left.
+[26:39] So in Delhi, there are a few coffee shops
+[26:41] and I think even Dunkin Donuts and Starbucks are doing this.
+[26:44] You buy something from them
+[26:46] they will give you a small card,
+[26:48] punch card.
+[26:49] And it has many holes on it like this.
+[26:52] And they tell you like this,
+[26:53] "Sir, when you'll come the 7th time"
+[26:55] "then we will give you a gift."
+[26:57] OK
+[26:59] Not there are 2 cases.
+[27:01] Restaurant number 1.
+[27:02] They give you a card with 7 circles,
+[27:05] he punched the first one and gave it to you.
+[27:07] That "Sir, as you've come todays"
+[27:09] "so I've filled the first one."
+[27:10] "Now you have to come only 6 times."
+[27:12] In the second case,
+[27:14] I went the first day and buy something
+[27:15] and he gave me an empty card
+[27:16] where all the 7 are empty.
+[27:19] The first person is more smart.
+[27:22] Because what he did,
+[27:23] he triggered artificial progress.
+[27:27] That you've completed you first day out of the 7 days.
+[27:31] Now you do it for 6 days.
+[27:32] But in the second one,
+[27:33] it's almost like starting a new book.
+[27:36] I will be very lazy.
+[27:38] Now, let's assume we did a book reading,
+[27:40] and in the book reading,
+[27:40] I read chapter 1 to you.
+[27:42] There's a higher chance that going home, you'll look at Chapter 2 after.
+[27:45] And if I just said that "This is what the book is about"
+[27:48] and I gave you a heart-bound book,
+[27:50] there's a chance that you  won't even read the book.
+[27:52] So let's understand by another real-life example.
+[27:56] When you feel like cooking,
+[27:57] a lot of people get lazy
+[27:59] that who will buy the vegetables?
+[28:01] Who will cut the vegetables?
+[28:02] Who will turn on the gas?
+[28:04] That's a huge excuse that people have.
+[28:06] But in a lot of cases,
+[28:08] if somebody chops the vegetables for you,
+[28:11] if somebody prepares the kitchen for you,
+[28:12] you just have to come
+[28:14] just like Khana Khazana,  have to use the spices
+[28:16] and just have to take that therapy part,
+[28:18] then you'll be up for it.
+[28:20] So what is happening here?
+[28:21] Here what is happening that
+[28:23] you have outsourced the less exciting work to someone
+[28:25] and usually the first 2-3 steps of any work
+[28:29] they are the least exciting.
+[28:31] Because you gain momentum after the third or fourth step.
+[28:34] You never gain momentum in the first initial one or two steps.
+[28:38] And this is how you can take  things to the next level
+[28:40] by giving the user this
+[28:43] assumption or this feeling
+[28:45] that we have taken the first 2-3 steps for you,
+[28:47] now you're super super close to completion.
+[28:50] So you need to make them feel
+[28:51] like they are already winning something.
+[28:54] Now the most common application  for it is LinkedIn.
+[28:57] Whenever you make a new profile in LinkedIn
+[29:00] it always fills the first progress.
+[29:04] And says 3 steps are completed
+[29:06] in this whole process.
+[29:07] Now you only have 4 steps left.
+[29:09] Not it can be only 4,
+[29:12] the first 3 can be fabricated.
+[29:13] I've never seen it,
+[29:14] you've never shown that its  starting from zero.
+[29:16] You directly said that 3 are completed.
+[29:19] So this is a very very fun way.
+[29:20] Because now my motivation has increased
+[29:22] to finish it.
+[29:23] It's also a sub product of the Zigarnik Effect.
+[29:25] I don't know how many of you have heard about Zigarnik Effect.
+[29:28] So Zigarnik Effect is there,
+[29:29] some people also call it  the Gold Gradient Effect.
+[29:32] So there are many names that this goes by.
+[29:34] Now similarly also in Zoom,
+[29:35] they always have these check-box.
+[29:37] Now the first check box is
+[29:38] download Zoom to your computer.
+[29:41] It will be completed.
+[29:44] Meaning, I cannot do anything without it.
+[29:47] But they have also shown that.
+[29:49] That this was your step number 1.
+[29:51] Now till here, you've won.
+[29:53] Second, check your audio video, Okey.
+[29:54] Invite others to join.
+[29:56] And this is also very interesting,
+[29:57] that third step is to trigger the Network Effect.
+[30:01] Invite others to join.
+[30:03] Are you seeing it?
+[30:04] So they know that your incentive is  more to fill this third step,
+[30:07] let's do one thing, take advantage of it.
+[30:09] Tell him to bring more users.
+[30:12] In fact folks,
+[30:13] we are also using this in our deck.
+[30:16] The bullet points that I'm making below,
+[30:18] they are for this purpose.
+[30:19] That you keep seeing that
+[30:21] we have come to 2, to 3,
+[30:22] it is almost over.
+[30:25] So yes,
+[30:26] now the question comes
+[30:27] that how do you become better
+[30:29] by knowing all of this and by using AI?
+[30:31] Is there any why that you can read
+[30:33] mental models like this more regularly?
+[30:35] Like what is the way to improve your design thinking?
+[30:37] So before explaining that
+[30:39] let's quickly revise module number 1.
+[30:41] First of all, we understood that,
+[30:43] if you learn about ideation and thinking
+[30:45] you'll have way more insights.
+[30:47] Because this is the fundamentals of user experience in the first place.
+[30:51] Second, we understood that
+[30:52] UX psychology in not just about apps.
+[30:54] I've shown you so many examples
+[30:56] which were beyond apps.
+[30:57] Which are in real world.
+[30:59] Right? In physical products.
+[31:01] At the very end,
+[31:02] Perception, Desire, or Status
+[31:05] they are our such innate features
+[31:08] which has been around for centuries.
+[31:10] Now as there are 2 desires.
+[31:11] One desire is to have a companion.
+[31:14] And second desire is to learn about ChatGPT.
+[31:17] OK
+[31:18] Now you made 2 apps.
+[31:19] One app which is helping you with relationships,
+[31:22] which is like Tinder.
+[31:23] And the second app teaches you ChatGPT.
+[31:26] Now which app do you think will be more hit?
+[31:28] 100% the first one.
+[31:30] Someone said ChatGPT.
+[31:34] Then you're to modern for this world.
+[31:37] That is why Tinder is so successful.
+[31:39] Because it is targeting a desire
+[31:41] which has been in human beings since ages.
+[31:45] So, let's have a call to actions.
+[31:47] Our every module will have a call to action.
+[31:49] So it doesn't only stay theoretical.
+[31:50] You'll have something to do when  you go back home.
+[31:53] First of all you need to target
+[31:55] for learning 3 mental models per week.
+[31:58] You guys can do this much.
+[32:00] And I will tell you now that,
+[32:01] how to use AI to learn these mental models.
+[32:04] Second,
+[32:05] you need to read at least  3 Research papers.
+[32:08] It's not like just read them a little bit,
+[32:10] read them from ChatGPT.
+[32:11] You need to make sure that you dig deep
+[32:13] and read the proper research behind it.
+[32:15] And at the very end, figure out
+[32:17] that you are already using Instagram, YouTube and Facebook,
+[32:20] if you're learning about  3 mental models every week
+[32:22] can you spot them in these apps.
+[32:25] You learned that Status is a thing,
+[32:27] so can you spot that in all of these 3 apps.
+[32:30] Because only understanding the  theory won't be enough
+[32:32] you need to see all these things happening in real life.
+[32:34] You need to recognize these UX laws.
+[32:36] You will find all the relevant resources
+[32:38] and the link to download the PDF  in description.
+[32:41] If you're here for the first time,
+[32:42] make sure you click on subscribe and hit the bell icon
+[32:44] so that you never miss an update.
+[32:46] Let me know in the comment section
+[32:47] if there's something specific you want me to cover
+[32:49] in the next video.
+[32:50] We make content on design, AI, and technology
+[32:53] to help you upskill for free.
+[32:55] I hope that you're taking care of your mind and body.
+[32:58] This is your friend, Ansh Mehra,
+[32:59] signing out.
+[33:02] If you liked this video.
+[33:03] Make sure you click on like
+[33:04] and hit the subscribe button.
+[33:05] I regularly upload videos
+[33:07] on UX design, marketing, and storytelling.

@@ -1,0 +1,11 @@
+{
+  "schedule": {
+    "anchor": "2026-10-24T09:30:00.000Z",
+    "capacity": 50
+  },
+  "registrations": {
+    "2026-10-31T09:30:00.000Z": [
+      "naskn@nan.com"
+    ]
+  }
+}

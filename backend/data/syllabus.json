@@ -1,0 +1,241 @@
+{
+  "tree": [
+    {
+      "id": "dsa",
+      "name": "DSA",
+      "summary": "Interviews live and die here — the core of every SDE loop.",
+      "skills": [
+        {
+          "id": "dsa-arrays",
+          "name": "Arrays & Strings",
+          "detail": "Indexing, two pointers, sliding window, prefix sums"
+        },
+        {
+          "id": "dsa-linklist",
+          "name": "Linked Lists",
+          "detail": "Singly & doubly lists, reversal, Floyd cycle detection"
+        },
+        {
+          "id": "dsa-stackqueue",
+          "name": "Stacks & Queues",
+          "detail": "Balanced parentheses, monotonic stack, circular queue"
+        },
+        {
+          "id": "dsa-trees",
+          "name": "Trees & Heaps",
+          "detail": "Pre/in/post-order, BST property, heaps & priority queues"
+        },
+        {
+          "id": "dsa-graphs",
+          "name": "Graphs",
+          "detail": "Adjacency lists, BFS/DFS, Dijkstra, topological sort"
+        }
+      ]
+    },
+    {
+      "id": "dbms",
+      "name": "DBMS",
+      "summary": "Backend and data roles probe SQL and transactions every time.",
+      "skills": [
+        {
+          "id": "dbms-er",
+          "name": "ER & Relational Model",
+          "detail": "Entities, keys, constraints, relational algebra"
+        },
+        {
+          "id": "dbms-sql",
+          "name": "SQL — Queries & Joins",
+          "detail": "SELECT, GROUP BY/HAVING, inner & outer joins, subqueries"
+        },
+        {
+          "id": "dbms-normalization",
+          "name": "Normalization",
+          "detail": "Functional dependencies, 1NF → BCNF, lossless decomposition"
+        },
+        {
+          "id": "dbms-transactions",
+          "name": "Transactions & ACID",
+          "detail": "Schedules, serializability, isolation levels, recovery"
+        },
+        {
+          "id": "dbms-indexing",
+          "name": "Indexing & Storage",
+          "detail": "B+ tree indices, hashing, clustered vs secondary"
+        }
+      ]
+    },
+    {
+      "id": "os",
+      "name": "OS",
+      "summary": "The classic OS round — scheduling, deadlock, memory.",
+      "skills": [
+        {
+          "id": "os-processes",
+          "name": "Processes & Threads",
+          "detail": "Process states, PCB, system calls, context switching"
+        },
+        {
+          "id": "os-scheduling",
+          "name": "CPU Scheduling",
+          "detail": "FCFS, SJF, Round Robin, priority; starvation & aging"
+        },
+        {
+          "id": "os-sync",
+          "name": "Concurrency & Deadlock",
+          "detail": "Semaphores, critical sections, Banker's algorithm"
+        },
+        {
+          "id": "os-memory",
+          "name": "Memory & Virtual Memory",
+          "detail": "Paging, segmentation, LRU/Optimal replacement, thrashing"
+        }
+      ]
+    },
+    {
+      "id": "cn",
+      "name": "CN",
+      "summary": "Subnet math and TCP handshakes are drive-day staples.",
+      "skills": [
+        {
+          "id": "cn-layers",
+          "name": "Network Models & Layers",
+          "detail": "OSI vs TCP/IP stack, encapsulation, which layer does what"
+        },
+        {
+          "id": "cn-datalink",
+          "name": "Data Link & MAC",
+          "detail": "Framing, CRC error detection, CSMA/CD, ARP"
+        },
+        {
+          "id": "cn-ip",
+          "name": "IP & Subnetting",
+          "detail": "IPv4 addressing, CIDR, subnet math, routing basics"
+        },
+        {
+          "id": "cn-transport",
+          "name": "TCP & UDP",
+          "detail": "3-way handshake, flow & congestion control, ports, reliability"
+        }
+      ]
+    },
+    {
+      "id": "oop",
+      "name": "OOP",
+      "summary": "Language-agnostic object design — asked in every service company.",
+      "skills": [
+        {
+          "id": "oop-basics",
+          "name": "Classes & Objects",
+          "detail": "Constructors, static members, this vs super"
+        },
+        {
+          "id": "oop-encapsulation",
+          "name": "Encapsulation & Abstraction",
+          "detail": "Access specifiers, abstract classes vs interfaces"
+        },
+        {
+          "id": "oop-inheritance",
+          "name": "Inheritance & Polymorphism",
+          "detail": "Overloading vs overriding, dynamic dispatch, upcasting"
+        },
+        {
+          "id": "oop-solid",
+          "name": "Design Principles",
+          "detail": "SOLID basics, composition over inheritance, UML class diagrams"
+        }
+      ]
+    },
+    {
+      "id": "ai",
+      "name": "Core AI",
+      "summary": "Core AI course content plus the ML basics recruiters now expect.",
+      "skills": [
+        {
+          "id": "ai-search",
+          "name": "Problem Solving & Search",
+          "detail": "State spaces, BFS/DFS, A* and admissible heuristics"
+        },
+        {
+          "id": "ai-logic",
+          "name": "Knowledge & Reasoning",
+          "detail": "Propositional & first-order logic, inference, unification"
+        },
+        {
+          "id": "ai-ml",
+          "name": "Machine Learning Basics",
+          "detail": "Supervised vs unsupervised, train/test split, overfitting"
+        },
+        {
+          "id": "ai-networks",
+          "name": "Neural Networks",
+          "detail": "Perceptrons, activation functions, backpropagation"
+        },
+        {
+          "id": "ai-nlp",
+          "name": "NLP Foundations",
+          "detail": "Tokenization, n-grams, TF–IDF, embeddings"
+        }
+      ]
+    },
+    {
+      "id": "web",
+      "name": "Web",
+      "summary": "From the B.Tech web-tech lab to the stack Quadly itself runs on.",
+      "skills": [
+        {
+          "id": "web-html",
+          "name": "HTML & Semantics",
+          "detail": "Document structure, semantic tags, forms, a11y attributes"
+        },
+        {
+          "id": "web-css",
+          "name": "CSS Layout & Responsive",
+          "detail": "Box model, flexbox & grid, media queries, specificity"
+        },
+        {
+          "id": "web-js",
+          "name": "JavaScript & the DOM",
+          "detail": "Closures, events, promises & async/await, fetch"
+        },
+        {
+          "id": "web-http",
+          "name": "HTTP & REST APIs",
+          "detail": "Methods & status codes, headers, JSON, DNS, client–server"
+        },
+        {
+          "id": "web-react",
+          "name": "Component Frameworks",
+          "detail": "Components, props & state, list rendering, SPA routing"
+        }
+      ]
+    },
+    {
+      "id": "aptitude",
+      "name": "Aptitude",
+      "summary": "The first filter in every drive — speed on paper.",
+      "skills": [
+        {
+          "id": "apt-quant",
+          "name": "Quant Basics",
+          "detail": "Percentages, ratios & proportion, averages, profit & loss"
+        },
+        {
+          "id": "apt-timework",
+          "name": "Time, Speed & Work",
+          "detail": "Relative speed, trains & boats, pipes & cisterns"
+        },
+        {
+          "id": "apt-probability",
+          "name": "Probability & Counting",
+          "detail": "Permutations, combinations, dice & card probability"
+        },
+        {
+          "id": "apt-reasoning",
+          "name": "Reasoning & Verbal",
+          "detail": "Series, syllogisms, puzzles; reading comprehension"
+        }
+      ]
+    }
+  ],
+  "students": {}
+}

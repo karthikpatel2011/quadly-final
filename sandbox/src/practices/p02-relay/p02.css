@@ -1,0 +1,110 @@
+.p02,
+.p02 *::before,
+.p02 *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Practice exercise 02 — dark developer dashboard pole.
+   Applied lessons: near-black surface scale + ONE green accent (S01/S09 dark rules),
+   semantic colors reserved, monospace identifiers, counted filters (S07),
+   state-complete (empty state designed, S02), card-header controls, dedup'd KPIs. */
+.p02 {
+  --bg:#0E1114; --surface:#151A1F; --surface-2:#1B222A; --border:#27313B; --border-strong:#384554;
+  --text:#E6EBF0; --text-2:#9AA7B5; --text-3:#7C8B9C;
+  --accent-600:#2FA46B; --accent-700:#27895A; --accent-050:#12241A;
+  --sem-err:#E5645C; --sem-errbg:#2A1B1A; --sem-warn:#D9A24A; --sem-warnbg:#2A2416;
+  --font-text:"Inter",system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,monospace;
+  --r:10px; --r-lg:16px;
+}
+.p02 * {margin:0;padding:0;box-sizing:border-box}
+.p02 {background:var(--bg);color:var(--text);font-family:var(--font-text);font-size:14px;line-height:1.5}
+.p02:focus-visible {outline:2px solid var(--accent-600);outline-offset:2px;border-radius:4px}
+.p02 .topbar {display:flex;align-items:center;gap:20px;padding:14px 28px;border-bottom:1px solid var(--border);background:var(--surface)}
+.p02 .logo {font-weight:700;font-size:15px;display:flex;align-items:center;gap:8px}
+.p02 .logo i {width:14px;height:14px;border-radius:4px;background:var(--accent-600);display:inline-block}
+.p02 .env {font-size:12px;color:var(--text-2);border:1px solid var(--border);border-radius:99px;padding:3px 10px}
+.p02 .env b {color:var(--accent-600);font-weight:600}
+.p02 .pill {font-family:var(--font-mono);font-size:11.5px;color:var(--text-3)}
+.p02 .page {max-width:1180px;margin:0 auto;padding:28px}
+.p02 h1 {font-size:20px;font-weight:650;letter-spacing:-.01em}
+.p02 .sub {color:var(--text-2);font-size:13px;margin-top:2px}
+.p02 .head {display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.p02 .btn {display:inline-flex;align-items:center;gap:8px;border-radius:var(--r);font-weight:600;font-size:13px;padding:9px 16px;cursor:pointer;border:none}
+.p02 .btn-primary {background:var(--accent-600);color:#08130C}
+@media (max-width:960px){.btn-primary .lbl-long{font-size:12.5px}}
+.p02 .btn-primary:hover {background:var(--accent-700)}
+.p02 .btn-quiet {background:transparent;color:var(--text-2);border:1px solid var(--border-strong)}
+.p02 .btn-quiet:hover {color:var(--text)}
+
+/* filter bar = counted decision support (S07) */
+.p02 .filters {display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:20px 0 16px}
+.p02 .chip {border:1px solid var(--border-strong);background:var(--surface);color:var(--text-2);border-radius:99px;font-size:12.5px;font-weight:600;padding:6px 12px;cursor:pointer}
+.p02 .chip.on {background:var(--accent-050);border-color:var(--accent-600);color:var(--accent-600)}
+.p02 .count {color:var(--text-3);font-size:12.5px;margin-left:auto}
+.p02 .count b {color:var(--text);font-weight:650}
+.p02 .range {font-family:var(--font-mono);font-size:12px;color:var(--text-2);border:1px solid var(--border-strong);border-radius:var(--r);padding:6px 10px;background:var(--surface)}
+
+/* KPI strip — exactly TWO tiles, sparkline each (dedup rule) */
+.p02 .kpis {display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px}
+.p02 .kpi {background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:16px 18px;display:flex;justify-content:space-between;gap:16px}
+.p02 .kpi small {display:block;font-size:12px;color:var(--text-2);font-weight:500}
+.p02 .kpi b {font-size:26px;font-weight:650;letter-spacing:-.02em;display:block;margin-top:2px}
+.p02 .kpi .m {font-family:var(--font-mono);font-size:11.5px;color:var(--text-3);margin-top:6px;display:block}
+.p02 .spark {display:flex;align-items:flex-end;gap:3px;height:44px;width:140px}
+.p02 .spark i {flex:1;background:var(--surface-2);border-radius:2px}
+.p02 .spark i.on {background:var(--accent-600)}
+.p02 svg.trend {overflow:visible}
+
+/* grid */
+.p02 .grid {display:grid;grid-template-columns:7fr 4fr;gap:14px;align-items:start}
+.p02 .card {background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden}
+.p02 .card-h {display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--border)}
+.p02 .card-h b {font-size:13.5px;font-weight:650}
+.p02 .card-h .h-act {display:flex;gap:8px;align-items:center}
+.p02 .card-h .h-act a {font-size:12.5px;color:var(--text-2);text-decoration:none}
+.p02 .card-h .h-act a:hover {color:var(--text)}
+.p02 select.iconish {background:var(--surface-2);color:var(--text-2);border:1px solid var(--border-strong);border-radius:8px;font-size:12px;padding:5px 8px}
+
+/* releases table */
+.p02 table {width:100%;border-collapse:collapse;font-size:13px}
+.p02 th {font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--text-3);text-align:left;font-weight:600;padding:10px 14px;border-bottom:1px solid var(--border)}
+.p02 td {padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+.p02 tr:last-child td {border-bottom:none}
+.p02 tr:hover td {background:#171D24}
+.p02 .ver {font-family:var(--font-mono);font-size:12.5px}
+.p02 .sha {font-family:var(--font-mono);font-size:11.5px;color:var(--text-3)}
+.p02 .st {display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:2.5px 10px;font-size:11.5px;font-weight:600}
+.p02 .st-ok {background:var(--accent-050);color:var(--accent-600)}
+.p02 .st-warn {background:var(--sem-warnbg);color:var(--sem-warn)}
+.p02 .st-err {background:var(--sem-errbg);color:var(--sem-err)}
+.p02 .st-run {background:#1A2331;color:#7FA6D9}
+.p02 .who {color:var(--text-2);font-size:12.5px}
+.p02 td.num, .p02 th.num {text-align:right}
+.p02 .dots {color:var(--text-3);letter-spacing:2px;font-weight:700;cursor:pointer}
+.p02 .bar {height:56px;display:flex;align-items:flex-end;gap:2px;padding:0 0 4px}
+.p02 .bar i {flex:1;background:#223041;border-radius:2px 2px 0 0}
+.p02 .bar i.ok {background:#2E6A4E}
+.p02 .bar i.err {background:#4A2523}
+
+/* env status */
+.p02 .envcard .row2 {display:flex;justify-content:space-between;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border);font-size:13px}
+.p02 .envcard .row2:last-child {border-bottom:none}
+.p02 .envcard .row2 span {color:var(--text-2);font-size:12.5px}
+.p02 .dot {width:8px;height:8px;border-radius:99px;display:inline-block;margin-right:8px}
+/* empty state — designed, not forgotten (S02) */
+.p02 .empty {padding:26px 18px;text-align:left}
+.p02 .empty b {font-size:13.5px}
+.p02 .empty p {color:var(--text-2);font-size:12.5px;margin:6px 0 12px}
+.p02 footer {color:var(--text-3);font-size:12px;padding:18px 28px;border-top:1px solid var(--border);margin-top:8px}
+@media (max-width:960px){
+  .p02 .grid {grid-template-columns:1fr}
+  .p02 .kpis {grid-template-columns:1fr}
+  .p02 .hide-m {display:none}
+  .p02 .page {padding:18px 16px}
+  .p02 .topbar {padding:12px 16px;gap:10px}
+  .p02 .env, .p02 .btn-quiet {display:none}
+  .p02 .btn-primary {padding:8px 12px;font-size:12.5px}
+}

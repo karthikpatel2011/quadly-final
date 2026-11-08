@@ -1,0 +1,129 @@
+/* Backed wall + giant waitlist pill. Colors/radii/fonts come from tokens. */
+
+.backed-cta {
+  background: var(--color-page);
+  padding-bottom: 200px; /* plain black run-out below the pill */
+}
+
+/* ---- Backed wall ------------------------------------------------------ */
+
+.backed-cta__wall {
+  height: 660px;
+  border-radius: var(--radius-panel) var(--radius-panel) 0 0;
+  background: linear-gradient(180deg, var(--color-backed-top), var(--color-backed-low));
+  padding-top: 140px; /* label sits ~140px into the block */
+  overflow: hidden;
+  text-align: center;
+}
+
+.backed-cta__label {
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+.backed-cta__row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.92;
+}
+
+.backed-cta__row--one {
+  margin-top: 56px;
+  gap: 84px;
+}
+
+.backed-cta__row--two {
+  margin-top: 64px;
+  gap: 72px;
+}
+
+.backed-cta__mark {
+  color: var(--color-text);
+  white-space: nowrap;
+  line-height: 1;
+}
+
+/* Row one — fake wordmarks, distinct type so they read as different logos. */
+.backed-cta__mark--reddit {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.backed-cta__mark--whatsapp {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.backed-cta__mark--discord {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 19px;
+  text-transform: lowercase;
+}
+
+.backed-cta__mark--telegram {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 19px;
+}
+
+/* Row two — small uppercase group labels. */
+.backed-cta__mark--group {
+  font-family: var(--font-body);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.backed-cta__row--two .backed-cta__mark:nth-child(1) { font-size: 14px; }
+.backed-cta__row--two .backed-cta__mark:nth-child(2) { font-size: 13px; }
+.backed-cta__row--two .backed-cta__mark:nth-child(3) { font-size: 15px; }
+.backed-cta__row--two .backed-cta__mark:nth-child(4) { font-size: 13px; }
+.backed-cta__row--two .backed-cta__mark:nth-child(5) { font-size: 14px; }
+
+/* ---- Giant CTA pill --------------------------------------------------- */
+
+.backed-cta__pill {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1190px;
+  max-width: calc(100% - 2 * var(--gutter));
+  height: 285px;
+  margin: 208px auto 0;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  overflow: hidden;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.backed-cta__pill-glow {
+  position: absolute;
+  top: -60px;
+  right: -50px;
+  width: 460px;
+  height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
+  filter: blur(50px);
+  pointer-events: none;
+}
+
+.backed-cta__pill-text {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 76px;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}

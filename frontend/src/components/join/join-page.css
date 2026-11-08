@@ -1,0 +1,474 @@
+/* Join page — login / Try Now. Dark card on black, blue quote panel.
+   Left panel: GSAP entrance + mode crossfade. Right panel: CSS-only quote
+   rotation (no animation libraries in there, per user's call). */
+
+.join-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--color-page);
+}
+
+.join-card {
+  width: min(1120px, 100%);
+  min-height: min(700px, calc(100vh - 48px));
+  display: grid;
+  grid-template-columns: 460px 1fr;
+  border-radius: var(--radius-panel);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55);
+}
+
+/* ---------- Left panel ---------- */
+
+.join-left {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 56px 24px;
+  min-width: 0;
+}
+
+.join-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.join-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.join-logo img {
+  height: 26px;
+  width: auto;
+  display: block;
+}
+
+.join-form-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+/* Mode segment (Log in | Try Now) with sliding thumb */
+.join-seg {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #101014;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 4px;
+  margin-bottom: 28px;
+}
+
+.join-seg__thumb {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.join-seg[data-mode='signup'] .join-seg__thumb {
+  transform: translateX(100%);
+}
+
+.join-seg button {
+  position: relative;
+  z-index: 1;
+  height: 36px;
+  border: 0;
+  background: transparent;
+  border-radius: var(--radius-pill);
+  color: var(--color-text-muted);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.join-seg button.is-on {
+  color: #fff;
+}
+
+.join-form-area h1 {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 30px;
+  color: var(--color-text);
+}
+
+.join-sub {
+  margin: 0 0 24px;
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+.join-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.join-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.join-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.join-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  transition: color 0.2s ease;
+}
+
+.join-field:focus-within .join-label {
+  color: var(--color-text);
+}
+
+.join-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  opacity: 0.85;
+  cursor: pointer;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.join-link:hover {
+  opacity: 1;
+  color: var(--color-primary);
+}
+
+.join-field input {
+  width: 100%;
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+  background: #101014;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 0 14px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.join-field input::placeholder {
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.join-field input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(32, 120, 255, 0.22);
+}
+
+.join-field.has-error input {
+  border-color: var(--color-danger);
+}
+
+.join-input-wrap {
+  position: relative;
+  display: block;
+}
+
+.join-input-wrap input {
+  padding-right: 46px;
+}
+
+.join-eye {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.join-eye:hover {
+  color: var(--color-text);
+}
+
+.join-eye:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.join-eye .join-eye__slash {
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.join-eye.is-off .join-eye__slash {
+  opacity: 1;
+}
+
+.join-btn {
+  height: 52px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: transform 0.18s ease, filter 0.18s ease, background 0.3s ease;
+}
+
+.join-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.join-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.join-btn:disabled {
+  opacity: 0.75;
+  cursor: default;
+}
+
+.join-btn.is-done {
+  background: var(--color-success);
+}
+
+.join-check {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 26;
+  animation: join-check-draw 0.45s ease-out both;
+}
+
+@keyframes join-check-draw {
+  from { stroke-dashoffset: 26; }
+  to { stroke-dashoffset: 0; }
+}
+
+.join-dots {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.join-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  animation: join-dot 0.9s ease-in-out infinite;
+}
+
+.join-dots i:nth-child(2) { animation-delay: 0.15s; }
+.join-dots i:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes join-dot {
+  0%, 100% { transform: translateY(0); opacity: 0.5; }
+  50% { transform: translateY(-5px); opacity: 1; }
+}
+
+.join-status {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--color-text-muted);
+  animation: join-status-in 0.35s ease both;
+}
+
+.join-status--error { color: var(--color-danger); }
+.join-status--done { color: var(--color-success); }
+
+.join-next {
+  margin-top: 14px;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+@keyframes join-status-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.join-alt {
+  margin: 18px 0 0;
+  text-align: center;
+  font-size: 13.5px;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Right panel: rotating quote, CSS-only ---------- */
+
+.join-right {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 56px;
+  background:
+    radial-gradient(1100px 500px at 80% -10%, rgba(255, 255, 255, 0.1), transparent 60%),
+    linear-gradient(165deg, var(--color-hero-blue) 0%, #3721d8 45%, #120b46 100%);
+}
+
+.join-right__streak {
+  position: absolute;
+  width: 420px;
+  height: 120px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.07);
+  filter: blur(46px);
+  transform: rotate(-32deg);
+  pointer-events: none;
+}
+
+.join-right__streak--a { top: -30px; right: -120px; }
+.join-right__streak--b { bottom: -40px; left: -140px; background: rgba(255, 255, 255, 0.05); }
+
+.join-quote {
+  position: relative;
+  z-index: 2;
+  width: 400px;
+  margin: 0;
+}
+
+.join-quote__mark {
+  display: block;
+  height: 52px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 96px;
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* Slide track: fixed size — its children are absolutely positioned */
+.join-quote__viewport {
+  position: relative;
+  margin-top: 10px;
+  height: 170px;
+}
+
+.join-quote__slide {
+  position: absolute;
+  inset: 0;
+}
+
+.join-quote__slide--in {
+  animation: join-quote-in 0.6s cubic-bezier(0.22, 0.9, 0.3, 1) 0.25s both;
+}
+
+.join-quote__slide--out {
+  animation: join-quote-out 0.6s cubic-bezier(0.4, 0, 0.6, 1) both;
+}
+
+/* New quote enters from the right; old one exits to the left — one direction only */
+@keyframes join-quote-in {
+  from { opacity: 0; transform: translateX(76px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes join-quote-out {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-76px); }
+}
+
+.join-quote blockquote {
+  margin: 0 0 18px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 25px;
+  line-height: 1.45;
+  color: var(--color-text);
+}
+
+.join-quote figcaption {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* ---------- Responsive + motion ---------- */
+
+@media (max-width: 920px) {
+  .join-right {
+    display: none;
+  }
+
+  .join-card {
+    grid-template-columns: 1fr;
+    max-width: 520px;
+  }
+
+  .join-left {
+    padding: 24px 30px 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .join-check,
+  .join-dots i,
+  .join-status,
+  .join-quote__slide {
+    animation: none !important;
+  }
+
+  /* No motion: show only the current quote, never the exiting one */
+  .join-quote__slide--out {
+    display: none !important;
+  }
+
+  .join-check {
+    stroke-dashoffset: 0;
+  }
+
+  .join-seg__thumb,
+  .join-social,
+  .join-btn,
+  .join-eye,
+  .join-link,
+  .join-field input {
+    transition: none !important;
+  }
+}

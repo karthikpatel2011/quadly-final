@@ -1,0 +1,218 @@
+[0:00] I analyzed over 1,000 different iOS apps
+[0:03] that have ridiculously high retention
+[0:05] rates and they all [music] have the same
+[0:08] one or more principles in common. But
+[0:10] what exactly is it that makes these apps
+[0:12] so effective? Is it the brand name or is
+[0:15] it something completely different? Well,
+[0:17] in this video we're going to cover the
+[0:18] five different tactics that the leaders
+[0:21] in this space do to retain their users
+[0:24] and keep them coming back time and time
+[0:26] again. So by the end of this video, you
+[0:28] should be able to understand why these
+[0:30] tactics work and how to go apply them
+[0:32] yourself. So without further ado, let's
+[0:34] get into it. To start things off, the
+[0:36] first thing that these apps are doing is
+[0:38] they're leaning into extreme
+[0:40] personalization.
+[0:41] Duolingo, one of the gold standards in
+[0:44] this space, does this by asking the user
+[0:47] a series of questions to deeply
+[0:49] understand why they're using Duolingo in
+[0:52] the first place, to understand why they
+[0:54] want to learn a foreign language, how
+[0:56] many minutes they have every single day,
+[0:58] so ultimately they can recommend a
+[1:00] course that's perfect for that user.
+[1:02] Headspace goes through assigning users a
+[1:05] personality type based on questions and
+[1:07] knowledge about them and then assigning
+[1:09] them a meditation program based on that.
+[1:12] Spotify does this by recommending
+[1:14] different artists, playlists, and daily
+[1:17] mixes all based on a user's listening
+[1:20] habits.
+[1:23] The aha moment. The apps that keep users
+[1:25] around the most are the ones that get
+[1:27] the users to value as quickly as
+[1:30] possible. Calorie IQ does this on the
+[1:32] very first screen of their app. As soon
+[1:34] as the user opens it up, they're shown a
+[1:36] demo of what the app does so they
+[1:38] understand the concept. And then
+[1:40] immediately when they get into the app,
+[1:42] the concept is very clear and reiterated
+[1:44] by taking a picture and getting their
+[1:46] food logged.
+[1:47] Granola, their impact moment is the
+[1:50] actual output of the data itself. It
+[1:52] listens to you while you're on a call
+[1:55] and then at the end of the call, it
+[1:56] generates notes for you based on
+[1:58] everything that was talked about. And
+[2:00] the results are so good that you won't
+[2:02] even be able to imagine ever doing a
+[2:04] meeting without it again.
+[2:06] And then shortly after, another impact
+[2:08] moment comes in where you can ask the AI
+[2:10] any question about your meeting.
+[2:14] These apps form habits, either good
+[2:16] habits or bad habits. And each one of
+[2:19] these apps do it in their own way. The
+[2:21] more ingrained that these apps become in
+[2:23] a user's psyche, the more frequency of
+[2:26] use that they will get. And the higher
+[2:28] retention that each one of these apps
+[2:30] will receive. And to be [music] honest,
+[2:31] some of the best in this space at it are
+[2:34] fitness apps. For example, Oura Ring
+[2:37] does this because they provide their
+[2:39] users with sleep scores. It's something
+[2:42] that the user gets to look forward to
+[2:43] and is ingrained in them every single
+[2:45] morning. Because everybody sleeps, every
+[2:48] morning when they wake up, there's fresh
+[2:50] data for them to check. And it starts to
+[2:53] form this habit for them over time.
+[2:55] Strava helps users form habits through
+[2:58] completing things like achievements,
+[3:00] challenges, attending events. They even
+[3:04] leverage a dopamine hit when the user
+[3:06] completes something. And then allows
+[3:07] them to share it with people, creating
+[3:09] that habit loop. Along that though, they
+[3:12] understand that people will get sore
+[3:14] from time to time and feel less
+[3:15] motivated. So they also build in
+[3:18] opportunities to be able to highlight
+[3:20] things like recovery runs, brisk walks
+[3:24] that build on those habits, but also are
+[3:27] there to support people in their
+[3:29] different times of need. And then
+[3:31] Duolingo here is just the industry
+[3:33] leader when it comes to habits and
+[3:35] streaks. They probably popularized
+[3:38] the streak method itself
+[3:42] with their borderline passive-aggressive
+[3:46] guilt-tripping and their unhinged
+[3:49] widgets
+[3:51] that make you never want to miss a
+[3:53] streak, and they even highlight friend
+[3:55] streaks to maximize the gamification and
+[3:59] community.
+[4:04] Many of the app leaders in the retention
+[4:07] space have really great communities
+[4:09] behind them
+[4:11] that almost grow the app itself and
+[4:14] become advocates for why someone should
+[4:17] use an app.
+[4:18] The larger the app gets, the more robust
+[4:21] the community gets and the tougher and
+[4:23] tougher it is to compete against these
+[4:25] apps.
+[4:27] Brilliant does this through a
+[4:28] combination of leaderboards and
+[4:30] gamification. When users go and complete
+[4:33] a coding lesson or an experience, they
+[4:37] earn XP points that pits them and ranks
+[4:40] them against the community
+[4:42] and lets them see other people that are
+[4:44] on the similar path to learning what
+[4:47] they're learning. And they can unlock
+[4:48] different leagues to compete against
+[4:51] different people, continuing
+[4:54] the community aspect to keep people
+[4:56] retained within their app.
+[5:00] The Ahead app does a great job of their
+[5:02] community building by not just showing a
+[5:05] community tab, but they elevate things
+[5:09] such as questions of the day
+[5:12] and advice.
+[5:14] It helps people to find information
+[5:16] based on exactly what they're looking
+[5:18] for
+[5:19] and help them feel like there are other
+[5:21] people out there that are going through
+[5:24] the same struggles as them.
+[5:26] When people feel heard,
+[5:28] that emotional connection tends to keep
+[5:31] people in and retained [music] because
+[5:33] humans are emotional creatures.
+[5:40] And then the final one here is that they
+[5:42] make switching
+[5:44] expensive.
+[5:45] That's arguably the highest retention
+[5:49] piece of this entire list that we've
+[5:51] gone through.
+[5:53] When users get so ingrained in your
+[5:55] ecosystem and [music]
+[5:58] in your product that the time and the
+[6:01] energy and the money to move off of your
+[6:05] platform becomes almost impossible to
+[6:09] ever do it. Think banking apps, things
+[6:12] like Google Drive, stock apps,
+[6:16] communication platforms, anything in
+[6:18] that realm is extremely painful for a
+[6:22] user or a company to ever leave. Google
+[6:25] Drive is probably one of the most
+[6:27] notorious for this. The deeper and
+[6:29] deeper that you have with more and more
+[6:30] storage, photos, [snorts]
+[6:33] documents, the harder it is to leave
+[6:36] that platform because it's just simply
+[6:37] not worth it to people, so they tend to
+[6:40] keep more and more users. Chase Bank or
+[6:43] other banking apps, they keep people on
+[6:45] there because moving money from one bank
+[6:47] account to another is not always the
+[6:49] easiest thing to do or close a bank and
+[6:51] move it to another. It's just not worth
+[6:53] the time and energy for the little bit
+[6:55] of bright side that you might get.
+[6:57] Places like Coinbase that sell crypto
+[7:00] have a high cost associated with moving
+[7:03] money. People have to figure out how to
+[7:05] time the market or figure out how to
+[7:08] make sure they don't lose a bunch of
+[7:09] money if they want to move from a
+[7:10] different platform, so that ultimately
+[7:13] often times leads to somebody
+[7:16] not moving off of their platform even if
+[7:18] they're not super happy with the service
+[7:19] that it provides. Things like Slack
+[7:22] where large orgs will rarely move from
+[7:25] communication providers. It just takes
+[7:27] up so much time, energy, and money to
+[7:30] move. They have things like channel
+[7:32] history, saved items, automations and
+[7:36] integrations that are automatically
+[7:38] synced up and connected and send reports
+[7:41] out to different parts of the company
+[7:43] and so much more. And so for these
+[7:45] companies to have to move off of that to
+[7:47] another is just not worth the time and
+[7:49] energy. So that kind of wraps up
+[7:52] everything that goes in to high
+[7:54] retaining apps.
+[7:56] And I'm curious if you made it to the
+[7:57] end of the video here,
+[7:59] is there anything else on the list that
+[8:01] you've noticed that helps an app retain
+[8:04] users at a high rate?
+[8:06] I'd love to know in the comments.
+[8:08] And if you're a founder and you are
+[8:10] looking [music] for design help to
+[8:12] identify the areas of opportunity to
+[8:15] make sure your users stick around for
+[8:17] longer and you have higher retention
+[8:19] rates,
+[8:20] then go ahead and click on the link
+[8:21] where you can fill out some information
+[8:23] and we can chat and see if we're a good
+[8:25] fit.
+[8:27] And I can help you out. So thanks a
+[8:29] bunch for being here. Hit the like and
+[8:30] subscribe button and we'll see you next
+[8:32] time.

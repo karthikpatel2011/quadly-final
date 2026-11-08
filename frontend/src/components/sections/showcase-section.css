@@ -1,0 +1,494 @@
+/* Showcase — auto-playing product tour rebuilt from the reference video.
+   Beat timeline (s): window 0.4 → tasks tick 2.8-4.2 → progress 4.4 →
+   ring 4.5 → squad 6.6-8.6 → chips drift 9.5+ → endcard 11.8. Loops every 15s.
+   Entrances are keyframe-driven with fill-mode:both so the pre-delay state is
+   the 0% frame; base styles stay the final (visible) state for reduced motion. */
+
+.showcase {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-page);
+  padding: 80px 0 60px;
+}
+
+/* Ambient blue glow behind the stage */
+.showcase__glow {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  width: 900px;
+  height: 620px;
+  transform: translate(-50%, 0);
+  background: radial-gradient(
+    ellipse at center,
+    rgba(66, 35, 250, 0.4) 0%,
+    rgba(35, 120, 245, 0.16) 45%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  pointer-events: none;
+  animation: showcase-glow 2.4s ease-out both;
+}
+
+@keyframes showcase-glow {
+  from { opacity: 0; transform: translate(-50%, 20px) scale(0.85); }
+  to { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+/* App window */
+.showcase__stage {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.showcase__window {
+  position: relative;
+  width: 880px;
+  border-radius: var(--radius-card);
+  background: var(--color-editor-canvas);
+  border: 1px solid #1c1c20;
+  animation: showcase-rise 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both,
+    showcase-dim 0.8s ease 11.5s both;
+}
+
+@keyframes showcase-rise {
+  from { opacity: 0; transform: translateY(40px) rotateX(6deg) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) rotateX(0) scale(1); }
+}
+
+@keyframes showcase-dim {
+  to { filter: brightness(0.55) saturate(0.8); }
+}
+
+.showcase__bar {
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  border-radius: 19px 19px 0 0;
+  background: var(--color-editor-panel);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.showcase__bar-left {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.showcase__dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.showcase__window-title {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.showcase__day-pill {
+  padding: 3px 10px;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Canvas: headline + readiness ring + split line */
+.showcase__canvas {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 44px 24px 52px;
+}
+
+.showcase__headline {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 38px;
+  color: #fff;
+  animation: showcase-fade 0.7s ease 1.2s both;
+}
+
+.showcase__ring-wrap {
+  position: relative;
+  margin-top: 28px;
+  width: 190px;
+  height: 190px;
+  animation: showcase-pop 0.7s cubic-bezier(0.2, 1.4, 0.4, 1) 1.6s both;
+}
+
+.showcase__ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.showcase__ring-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 11;
+}
+
+.showcase__ring-progress {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 11;
+  stroke-linecap: round;
+  stroke-dasharray: 339.3;
+  /* Base = final state (reduced motion); the keyframes hold 0% during the delay */
+  stroke-dashoffset: 210.4;
+  animation: showcase-ring 1.5s cubic-bezier(0.3, 0.7, 0.2, 1) 4.5s both;
+}
+
+/* r=54 → circumference 339.3; 38% → dashoffset 210.4 */
+@keyframes showcase-ring {
+  from { stroke-dashoffset: 339.3; }
+  to { stroke-dashoffset: 210.4; }
+}
+
+.showcase__ring-center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+
+.showcase__ring-value {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 40px;
+  color: #fff;
+}
+
+.showcase__ring-label {
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+
+.showcase__split {
+  margin: 26px 0 0;
+  font-size: 14px;
+  color: var(--color-text-muted);
+  animation: showcase-fade 0.7s ease 5.8s both;
+}
+
+.showcase__split strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Floating panels */
+.showcase__panel {
+  position: absolute;
+  border-radius: 12px;
+  background: var(--color-editor-panel);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  z-index: 2;
+}
+
+.showcase__panel--today {
+  left: -96px;
+  top: 120px;
+  width: 210px;
+  padding: 16px;
+  animation: showcase-slide-left 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 2.2s both,
+    showcase-dim 0.8s ease 11.5s both;
+}
+
+@keyframes showcase-slide-left {
+  from { opacity: 0; transform: translateX(-46px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.showcase__panel--squad {
+  right: -84px;
+  top: 90px;
+  width: 250px;
+  padding: 16px;
+  animation: showcase-slide-right 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 6.6s both,
+    showcase-dim 0.8s ease 11.5s both;
+}
+
+@keyframes showcase-slide-right {
+  from { opacity: 0; transform: translateX(46px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.showcase__panel-title {
+  margin: 0 0 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+/* Today checklist */
+.showcase__tasks {
+  list-style: none;
+  margin: 0 0 14px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.showcase__tasks li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.showcase__check {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  /* Base = final state (all ticked, reduced motion); keyframes hold 0% pre-delay */
+  background: var(--color-primary);
+  border: 1.5px solid var(--color-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #fff;
+  animation: showcase-check 0.35s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.showcase__tasks li:nth-child(1) .showcase__check { animation-delay: 2.8s; }
+.showcase__tasks li:nth-child(2) .showcase__check { animation-delay: 3.5s; }
+.showcase__tasks li:nth-child(3) .showcase__check { animation-delay: 4.2s; }
+
+@keyframes showcase-check {
+  0% { background: transparent; border-color: rgba(255, 255, 255, 0.25); }
+  1% { background: transparent; }
+  99% { background: var(--color-primary); }
+  100% { background: var(--color-primary); border-color: var(--color-primary); }
+}
+
+.showcase__track {
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+
+.showcase__fill {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--color-primary);
+  animation: showcase-fill 1s ease 4.4s both;
+}
+
+@keyframes showcase-fill {
+  from { width: 0; }
+  to { width: 40%; }
+}
+
+/* Squad panel */
+.showcase__squad-avatars {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.showcase__avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.7);
+  animation: showcase-pop 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+}
+
+.showcase__avatar--pink { background: linear-gradient(135deg, var(--chip-pink-a), var(--chip-pink-b)); }
+.showcase__avatar--lime { background: linear-gradient(135deg, var(--chip-lime-a), var(--chip-lime-b)); }
+.showcase__avatar--green { background: linear-gradient(135deg, var(--chip-green-a), var(--chip-green-b)); }
+
+.showcase__squad-avatars .showcase__avatar:nth-child(1) { animation-delay: 7s; }
+.showcase__squad-avatars .showcase__avatar:nth-child(2) { animation-delay: 7.2s; }
+.showcase__squad-avatars .showcase__avatar:nth-child(3) { animation-delay: 7.4s; }
+
+.showcase__squad-rank {
+  margin: 12px 0 14px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.showcase__squad-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  animation: showcase-rise-small 0.5s ease both;
+}
+
+.showcase__squad-row:nth-of-type(1) { animation-delay: 8s; }
+.showcase__squad-row:nth-of-type(2) { animation-delay: 8.4s; }
+
+@keyframes showcase-rise-small {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.showcase__squad-score {
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.1);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes showcase-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes showcase-pop {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Drifting chips (ambient, start once the story beats are done) */
+.showcase__chip {
+  position: absolute;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 52px;
+  padding: 0 22px;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  color: #0b0b0b;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+  animation: showcase-chip-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+    showcase-chip-float 4s ease-in-out 10.5s infinite alternate;
+}
+
+.showcase__chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.showcase__chip--a {
+  top: 110px;
+  left: 12%;
+  background: linear-gradient(180deg, var(--chip-lime-a), var(--chip-lime-b));
+  animation-delay: 9.3s, 10.5s;
+}
+
+.showcase__chip--b {
+  bottom: 130px;
+  left: 6%;
+  background: linear-gradient(180deg, var(--chip-orange-a), var(--chip-orange-b));
+  animation-delay: 9.6s, 10.5s;
+}
+
+.showcase__chip--c {
+  bottom: 60px;
+  right: 6%;
+  background: linear-gradient(180deg, var(--chip-mint-a), var(--chip-mint-b));
+  animation-delay: 9.9s, 11.1s;
+}
+
+@keyframes showcase-chip-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.9); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes showcase-chip-float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-14px); }
+}
+
+/* Closing lockup over the dimmed window */
+.showcase__endcard {
+  position: relative;
+  z-index: 4;
+  margin-top: -270px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+  animation: showcase-endcard 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) 11.8s both;
+}
+
+@keyframes showcase-endcard {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.showcase__brand {
+  margin: 0;
+  line-height: 0;
+}
+
+.showcase__brand img {
+  height: 36px;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.showcase__tagline {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 40px;
+  color: #fff;
+}
+
+.showcase__endcard .btn {
+  pointer-events: auto;
+  animation: showcase-cta-pulse 2.2s ease-in-out 12.8s infinite;
+}
+
+@keyframes showcase-cta-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@media (max-width: 1100px) {
+  .showcase__panel--today { left: 8px; }
+  .showcase__panel--squad { right: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .showcase *,
+  .showcase *::before,
+  .showcase *::after {
+    animation: none !important;
+  }
+
+  /* The overlay lockup duplicates the page's hero/CTA beats; without motion
+     it only collides with the window — drop it and show the finished app. */
+  .showcase__endcard {
+    display: none;
+  }
+}

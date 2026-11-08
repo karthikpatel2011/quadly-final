@@ -1,0 +1,1475 @@
+[0:00] Today, I'm joined by Alex Danilovich,
+[0:02] co-founder and CEO of Magic Patterns, an
+[0:05] AI design tool that takes you from an
+[0:08] idea to a real interactive code-backed
+[0:11] prototype in minutes. We'll look under
+[0:13] the hood to see how Magic Patterns
+[0:15] works, hear his origin story as a
+[0:17] non-designer, and then review some
+[0:19] startup websites to help make them look
+[0:21] a little bit less vibe-coded.
+[0:30] Alex, thank you for joining.
+[0:32] >> Thanks, Aaron. Thanks for having me.
+[0:33] I've been watching the show for a long
+[0:34] time.
+[0:34] >> Oh, it's awesome to have you on. Maybe
+[0:36] to start, uh, tell us more, what is
+[0:37] Magic Patterns and what were your goals
+[0:39] in building it?
+[0:40] >> Yeah, so Magic Patterns is an AI design
+[0:41] tool. Product managers, founders,
+[0:44] professional designers all use this to
+[0:46] visually communicate their ideas,
+[0:48] whether it's through a prototype,
+[0:49] interactive mock-up, or a code-ready
+[0:52] export for production.
+[0:53] >> You don't come from a design background,
+[0:55] and so talk a little bit about the
+[0:56] inspiration for building this.
+[0:57] >> Yeah, it does. We are a unique in that
+[0:59] we are non-designers, my co-founder and
+[1:02] I. We are, by trade, front-end
+[1:04] engineers. And actually, when we got
+[1:05] into the YC batch, our YC partner told
+[1:08] us, "Do something that you're really
+[1:09] good at. What are you What do you know
+[1:11] really well?" And for us, that was
+[1:12] translating Figma mock-ups into code,
+[1:16] and that's how Magic Patterns was born.
+[1:17] It was the product that we always wanted
+[1:19] ourselves. There was something always
+[1:21] there where I was never really good at
+[1:23] Figma. And we just felt like, "Well,
+[1:25] wait a second. I'm doing lots of
+[1:27] front-end engineering. As a founder, I
+[1:29] have to do lots of design. What is a
+[1:32] tool that is more intuitive
+[1:35] and easier for non-designers like
+[1:36] myself?"
+[1:37] >> And this was the early days of a lot of,
+[1:39] uh, prompt-to-design tools or
+[1:41] prompt-to-prototype tools coming out,
+[1:43] right? You guys were actually one of the
+[1:44] first that was doing that.
+[1:45] >> We were certainly one of the first. When
+[1:47] we launched in October 2023, the only
+[1:50] other tool on the market similar to us
+[1:52] was V0. Mhm. And if you look back, that
+[1:55] was before even chat was a thing. The
+[1:57] models were so bad that there was no
+[2:00] chat. There was no back and forth
+[2:01] conversation. It was literally just
+[2:03] prompt, you get a design. Prompt, you
+[2:05] get a design. No actual
+[2:07] interaction with the agent. You apply to
+[2:09] YC and you you had a different idea. And
+[2:11] so maybe talk about some of the the
+[2:13] origin story of how you met your
+[2:14] co-founder,
+[2:16] um your time during YC, and then
+[2:18] ultimately what led you to building
+[2:19] this. Yeah, so my co-founder and I, we
+[2:22] actually applied to YC with a text
+[2:24] message analyzer. Your top group chat,
+[2:26] your top word
+[2:28] What's the funniest thing you sent in
+[2:29] 2026 across all your group chats?
+[2:32] Um and we had revenue, which I think is
+[2:34] why we got into YC. But we get in and
+[2:36] our YC partner tells us, "Hey, this is
+[2:39] This is your company.
+[2:41] It's an okay idea, but I highly
+[2:42] recommend you do something that you know
+[2:44] really, really well."
+[2:46] And for us, again, that was front-end
+[2:48] engineering and implementing Figma
+[2:49] mockups by code. And then so then during
+[2:51] all of our pivots, that's pretty much
+[2:53] what we focused on.
+[2:54] >> How long did it take you to get to the
+[2:55] idea
+[2:56] that ultimately became Magic Patterns?
+[2:58] >> It took us about 9 months. We were
+[3:01] always circulating around it. So, again,
+[3:04] we were doing a component library
+[3:05] editor. We were doing kind of storybook
+[3:07] on steroids. We had a Chrome extension
+[3:10] that allowed you to bring localhost
+[3:13] um
+[3:14] and instantly publish it on the internet
+[3:16] as kind of like a feedback tool. That
+[3:18] later became a feature of of Magic
+[3:20] Patterns. And throughout all of that,
+[3:22] the main thing that I learned was
+[3:24] that classic PG advice, find 10 users
+[3:27] who really love you.
+[3:29] None of those pivots we had we didn't
+[3:30] have any 10 users that really loved us.
+[3:33] Where love is defined as they're paying
+[3:34] you and they're using you.
+[3:36] And then once we launched what became
+[3:38] Magic Patterns, those 10 users came very
+[3:40] quickly.
+[3:41] >> How do you stay differentiated in a
+[3:43] world where it feels like the design
+[3:45] tools keep leveling up significantly
+[3:47] every 6 months. And you guys were one of
+[3:49] the the original prompt to design
+[3:52] products that are out there. And so, how
+[3:54] do you find your audience in that and
+[3:56] keep staying ahead of the game,
+[3:58] especially as the models continue to
+[3:59] improve as well?
+[4:00] >> I've said this before on a video, like
+[4:03] customers are our religion.
+[4:04] >> Mhm.
+[4:04] >> Talking to them every single day.
+[4:07] And then also adapting to new workflows.
+[4:09] As an example, we released an MCP
+[4:13] about a year ago as part of a hackathon
+[4:15] project internally.
+[4:16] >> Mhm.
+[4:17] >> We didn't think it would go anywhere.
+[4:19] And now MCP usage has completely
+[4:20] exploded. It's one of the main ways that
+[4:22] people interact with Magic Patterns. And
+[4:24] so, you always have to be almost
+[4:26] rebirthing your company to it uh adjust
+[4:29] to new workflows, especially in the AI
+[4:31] world.
+[4:31] >> I I'd love to see a demo. Can you show
+[4:32] us uh a little bit about how it works?
+[4:34] >> Yeah, let's do it. I think one thing
+[4:36] that would be good to start is I'll show
+[4:37] you how we use it internally.
+[4:39] >> And you're always dogfooding your
+[4:40] product, right?
+[4:41] >> We are obsessed with dogfooding, but we
+[4:43] never force the dogfooding because then
+[4:45] it's you're not getting actual
+[4:46] >> Right. It has to be good enough that you
+[4:48] actually want that and you choose that
+[4:50] to be your tool, right?
+[4:51] >> Exactly. And then noting when you don't
+[4:53] choose it. And so, we've been dogfooding
+[4:55] creating our loading indicator for our
+[4:57] own product. So, you know, we have uh
+[5:00] Wall-E, Eve from Wall-E, or some of the
+[5:04] uh if you've ever played Portal the
+[5:05] video game, we were thinking through
+[5:07] that kind of what that might look like
+[5:09] as a loading indicator.
+[5:11] What's neat here is everything here is a
+[5:12] global chat. So, we can make uh any
+[5:15] updates and and make several updates at
+[5:17] once, right? Like as an example, I could
+[5:21] select the two of these.
+[5:23] Say, give me
+[5:25] a new style
+[5:29] of loading indicator that merges the
+[5:32] inspiration of the Claude code
+[5:36] icon and the Grok bot.
+[5:39] And what's really neat, too, is of
+[5:40] course, you can use the MCP. So, let's
+[5:43] go ahead and do that just to kind of
+[5:44] show it. I'm going to go into cursor
+[5:46] here. and through using our MCP I can
+[5:49] just go ahead and prompt right add an
+[5:51] ASCII version of my agent. What's really
+[5:54] neat is we're seeing lots of enterprises
+[5:56] use this where they have so much context
+[5:58] like in cursor or Claude code whether
+[6:01] it's PRDs or meeting notes so they can
+[6:04] leverage all the skills that they
+[6:05] already have but then instantly kind of
+[6:07] put it on this visual canvas to better
+[6:10] communicate.
+[6:10] >> Mhm.
+[6:12] Yeah, it's interesting so you've got
+[6:13] this powerful canvas in and magic
+[6:15] patterns where when that's the best tool
+[6:17] for the job you can be working directly
+[6:19] in there and when you want to be working
+[6:21] in code or in cursor another app you can
+[6:23] just pull directly from that through the
+[6:25] MCP.
+[6:26] >> Yeah, exactly and what's cool too is we
+[6:28] have so many customers that come out to
+[6:29] us and say I'm using cursor and Claude
+[6:31] code but it gave me local host I can't
+[6:34] share I can't share my prototype with
+[6:36] anybody. So oh we have a solution for
+[6:38] you right. Yeah, so what's cool here is
+[6:40] actually we can see my colleague on here
+[6:43] as well as the cursor agent from that
+[6:44] cursor prompt that we fired off right
+[6:46] and so they're working simultaneously
+[6:48] and we can go ahead and just open this
+[6:49] up here.
+[6:51] We can see this is like that ASCII
+[6:52] version of of Claude code right
+[6:57] and kind of playing around oh what would
+[6:58] it look like with different colors. Now
+[7:00] obviously this is very Claude code ask
+[7:01] we're just kind of getting inspiration
+[7:03] here
+[7:04] to make our own loading indicator.
+[7:06] >> And it generated this entire page
+[7:08] showing off the work that it had done.
+[7:11] >> Yeah, exactly so like one thing that we
+[7:14] encourage users to do and we've seen
+[7:16] users do ourselves is explaining kind of
+[7:18] the choices
+[7:20] and the different states. So as another
+[7:23] example here to kind of look at this one
+[7:26] we were thinking through well what does
+[7:28] it look like at different screen sizes?
+[7:30] What does it again look like if it's
+[7:31] Claude code kind of playing around with
+[7:34] should it look more like a helmet or
+[7:36] like a pillow right? Again just
+[7:37] brainstorming and exploration that's
+[7:39] where we see users get the most value in
+[7:41] a tool like ours.
+[7:42] >> Yeah, I mean that's I think one of the
+[7:44] most valuable things at the idea and
+[7:45] inspiration stage is just being able to
+[7:48] fire off a bunch of different
+[7:49] variations. And a lot of times it's hard
+[7:53] to manage those and they're all in
+[7:54] different tabs and stuff and it seems
+[7:56] like
+[7:57] Magic Patterns is able to just give you
+[7:58] a bunch of nice tabs and options and
+[8:01] kind of enumerates everything so like
+[8:02] here's a bunch of color options, here's
+[8:03] body options, here's different agent
+[8:05] options. And it's really cool to do that
+[8:08] in a very centralized uniform way to
+[8:10] actually make the tweaks and explore,
+[8:12] find what you like and then be able to
+[8:14] move on faster to the next step in the
+[8:16] flow.
+[8:16] >> Totally, cuz I think what's changed
+[8:18] about software development in the last
+[8:19] year especially is the end stage is so
+[8:23] compressed now, it's so easy. Everyone's
+[8:25] talking about this, right? How engineers
+[8:26] are just moving at the speed of light,
+[8:28] there's too many PRs to review. And so
+[8:30] as a result, we can spend more time
+[8:33] actually brainstorming, thinking about
+[8:35] what to build and what not to build, and
+[8:37] using something like Magic OS to really
+[8:39] visualize
+[8:41] and think through the different ideas
+[8:43] and concepts, error states, loading
+[8:45] states,
+[8:46] what happens when it's multiple agents
+[8:48] working on a file. Here's actually, I
+[8:50] think this one is really cool.
+[8:53] Where we were thinking through, well
+[8:54] okay,
+[8:56] lots of folks use the MCP to use our
+[8:58] product and they might be using it
+[9:00] through Cursor or Claude Code or Codex
+[9:03] and thinking through what that might
+[9:04] look like.
+[9:05] And through Magic OS, we actually
+[9:07] brainstorm kind of this like LED style
+[9:10] design.
+[9:11] >> And so is this whole page a canvas?
+[9:13] >> Yeah, so this is all a canvas. Um
+[9:16] and what's cool is we also think of it
+[9:18] as almost like an artboard, right? Where
+[9:20] you can bring in any of your contacts,
+[9:22] whether that's images or PRDs or
+[9:24] documentation.
+[9:26] And again, what's neat is we're not
+[9:28] blocked here by a single thread, right?
+[9:30] So historically, when you use lots of
+[9:31] these design tools and prototyping
+[9:33] tools, you kind of have to wait for the
+[9:35] AI agent to finish, right? But on any of
+[9:37] these, we have many, many threads here.
+[9:40] So, I can go back to kind of what we
+[9:42] first did
+[9:44] when we first created our first design
+[9:45] here on this canvas.
+[9:47] >> I know you've kind of gone back and
+[9:48] forth on canvases in general [laughter]
+[9:52] as as an interface and just talk about
+[9:54] your thinking and and what you've
+[9:55] discovered kind of being at the frontier
+[9:57] of that for when it makes sense and when
+[9:58] it doesn't.
+[9:59] >> Totally. So, I'll actually show that
+[10:01] where we've had a canvas for a long
+[10:03] time. What you just kind of saw is
+[10:05] canvas 2.0.
+[10:06] But we've had a canvas
+[10:08] for roughly 2 years now. And what we
+[10:11] learned and actually we're hiring, by
+[10:13] the way, we're hiring a designer.
+[10:15] One of the reasons that we're hiring a
+[10:16] designer is one of our issues that we've
+[10:18] had is thinking through that initial
+[10:21] onboarding experience. Almost like this
+[10:23] progressive disclosure of okay, when
+[10:25] does it make sense for users to know
+[10:28] that they can use a canvas versus just
+[10:30] kind of a single chat thread. One of the
+[10:32] initial learnings that we had is like a
+[10:33] canvas is not necessarily for everyone.
+[10:37] And actually this new product that we've
+[10:39] released, we're intentionally calling it
+[10:41] an OS because it's an operating system
+[10:44] for all of your context. So, of course,
+[10:47] like the interface is a canvas, right?
+[10:48] We see here our images and you can bring
+[10:51] in documents and then make designs. But
+[10:53] it's not a canvas in the traditional
+[10:55] sense where
+[10:57] something like Figma and having a bunch
+[10:59] of tools on one side.
+[11:00] >> Yeah, so it's it's more like you you've
+[11:02] got canvas-like artboards that you can
+[11:05] get in there and you can customize.
+[11:07] You also talked about front end and
+[11:09] being able to see what it's like to
+[11:11] actually experience the design that
+[11:13] you're making and not just have these
+[11:14] static files. Maybe can you show us
+[11:16] something around that?
+[11:18] >> Cool. So, yeah, let's do another example
+[11:19] here. One thing that is really, really
+[11:21] fun for us is we do what we call magic
+[11:24] patterns meetups all over the world. And
+[11:26] I've been thinking about I want to send
+[11:27] our users postcards from these meetups.
+[11:30] So, let's take this from the top. So,
+[11:32] let's go ahead and add some context. So,
+[11:34] I have basically these pictures that
+[11:36] I've pulled
+[11:38] and all of these descriptions from our
+[11:40] events that we hosted. So, as an
+[11:42] example, I was just in Colombia actually
+[11:44] hosting what I called Magic Patterns
+[11:46] Medellin and we met some power users
+[11:48] there. I learned that Magic Patterns was
+[11:50] taught at a university, which is super
+[11:51] cool. And I also have this prompt,
+[11:55] right?
+[11:56] Uh where if we open this up here,
+[11:58] this is a prompt that I just kind of
+[11:59] came up with like a rubber stamp travel
+[12:01] notes field poster.
+[12:04] And so, what's cool is I can go ahead
+[12:06] and just tell our agent
+[12:09] reference
+[12:11] my prompt
+[12:13] on the canvas and then make postcards
+[12:20] for every single city and image.
+[12:24] >> Cool. So, you've got images for
+[12:25] Medellin, Singapore. You got the Statue
+[12:28] of Liberty, so New York and then
+[12:30] Toronto.
+[12:31] >> Uh exactly, right? And notice how like
+[12:33] the agent has all of the context that is
+[12:36] on the the canvas already, right? It
+[12:39] automatically knows what is really in
+[12:40] the in the file system, what's on this
+[12:42] artboard here and it can go ahead and
+[12:44] then make make its updates. So, what's
+[12:46] cool here is we see it generated all
+[12:48] four postcards at once. We can go ahead
+[12:51] and just see a bigger version of this
+[12:52] here.
+[12:54] My prompt was basically telling it to
+[12:55] make kind of like a stamp of the the
+[12:58] image that that it had.
+[13:01] And now, we because we're on a canvas, I
+[13:02] can go ahead and just grab kind of my
+[13:04] description of our Singapore event right
+[13:07] here. I have kind of just some random
+[13:08] notes from when our meetup was. It was
+[13:10] on May 17th and I can go ahead and
+[13:13] select these two, say now make a design
+[13:17] of a postcard
+[13:21] that references the description thanking
+[13:24] users for attending.
+[13:26] And when this is done, of course, we can
+[13:28] iterate on just the Singapore one
+[13:29] specifically and then apply all of these
+[13:31] changes to all the cities at once,
+[13:34] right? Without having to redo it.
+[13:36] >> And who are the people
+[13:37] within your team that are actually using
+[13:39] this and creating these postcards? Cuz
+[13:41] it seems like it doesn't necessarily
+[13:43] need to be designers, right?
+[13:44] >> Yes, so we have everyone from our ops
+[13:47] team to our sales team using magic
+[13:49] patterns. So, as an example, our
+[13:51] go-to-market person is creating these
+[13:53] postcards in magic patterns to send out
+[13:55] to users. And historically, this was
+[13:57] someone that didn't know how to use
+[13:59] Figma, would have to outsource this type
+[14:02] of work. And so, that's what's really, I
+[14:04] think, special about our our tool is how
+[14:06] much we have been kind of democratizing
+[14:08] design.
+[14:09] >> Mhm. You can export to Figma as well.
+[14:11] So, you play nicely with the other
+[14:13] tools.
+[14:14] >> One thing that's very different about
+[14:15] our tool is that we're model agnostic
+[14:18] and in a way feature agnostic, right?
+[14:20] Where we
+[14:22] encourage folks to export to Figma if
+[14:24] they want to and and get high-fidelity
+[14:27] precision or export to the coding engine
+[14:30] of their choice, right? Some of our
+[14:31] other competitors, like Claude Design as
+[14:33] an example, it's only the Anthropic
+[14:35] models. You're only exporting to Claude
+[14:36] code. There's no integration with Figma.
+[14:39] Whereas a tool like ours, you know, we
+[14:41] have integrations with anything you can
+[14:42] think of.
+[14:43] >> So, prompting's obviously very important
+[14:45] here. What's your advice for how people
+[14:46] should improve their prompts and and get
+[14:48] better results from them?
+[14:50] >> Yeah, I think it's leveraging the
+[14:51] features that tools offer. One thing
+[14:53] that's really interesting that I've seen
+[14:55] is there's more and more AI enablement
+[14:57] teams popping up at especially large
+[15:00] companies. And what are they doing?
+[15:01] They're leveraging things like skills,
+[15:03] agents MD, right? And bringing in your
+[15:06] unique context that's relevant to your
+[15:08] company. So, of course, we have, you
+[15:10] know, skills feature in magic patterns
+[15:12] where you can go ahead and
+[15:14] and add your skills
+[15:16] or as we were talking about, add your
+[15:18] design system and bring in in
+[15:20] components. And that's what I always
+[15:21] recommend is like spend the 10 minutes
+[15:24] to bring in your existing contacts.
+[15:26] It'll save you hours in the long run.
+[15:27] >> Mhm. What's one of the coolest things
+[15:29] that that you've seen created with Magic
+[15:31] Patterns?
+[15:32] >> Yeah, one of the most fun is this
+[15:34] RollerCoaster Tycoon theme park. Uh it's
+[15:37] like a chocolate park, which is crazy
+[15:39] because when we first started this, you
+[15:42] know, you would prompt like a form and
+[15:44] it would give you back like a drop down.
+[15:45] Like the models were so bad. And now
+[15:47] suddenly, you know, we're seeing folks
+[15:49] literally bring in
+[15:51] like building entire video game
+[15:52] experiences. Again, this is not a very
+[15:55] common use case, but it's kind of
+[15:56] showing what's possible when the input
+[15:59] and output is code.
+[16:01] >> And what was this created for?
+[16:02] >> This is really just created for fun. Um
+[16:04] you know, experimenting with what is
+[16:06] possible like in in the browser and
+[16:09] actually thinking through
+[16:10] how components can help you design uh in
+[16:14] a tool like this, right? So, actually
+[16:16] when you think about a chocolate factory
+[16:18] theme park in RollerCoaster Tycoon, the
+[16:21] track is a component. The chocolate bar
+[16:24] twister ride is a component. The paths
+[16:27] that guests walk on are components. And
+[16:30] so, when you give the AI those
+[16:31] guardrails, how can it output like a
+[16:34] theme park in one shot or two shots
+[16:36] bringing in that context?
+[16:38] >> Mhm.
+[16:38] Uh very cool. And you can even get right
+[16:40] in there. See all the little people
+[16:41] walking around.
+[16:42] >> Yeah. [laughter]
+[16:43] And again, it's amazing where like this
+[16:44] is literally just, you know, WebGL ren-
+[16:47] rendering in the in the browser, right?
+[16:49] And we can see that we Again, the way
+[16:51] that we did this is we use a design
+[16:52] system that we called the 3D theme park,
+[16:55] right? So, I can go ahead and update
+[16:56] that to bring in my my latest
+[16:58] components.
+[16:59] Uh and and updating it is really as
+[17:00] simple as prompting something like no
+[17:02] trees, just lollipops, and more uh
+[17:04] chocolate rivers, right?
+[17:05] >> Mhm. What does this tell you now about
+[17:07] what might be possible with Magic
+[17:08] Patterns? It seems like this is far
+[17:10] beyond just making a postcard or website
+[17:13] design or something.
+[17:15] >> Yeah, I think it showed me that design
+[17:16] has historically been 2D, right? And
+[17:19] it's been really hard if you worked on a
+[17:20] software team 4 years ago
+[17:22] going back and forth with the designer
+[17:24] and the engineer and the PM, what should
+[17:25] the exact interaction be? Then you see
+[17:27] something like this where people are,
+[17:29] you know, one shotting
+[17:31] 3D theme parks. And I think it's a taste
+[17:34] of the of the future where people can
+[17:37] really design full-on interactions that
+[17:39] are high fidelity, you know, and using
+[17:42] their their components.
+[17:43] >> Yeah, it's going to be [music] a wild
+[17:45] future, for sure.
+[17:46] >> Definitely.
+[17:47] >> YC's next batch is now taking
+[17:49] applications. Got a startup in you?
+[17:52] Apply at ycombinator.com/apply.
+[17:55] It's never too early, and filling out
+[17:57] the app will level up your idea. Okay,
+[18:00] back to the video.
+[18:01] >> You talked about how you've seen
+[18:03] thousands of Vibe Coded designs. You're
+[18:05] probably a a world expert on this.
+[18:07] Should we review some websites?
+[18:08] >> Let's review some websites. It'll be a
+[18:10] lot of fun.
+[18:10] >> Okay, great. All right, first looks like
+[18:12] we got Ego. Agents are machines, we make
+[18:15] them people. Ego is an applied AI
+[18:17] research lab building personal agents
+[18:19] indistinguishable from humans.
+[18:22] >> Okay.
+[18:22] >> what do we think?
+[18:24] >> So, first off, I mean, it's cool. Here's
+[18:26] Here's the thing that I think people
+[18:27] miss about landing pages in general. The
+[18:29] real metric to track is does it convert?
+[18:32] And I obviously don't know what what it
+[18:35] if this is converting or not, but my
+[18:36] sense is like
+[18:38] I don't know, it's not accessible. I
+[18:41] don't know where the CTA is. Is the CTA
+[18:43] Ronan? Yeah, what do it What do you
+[18:44] think
+[18:45] >> they want us to do here?
+[18:47] >> I mean, my initial reaction is like I
+[18:49] should just keep scrolling, right?
+[18:53] One interesting thing that we've learned
+[18:54] about our own landing page is, you know,
+[18:57] everyone that has a Vibe Coded tool has
+[19:00] that input where to to prompt to get
+[19:02] started. And for a little while we
+[19:04] removed it to try and be more creative,
+[19:08] and our conversion rate totally tanked.
+[19:10] We learned why people do that, right?
+[19:12] And so I always encourage folks to think
+[19:14] about like what are you ultimately
+[19:15] trying to do here?
+[19:17] >> Okay, so then there's like an app in
+[19:18] there.
+[19:20] Yeah, I guess I'm halfway down the page
+[19:22] and I'm still unclear what is this and
+[19:24] who is it for.
+[19:25] Uh I guess there's a waitlist, so maybe
+[19:27] it's not live yet.
+[19:29] >> Yeah, let's see.
+[19:29] >> And now they're getting into more of the
+[19:30] description. It's a voice agent with a
+[19:32] personality, a memory, and a mind of its
+[19:34] own. That feels like the kind of thing
+[19:35] that should have been all the way at the
+[19:36] top.
+[19:37] >> Right.
+[19:37] >> Like the site should start here.
+[19:40] With this, cuz this is the call to
+[19:41] action, which is join the waitlist. But
+[19:43] we had to scroll down pretty far in
+[19:45] order to even get to this point.
+[19:47] >> Totally. And I'm kind of laughing here
+[19:48] that like this main CTA to join, I had
+[19:51] to do there was an interaction there.
+[19:53] That's another
+[19:55] almost an example of something that
+[19:56] maybe was potentially vibe coded. AI
+[19:58] agents, they love adding animations and
+[20:01] things like that, right? Overly
+[20:03] animating. And so
+[20:06] you know, why not just start it with
+[20:07] that, right?
+[20:08] >> Yeah, that that's actually interesting.
+[20:10] Um
+[20:11] we ran some tests at my company,
+[20:14] Creative Market, and um when you had the
+[20:17] input form it visible and expanded
+[20:20] directly on the page, conversion rate
+[20:21] was much higher than requiring somebody
+[20:23] to click through to then put in an email
+[20:26] address or pop up a window or get to the
+[20:28] form or something like that. So, I I
+[20:30] would recommend [snorts] whenever
+[20:31] possible, yeah, just start with the text
+[20:33] box open and people can just type type
+[20:35] right in it. It's pretty shocking how
+[20:38] that actually significantly impacts um
+[20:40] conversion rate of people entering
+[20:41] information there.
+[20:43] >> Yeah, and that's what I encourage, like
+[20:44] think about the human. I think AI
+[20:47] agents, they There again, they're
+[20:48] rewarded of doing fun things like motion
+[20:51] and overly animating, right? But the
+[20:53] human is not going to spend a lot of
+[20:54] time on your site. They're in a rush.
+[20:56] >> Yeah, we see a lot of There's blinking
+[20:58] dots everywhere and um I don't know if
+[21:01] music is playing, but it looks like
+[21:03] there's some type of you know, like
+[21:05] music faders or something going there.
+[21:07] Um and so yeah, it's it's kind of hard
+[21:10] to tell what's going on. Um I like the
+[21:11] overall vibe. It It's like It's got this
+[21:14] kind of dark mode red. It feels very
+[21:16] like 80s video game kind of, um which I
+[21:19] think is is interesting.
+[21:22] Um but it's also hard to read some of
+[21:24] the things. Like it it actually looks
+[21:25] like maybe there's an input box or
+[21:27] something over on the right-hand side
+[21:28] and and I almost missed it because it's
+[21:30] not clear to me that it exists.
+[21:33] >> Yeah, this is another kind of vibe coded
+[21:35] smell that I I commonly see is you can
+[21:38] see my my mouse here is letting me
+[21:41] interact with this, but I can't actually
+[21:43] type anything, right? And so, you know,
+[21:46] and then I'm like, "Well, well, what's
+[21:48] going on?"
+[21:49] >> Yeah. Yeah, there's a pattern that I've
+[21:50] seen where sometimes you have actual UI
+[21:53] elements embedded in the page, but
+[21:55] they're actually real and and
+[21:56] interactive. And that's cool to be able
+[21:58] to do that. That's something that I
+[22:00] think agents make a lot simpler now that
+[22:02] was much harder to do before. And so it
+[22:05] can feel very interactive and like you
+[22:06] can actually try out the product live on
+[22:08] the page, and that's super cool.
+[22:10] But yeah, the flip side is when it looks
+[22:12] like something like that and it becomes
+[22:13] misleading and you think that you can
+[22:14] interact with something, but but you're
+[22:16] actually not able to.
+[22:17] >> Yeah, and I think it's important to talk
+[22:18] about like why does this matter? Why
+[22:20] does it matter if
+[22:22] there's a vibe coded smell on the
+[22:24] website, right? And I think it matters
+[22:26] because you can notice how distracted we
+[22:28] are by this input trying to type. And
+[22:31] we're distracted from the core thing,
+[22:33] which is whatever the CTA is supposed to
+[22:35] be, I guess, in this case, right? It's
+[22:36] join the join the waitlist.
+[22:38] >> Yeah, it's cool if you scroll down, you
+[22:39] see um the picture of the people. They
+[22:41] match that vibe, that kind of 80s video
+[22:45] game throwback vibe, which I think is
+[22:47] cool. Um you know, they had that eyeball
+[22:49] up at the top,
+[22:51] which is like very provocative.
+[22:53] Um
+[22:54] yeah, it creeps me out a little bit.
+[22:55] There's like an eyeball looking directly
+[22:57] at me. But um but it's interesting and
+[22:59] it and it becomes memorable if that's
+[23:01] the vibe that you're going for. but
+[23:03] yeah, it just wasn't obvious to me what
+[23:04] this is until we got halfway down the
+[23:06] page. And so, um I think just a little
+[23:09] more about what it is and what's the
+[23:10] action that you want people to take.
+[23:12] Even that call to action
+[23:14] in the top right, that button, it just
+[23:15] says Ronin.
+[23:16] >> Right.
+[23:17] >> I don't know what Ronin is. The
+[23:19] company's called Ego. I guess it says
+[23:21] here Ronin launching September. Is Ronin
+[23:24] a product? Is it a model? Is it It's not
+[23:26] clear to me what this is. And so, I
+[23:28] think ultimately I'm just left very
+[23:30] confused.
+[23:31] >> This is another vibe code of smell, by
+[23:32] the way. It says scroll right here.
+[23:36] I'm naturally going to scroll. Like, I
+[23:37] don't think Personally, I don't
+[23:40] know many instances where where a human
+[23:42] would feel the need to put scroll there
+[23:44] because naturally you're going to do
+[23:45] that versus I commonly see agents trying
+[23:48] to always nudge the user to do to do
+[23:50] something.
+[23:51] >> Mhm.
+[23:51] >> Can we take a look at another one?
+[23:52] >> Yeah. Okay, we got Sentient OS. Your Mac
+[23:56] sentient. An on-device LLM understands
+[23:59] your entire life, then proactively
+[24:01] offers to get your work done through
+[24:03] computer use.
+[24:04] Okay, that's interesting. And then, I
+[24:07] guess we have an image here of a laptop
+[24:09] that's open.
+[24:11] >> Whoa. Okay.
+[24:12] >> And it closes when you scroll.
+[24:14] Oh, go go back for a second.
+[24:15] >> Oh.
+[24:16] >> So,
+[24:18] all right, so there's a bunch of stuff
+[24:20] going into the middle.
+[24:22] And then, when you scroll down a little,
+[24:25] and it says, "While you sleep, your Mac
+[24:26] understands your entire life." Okay.
+[24:30] >> And And I think notice something here.
+[24:32] I'm really struggling to like perfectly
+[24:35] match the scroll. One thing I I never
+[24:38] see a, you know, decacorn company ever
+[24:42] do any kind of scroll jacking.
+[24:44] >> Yes.
+[24:44] >> Why don't they do any kind of scroll
+[24:46] jacking? Well, because it does not
+[24:47] convert and it's frustrating. Um another
+[24:50] thing that I see AI agents doing doing a
+[24:53] lot, right? I mean, just notice like,
+[24:54] okay, if If
+[24:55] I I missed it.
+[24:57] >> [laughter]
+[24:58] >> Right? Again, go to like the top Fortune
+[25:00] 500 company sites that are have millions
+[25:02] and millions of page views, they are not
+[25:03] scroll jacking.
+[25:05] >> Yeah, what's frustrating about it is
+[25:07] you're used to the precision of how you
+[25:09] move through a site
+[25:10] >> Mhm.
+[25:11] >> when you're scrolling. And when you hit
+[25:13] hit a site and it's different precision,
+[25:16] you know, it keeps scrolling after you
+[25:18] stop touching the mouse or the trackpad,
+[25:21] it messes things up and it feels
+[25:23] unnatural.
+[25:25] Um and so please everybody, please stop
+[25:27] scroll jacking.
+[25:28] >> Stop scroll jacking.
+[25:29] >> Just keep the normal scroll. Cuz there's
+[25:31] some cool stuff that's happening here,
+[25:33] right? Like Like okay, we started out
+[25:35] with the laptop screen, open a bunch of
+[25:36] things are going into it.
+[25:37] >> Right.
+[25:38] >> The lid closes. And I think it's trying
+[25:40] to tell you like all this stuff happens
+[25:42] while you sleep, the lid is closed. And
+[25:44] then you wake up to your finished work
+[25:46] and so it wakes up and here's all the
+[25:47] things that it's done. And then it takes
+[25:49] you through that. So the visual and the
+[25:52] experience, what I like about this one
+[25:53] is it's actually reinforcing the
+[25:55] concepts that it's trying to tell you
+[25:57] about.
+[25:57] >> Mhm.
+[25:58] >> When it talks about going when you
+[25:59] sleep, the lid closes. The computer is
+[26:02] asleep. Then it's like, oh, it wakes up,
+[26:04] it does all the work while you sleep. So
+[26:05] when you wake up and then boom, the
+[26:07] laptop comes back out, we have all the
+[26:08] work is done and it's showing it to us.
+[26:11] That's I think the best version of an
+[26:12] animation is not animation for
+[26:14] animation's sake, but animation that
+[26:16] actually reinforces the point that
+[26:18] you're trying to make and communicate
+[26:20] something in a way that just being
+[26:21] static would not have been able to do.
+[26:23] >> Totally. I mean, it's it's definitely
+[26:25] helping me understand what this product
+[26:28] does.
+[26:29] Uh but I would also
+[26:31] I always think when you're you're trying
+[26:32] to be too creative or something, that's
+[26:34] great on like a product page or a video.
+[26:38] Not your landing page. Your landing
+[26:40] page, the number one thing you want to
+[26:42] try to get me to do is click this
+[26:43] button, download for Mac OS, right?
+[26:46] Also, just speaking about that button
+[26:47] for a second, this kind of glow
+[26:51] another bit of a vibe coding smell.
+[26:54] Again, it hey, it's definitely getting
+[26:56] my my attention.
+[26:58] Uh but one thing that I've noticed is AI
+[27:01] agents, they love to
+[27:03] overdo it on this kind of gradient, on
+[27:07] this massive drop shadow.
+[27:10] And again, look, it got my attention,
+[27:12] but it's just one thing to be wary of if
+[27:14] that's something that you're trying to
+[27:16] not do.
+[27:16] >> Yep. And then what do we have further
+[27:18] down the page here?
+[27:22] >> Let's see. Recipes.
+[27:25] >> I think what what's interesting here is
+[27:27] again, this is that main CTA, right? I
+[27:29] scroll through the whole thing and I'm
+[27:30] just I
+[27:31] You really want me to click this button
+[27:33] or perhaps even do this home brew
+[27:35] installation, but it's so small.
+[27:38] Like I'm at like 100% and I can barely
+[27:40] see it.
+[27:41] >> Mhm.
+[27:41] >> Right? And like this has this kind of
+[27:43] hover effect. I guess this brings me to
+[27:45] the GitHub. I can barely read that.
+[27:48] >> Yeah, [laughter]
+[27:48] it's really tough to read those.
+[27:50] >> Right? Like free.
+[27:52] There's a reason that free is giant on
+[27:54] pricing pages.
+[27:55] >> Mhm. Yeah, download for free.
+[27:57] >> Yeah, exactly.
+[27:58] >> Right.
+[27:59] >> Right? And I swear it's it's, you know,
+[28:02] perhaps it's because of the angle, but
+[28:03] it doesn't really matter. I cannot see
+[28:05] the word free
+[28:06] >> Right.
+[28:06] >> right now.
+[28:07] >> If you have something important to
+[28:08] communicate, it shouldn't matter the
+[28:09] angle that the user is looking at it. It
+[28:11] should be painfully obvious.
+[28:13] >> Yes, exactly.
+[28:14] >> All right. I mean, I guess maybe, you
+[28:16] know, one of the other pieces of
+[28:17] feedback for a product like this that
+[28:19] runs locally on your machine, privacy
+[28:21] and trust is something that's very
+[28:22] important. What do they do with the
+[28:24] data? I I guess they have an FAQ here to
+[28:27] try to answer some of this, but this is
+[28:30] actually an interesting problem in new
+[28:32] world of AI apps and LLMs is they need
+[28:36] so much data and so much context to be
+[28:38] really valuable. And especially a
+[28:39] product like this that's going to run
+[28:40] locally on your machine and have access
+[28:42] presumably to everything that's on your
+[28:44] computer. And so, there's a new bar that
+[28:48] needs to be established for trust and
+[28:51] privacy and security for all of these
+[28:53] types of products. My take is that I
+[28:55] actually think the products that really
+[28:57] lean into that and go above and beyond
+[28:59] to make users feel super comfortable
+[29:01] around what is the data we're going to
+[29:03] have access to, how are we going to use
+[29:05] it, what are our retention policies, is
+[29:07] it secure or not, all these things, and
+[29:09] being very proactive about that are the
+[29:11] ones that I think are going to have more
+[29:12] success of getting users to download and
+[29:14] try it and spread the word and tell
+[29:16] their friends.
+[29:17] >> Totally agree. As someone who applied to
+[29:19] YC with a text message analyzer that was
+[29:21] open source and read your iMessages all
+[29:24] locally on the computer, I can fully
+[29:26] agree.
+[29:26] >> And so, what were the things when you
+[29:27] were working on that product that you
+[29:29] thought about that you felt like you had
+[29:31] to do in order to get people to trust
+[29:33] your product and give it access to all
+[29:35] of their text messages?
+[29:37] >> Hero on the landing page was open
+[29:39] source,
+[29:40] completely on device.
+[29:42] >> Mhm.
+[29:42] >> Right? Communicating that the internet
+[29:44] isn't touched in any single way.
+[29:47] The And that's what we learned that
+[29:48] people really, really cared about,
+[29:49] right?
+[29:50] >> Yep.
+[29:50] >> And they do it here, you know, in
+[29:51] on-device LLM.
+[29:53] >> Yep.
+[29:53] >> But it's funny like like is it the word
+[29:55] "and" really even necessary? Like it's
+[29:57] it's interesting to me they're like
+[29:58] bolding these words. Another sign of AI
+[30:01] writing, actually, is you can look this
+[30:03] up on Wikipedia is when random words are
+[30:05] are bolded, right? Like but just
+[30:07] communicating those kind of the that
+[30:10] most important thing, which is that it's
+[30:12] on device.
+[30:13] >> Yep.
+[30:14] >> Another thing that kind of makes me
+[30:14] laugh is this font.
+[30:16] Let's see what the font is. Space
+[30:20] Grotesque is is always the the font that
+[30:24] is
+[30:25] uh
+[30:26] Oh, Instrument Serif is another one.
+[30:28] >> [laughter]
+[30:29] >> Instrument Serif, Claude Code loves
+[30:31] Instrument Serif. Oh, which is funny.
+[30:33] This kind of reminds me of the M dash,
+[30:35] right? It's like you can still use the M
+[30:36] dash in your writing, but unfortunately
+[30:38] people are going to look at it and go,
+[30:39] "Oh, he used AI, right? Instrument
+[30:42] Serif, Space Grotesque.
+[30:45] >> It's interesting how these things are
+[30:46] trends that sometimes are hard to spot
+[30:48] in the moment. I feel like we're on it
+[30:50] and, you know, we can spot it in the
+[30:52] moment here, but it's like you see a
+[30:53] kitchen that was designed in the '80s or
+[30:56] something like that and you're like,
+[30:57] "Man, this looks like an outdated
+[30:58] kitchen." But in the '80s, it probably
+[31:00] looked like a modern kitchen. And that's
+[31:02] what some of this feels like. It's
+[31:04] something that feels like of the moment
+[31:06] now, but 5 10 years, we're going to look
+[31:08] back at this and we're going to be like,
+[31:10] >> that's a hallmark mid-2020s
+[31:13] site design that will feel outdated at
+[31:16] that point." And so, I don't know. I
+[31:17] would encourage people just resist the
+[31:19] urge to do the default that the agents
+[31:21] are spitting out when they're designing
+[31:23] or the default fonts or use something
+[31:25] that is more unique to you and
+[31:26] communicates what you want to
+[31:27] communicate rather than just using the
+[31:29] thing that everybody else is using. And
+[31:31] that's the way to create more timeless
+[31:32] design, I think.
+[31:33] >> Yeah, and and establishing that brand
+[31:35] book early on. That's one thing that I
+[31:36] regret that we didn't do earlier for our
+[31:38] own company, was establishing a brand
+[31:40] book, deciding on what is the brand,
+[31:43] what is your font, uh your really your
+[31:45] design system.
+[31:47] Uh companies should do that
+[31:49] earlier, for sure.
+[31:50] >> All right. Well, thank you, Sentient OS.
+[31:52] >> Let's do another one.
+[31:54] >> All right. Sarah Novus. Institutional
+[31:56] Intelligence and Decision
+[31:58] Infrastructure.
+[32:00] >> Okay.
+[32:00] >> I don't really know what that means, but
+[32:03] uh Sarah Novus is your AI operating
+[32:05] partner. It reads every record your
+[32:07] company produces, finds the operational
+[32:08] inefficiencies nobody's tracking, and
+[32:10] warns you while problems are still
+[32:11] small. Okay. Um I don't know. This is
+[32:15] I think the copy could be improved here.
+[32:17] It's very generalized. It's very vague.
+[32:19] I'm kind of like, "Is this something I
+[32:20] need?" I'm not really sure. It does
+[32:22] everything that my company wants and
+[32:24] finds inefficiencies.
+[32:26] Um it's a decision infrastructure. I
+[32:28] don't know what that means. So, I think
+[32:30] something that would be helpful is just
+[32:32] getting to more specifics or more
+[32:33] specific language around who should use
+[32:35] this and why because right now I think
+[32:37] it's it's too unclear.
+[32:39] >> I just It's interesting to me like the
+[32:40] There's so much padding, right? Like
+[32:42] there's just a lot of white space. But
+[32:43] this is This is what they call above the
+[32:45] fold, right? Before I scroll. It's such
+[32:48] an important section, the hero section
+[32:50] of the landing page. And yet immediately
+[32:52] my eyes
+[32:53] I'm like looking at white space right
+[32:55] now.
+[32:55] Right? Um
+[32:57] Unfortunately, this is also kind of like
+[32:59] a classic vibe coding smell.
+[33:01] >> Uh this small all caps
+[33:04] >> Yeah.
+[33:04] >> Exactly. Yeah. Um And again, it's like,
+[33:07] okay, is there anything inherently wrong
+[33:09] with small all caps? Not necessarily,
+[33:11] but
+[33:12] when I read it, every claim cited, years
+[33:15] of history lied from day one.
+[33:18] >> Nothing installed, no interviews, but I
+[33:19] still don't even know what the product
+[33:20] does.
+[33:21] >> Yeah, exactly.
+[33:22] >> I didn't even know it was going to be
+[33:23] something that was installed. That was
+[33:24] not my assumption to begin with. So
+[33:26] >> Yeah, yeah, yeah, exactly. Like nothing
+[33:28] installed where? Like am I dealing with
+[33:30] hardware?
+[33:31] Um
+[33:32] >> Oversight over the operations, it finds
+[33:34] the inefficiencies, foresight with
+[33:36] receipts.
+[33:37] Yeah, I just need specific examples.
+[33:39] Like as we're scrolling, do they give
+[33:40] specific examples? Start with the
+[33:42] problem on your desk, enterprise, middle
+[33:44] market, private equity.
+[33:47] Yeah, it's This is like who they go
+[33:49] after.
+[33:49] >> Mm.
+[33:51] >> And which is This is not helpful because
+[33:54] it's about them, it's not about the
+[33:56] user, right? The user doesn't care who
+[33:58] they go after. The user cares about they
+[34:01] have a problem that they want solved and
+[34:03] can Cerno Vis help solve this problem
+[34:05] for me.
+[34:06] >> Right. It's almost like you like right
+[34:07] now I have to think through, am I
+[34:10] enterprise, middle market Like who am I?
+[34:12] >> Yeah.
+[34:12] >> Let's pretend I'm secondaries or I'm
+[34:15] continuation vehicles.
+[34:17] I have to look at this.
+[34:19] But I had to like click to decide who I
+[34:21] am. You're making me think, you know?
+[34:22] >> Too much work.
+[34:23] >> And again, to your point, what I really
+[34:24] want to see are the solutions.
+[34:27] >> Yeah, you know, this is um a trend that
+[34:29] I see with vibe coded sites and
+[34:31] especially we see this a lot in YC
+[34:33] applications. One of the things that we
+[34:35] see is um it's it's almost like it makes
+[34:38] a slide deck for the company
+[34:41] that's kind of pitching the company
+[34:43] um almost to investors a lot of times,
+[34:45] or like the the models think that is the
+[34:48] intended audience for a startup or a
+[34:50] startup website. And sometimes it is,
+[34:52] like investors will look at the thing,
+[34:54] but um that's not who you should be
+[34:56] speaking to and who you should be
+[34:57] targeting. You should be talking about
+[34:59] your product, who should use it, why,
+[35:00] why it's valuable, what problem it
+[35:02] solves for them, social proof of, you
+[35:05] know, other people that use this that
+[35:06] are like those users and how much it's
+[35:08] helped them. These are the things that I
+[35:10] think real users want to find, rather
+[35:13] than a pitch deck about who they target,
+[35:15] and yeah, here's the four guarantees,
+[35:18] and it's like I don't even know what I
+[35:19] still can't figure out what you do. Uh
+[35:21] one thing that's interesting I noticed
+[35:22] cuz we just talked about this, there's a
+[35:24] link at the top that says trust and
+[35:25] security.
+[35:27] And that's not something that you
+[35:28] normally see
+[35:29] >> Mhm.
+[35:30] >> um in a main navigation of a site. Um
+[35:34] and, you know, coming off the discussion
+[35:36] we just had around maybe companies
+[35:38] should put more emphasis on this.
+[35:40] It's actually interesting to see them
+[35:42] doing that and putting it up there and
+[35:44] having an FAQ, what data do we collect,
+[35:46] where does the data live. It um I would
+[35:48] not be surprised to see this become a
+[35:50] more common pattern that we're going to
+[35:52] see across um
+[35:54] AI sites trying to talk about the
+[35:56] product and get people to entrust them
+[35:58] with lots of sensitive information.
+[36:00] >> Totally.
+[36:00] >> Well, overall, I feel like the style is
+[36:02] very clean. It's it's very fresh. It's
+[36:04] very modern. Um so, from a visual
+[36:07] perspective, I think it looks very nice.
+[36:10] From a copy and, you know, overall
+[36:14] description, and are you communicating
+[36:16] what the product does into your users,
+[36:18] uh I'm still very confused on what it
+[36:20] actually does and who should use it and
+[36:21] why.
+[36:22] And so, I think there's a lot of room
+[36:23] for improvement on that.
+[36:25] >> Totally. And what I would encourage
+[36:28] all kind of founders to do something
+[36:29] that we did in the early days is you
+[36:31] should go to your users and ask them,
+[36:33] "What do you think of this website?" Try
+[36:35] not to make it clear that it's your
+[36:36] website because they're going to be too
+[36:37] nice to you and not tell you the truth.
+[36:40] But, you know, you need users to tell
+[36:42] you if it's resonating with them.
+[36:44] >> That's the ultimate test.
+[36:45] >> That is the absolutely the ultimate
+[36:47] test. We're just two people that are
+[36:49] here behind some cameras, you know. Talk
+[36:51] to your users.
+[36:52] >> All right, let's do another one here.
+[36:53] Slashy, your intelligent inbox. Um so,
+[36:56] first of all, their logo kind of
+[36:58] confuses me a little bit.
+[36:59] >> [laughter]
+[36:59] >> It looks like s/ashy
+[37:02] is what it makes me think of. So, I get
+[37:04] that it's clever and it's got a slash in
+[37:06] the slashy, but um if I had just seen
+[37:09] that without the context of like
+[37:10] slashy.com, I think I would have thought
+[37:13] this was s/ashy.
+[37:15] Um okay, your intelligent inbox. Slashy
+[37:17] drafts replies in your voice, schedules
+[37:19] meetings, and handles follow-up so you
+[37:21] spend less time managing email. Okay,
+[37:24] cool. So, it's like a new email product.
+[37:28] Um
+[37:28] and they've got a demo here that's
+[37:30] pretty big.
+[37:32] It's cool to show a demo, but there's so
+[37:34] much going on, there's so much text in
+[37:35] the demo, it's hard for me to mentally
+[37:37] orient around what's happening and what
+[37:39] it wants me to take away from this.
+[37:41] So, I see Pied Piper metrics before
+[37:43] Thursday. I see something happening in
+[37:46] an agent in the bottom right that it
+[37:47] keeps flipping over to, but it's not
+[37:50] slow enough where I can get my head
+[37:52] around what it's actually typing, what's
+[37:54] happening, and what the product is doing
+[37:56] here.
+[37:57] >> That's that's fair. I will say what
+[37:59] they're doing well is I know immediately
+[38:01] what it is.
+[38:02] >> Mhm.
+[38:03] >> I know that okay, this is kind of like
+[38:04] superhuman, this is a Gmail replacement,
+[38:08] right? I actually have this problem my
+[38:10] myself. My email is overloaded. Um but
+[38:14] yeah, it's like it maybe this would be
+[38:15] better as just showing kind of the chat
+[38:17] inbox, almost like an animation versus a
+[38:19] screen recorded video. I would
+[38:21] [clears throat] encourage this founder
+[38:22] to get an agency to do a really cool
+[38:25] animation that might go here and might
+[38:27] actually work better than kind of this
+[38:28] full-screen video right here.
+[38:30] >> Yeah.
+[38:31] Um replies drafted in seconds.
+[38:34] Okay. Um
+[38:36] And I guess it's going through these
+[38:37] tabs here on the side. And the problem
+[38:39] with these is if you scroll through,
+[38:41] it's you will miss the other ones.
+[38:44] >> Um and these are just seem to be on a
+[38:45] timer. Yeah, you can see the line going
+[38:47] across at the bottom there. Um which is
+[38:50] cool, but the problem with anytime you
+[38:52] have tabs is you have to expect that
+[38:54] people will not see anything that is
+[38:56] behind the other tabs.
+[38:58] >> Totally. You have to assume that I am
+[38:59] just going to see Well, what's
+[39:01] interesting? Wait, let's refresh this
+[39:03] cuz I think this is always good thing to
+[39:04] pay attention to. Let's pretend we spent
+[39:06] time on intelligent inbox.
+[39:08] >> Mhm.
+[39:09] >> Is the timer going?
+[39:12] Yeah, like it
+[39:14] doesn't look like it. It looks like it's
+[39:15] probably actually just starting right
+[39:17] when I actually which I when I scroll,
+[39:18] which is great. But what's interesting
+[39:20] sometimes I notice on sites that the
+[39:22] timer might start going before the user
+[39:24] is seeing it. And so you don't even
+[39:25] realize this, but everyone is actually
+[39:27] seeing snippets even though you might
+[39:29] consider it the fourth most important
+[39:31] thing.
+[39:31] >> Yeah, I think when we got down here the
+[39:32] first time, voice drafts was the thing
+[39:34] that was highlighted. Um and maybe cuz
+[39:37] we were just kind of scrolling back and
+[39:38] forth. And so we started the timer
+[39:40] without actually reading them. Um
+[39:42] maybe the other thing that I'll mention
+[39:43] here is I can't tell again what's
+[39:46] happening in the screenshots. And I
+[39:48] think if I was like really dr- Okay, AI
+[39:50] drafts and what's happening and I tried
+[39:52] to really orient myself and pay
+[39:53] attention, I could try to figure it out.
+[39:56] But most users are not actually looking
+[39:58] at something for the first time and
+[39:59] spending that level of depth and
+[40:02] scrutiny on what's happening. And so it
+[40:04] it's cool they're showing the product. I
+[40:06] wonder if there's a more focused
+[40:08] dumbed-down way to actually uh
+[40:10] communicate what is happening with each
+[40:12] of these rather than showing all the um
+[40:15] um, granularity and level of detail of
+[40:18] the actual interface.
+[40:20] >> Totally.
+[40:20] >> Okay, so we got some social proof here.
+[40:22] Loved by the busiest people. We've got
+[40:24] an investor, Red Point. We've got a
+[40:26] content creator who I I don't know.
+[40:29] Um,
+[40:30] so all right. So some people use this
+[40:32] and and again,
+[40:34] they've got a security
+[40:36] uh, link up at the top. They've got
+[40:38] social proof here on here's people that
+[40:40] are actually using this because you
+[40:41] again, you're asking them to entrust you
+[40:43] with their your inbox. And that is one
+[40:46] of the most sensitive areas to give uh,
+[40:48] anybody access to. So it's an
+[40:50] interesting challenge for how can you
+[40:51] build that trust and get people to
+[40:53] download and start using it?
+[40:54] >> Yeah, and social proof is so important,
+[40:56] right? That's always why typically you
+[40:58] see logos above the fold. I think
+[41:00] founders should always consider though
+[41:03] who they're using as social proof. Like
+[41:05] just as an example, I see investors and
+[41:08] founders and I think, okay, this is for
+[41:09] investors and founders. Which you know,
+[41:11] kind of makes sense like they they are
+[41:13] busy people which have a lot of emails.
+[41:15] But immediately I just like even with
+[41:18] both investors on this side on the left
+[41:20] hand side, I think, oh wait a second, is
+[41:21] this just an inbox for VCs?
+[41:24] >> Yeah, maybe it is that they're targeting
+[41:25] founders and VCs. So I'm not sure. Um,
+[41:27] or is it for general consumers? They say
+[41:30] for busy people, so maybe this is like a
+[41:32] prosumer superhuman kind of thing. Then
+[41:35] writes in your style. Okay, this is cool
+[41:36] cuz you know, it's showing that it's
+[41:38] going through and um, and making edits
+[41:41] uh, that actually match the style. Like
+[41:43] that view right there. That's
+[41:44] >> Awesome. This is really This is like
+[41:46] kind of the animation that I was talking
+[41:48] about. Something that you could design
+[41:49] in magic patterns, by the way. But this
+[41:51] is really really neat where I I totally
+[41:53] get what it's doing here.
+[41:55] >> And handle your inbox from iMessage.
+[41:57] Again, we got more of these tabs. It
+[41:58] started at the third one down there, so
+[42:01] uh, there was review and approve.
+[42:03] Um,
+[42:05] but yeah, same
+[42:06] same as above.
+[42:07] >> That's cool, too. That's it's
+[42:08] interesting to me like this is kind of
+[42:10] what's resonating with me, right? Like,
+[42:11] oh my, you know, there's so many
+[42:13] problems with you have so many inboxes,
+[42:15] whether it's text messages, WhatsApp,
+[42:17] your Gmail, your Slack, and it's kind of
+[42:19] consolidating that. Like, this is really
+[42:21] resonating and
+[42:23] yeah, it would be cool if that was maybe
+[42:24] that should be pushed to the top if
+[42:25] users are appreciating that.
+[42:27] >> Yeah, and that's a problem I have. Too
+[42:29] many inboxes. And so, that would have
+[42:31] resonated with me to the extent that I
+[42:33] am both a founder and a investor. They
+[42:35] would be interested in this.
+[42:37] >> One more thing that I think is great is
+[42:38] actually just how
+[42:39] long this landing page is. I learned
+[42:42] this from the PostHog guys, actually.
+[42:44] So, the PostHog folks had a massive
+[42:46] footer to communicate that they
+[42:48] were you know, a big company, right? And
+[42:51] so, I always encourage folks to think
+[42:53] about like, what is kind of the meta
+[42:55] thing that's being communicated and just
+[42:57] by the sheer fact that it's a really
+[42:58] long landing page, I think, oh, this
+[43:00] company's been around a while.
+[43:01] >> Yeah, it does a good job of spacing down
+[43:03] the page, um calling out the main points
+[43:06] that it wants to hit on, trying to build
+[43:08] trust, and it looks very nicely,
+[43:11] professionally designed, um which helps
+[43:13] build that trust, as well, which is
+[43:15] really important. Um so, overall, I
+[43:17] think this this is really well done.
+[43:19] Great. Thank you, Slashy. As someone who
+[43:21] comes from a a front-end engineering
+[43:23] background, how did you get better at
+[43:25] design and improving your design taste?
+[43:27] >> So, one thing I I try to do is look at
+[43:28] beautiful things. Like, as an example,
+[43:30] there's a Matisse exhibit uh here in San
+[43:33] Francisco.
+[43:35] Um or just kind of consuming
+[43:37] things that you enjoy aesthetically. A
+[43:40] great book to read is like The Design of
+[43:41] Everyday Things.
+[43:43] And again, always considering the human
+[43:45] and the user. I think there's this big
+[43:46] misconception in Silicon Valley that
+[43:48] design is pixel-perfect border radius.
+[43:52] And it's not. It's thinking through the
+[43:54] user experience. And of course, having
+[43:56] high-fidelity UI and that's that's
+[43:58] beautiful, right? But
+[43:59] >> Yeah. And how do you do that? What are
+[44:00] some things that you do maybe in your
+[44:02] day-to-day as you're building Magic
+[44:04] Patterns and leading the company, as
+[44:06] well, that you do to try to put the user
+[44:09] front and center and and always keep
+[44:11] that voice of the user in your head.
+[44:13] >> Yeah, well, like a couple things that we
+[44:14] do is everyone at our company does
+[44:16] customer support.
+[44:17] >> Mhm.
+[44:18] >> So, every single person is in the
+[44:21] support inbox, talking to users every
+[44:24] single day, seeing their frustrations
+[44:26] when they can't find the share button
+[44:28] because we have two CTAs that are the
+[44:31] exact same color, two primary buttons,
+[44:33] right? And the next thing you know,
+[44:34] because the engineers there, they're
+[44:36] going ahead and and fixing it cuz they
+[44:38] experience the user problem first hand.
+[44:40] And also just having a very high bar,
+[44:42] right? Where if something looks off and
+[44:46] it just feels off, we encourage all of
+[44:49] our team to go ahead and tackle that.
+[44:51] Spend time on the extra 20%. Don't just
+[44:55] have the vibe coded output and not take
+[44:59] it to the next level.
+[45:00] >> And how do you balance that because
+[45:02] obviously doing that sounds great. The
+[45:04] trade-offs are now it's going to take
+[45:05] longer to ship something. How do you
+[45:07] balance the speed of shipping quickly
+[45:09] with actually, you know, going above and
+[45:11] beyond and and making something that
+[45:13] that is is actually excellent rather
+[45:15] than the thing that was just okay?
+[45:17] >> Yeah, well, you have to it's all about
+[45:18] trade-offs, right? And if you don't do
+[45:21] that,
+[45:23] you might have tons of users that are on
+[45:25] your site and then they're leaving.
+[45:27] They're not understanding it. They're
+[45:29] their workflow is blocked, right? And so
+[45:32] you have to have faith that it is worth
+[45:35] it. And for us, we have tremendous faith
+[45:38] that it is worth it, that this is
+[45:39] important to think through and to take
+[45:42] your time doing something. And I think
+[45:44] it's also like people love saying, "If
+[45:46] it's well designed, it must have taken
+[45:48] so long to ship and they're so slow." I
+[45:51] can practice not
+[45:53] Not really. You can still be really
+[45:55] fast, especially considering how much
+[45:57] everything has sped up
+[45:59] when it comes to writing code.
+[46:00] >> Yeah, it's actually really interesting.
+[46:01] Those trade-offs don't have to exist
+[46:03] anymore. Historically, they had to
+[46:05] exist.
+[46:06] >> What's next for Magic Patterns? What's
+[46:07] What's next on the road map for you and
+[46:09] and where do you think design is going
+[46:10] from here?
+[46:11] >> Yeah, so this week we released Magic OS,
+[46:13] which again is our new version of our
+[46:15] canvas. It's like Pinterest and Figma
+[46:18] had a baby. Uh and you can
+[46:21] chat with it, prompt with it to make
+[46:23] designs, bring in your PRDs and your
+[46:25] context. I think what's next for the the
+[46:27] future of design, well, one thing's for
+[46:29] sure, it's moving very, very fast. And
+[46:31] anyone who thinks that they know for
+[46:33] sure,
+[46:34] you know, probably is just making it up,
+[46:36] right? But I think one thing that's
+[46:38] certainly true is code as a medium is
+[46:42] here to stay because clearly the
+[46:45] Frontier Labs and everyone is working on
+[46:47] making coding agents very, very good.
+[46:49] And that is the ultimate
+[46:51] medium for um
+[46:54] production and for your users.
+[46:56] >> Yeah, it's interesting. Um
+[46:59] code is just another medium, like you
+[47:01] said, and there's lots of different
+[47:03] mediums by which products are created
+[47:05] and users experience products, and this
+[47:08] is just a new one that has now new tools
+[47:11] to be able to build things that weren't
+[47:13] possible before. And it's really
+[47:15] exciting to see everything get taken to
+[47:17] a new level and new things being
+[47:19] possible that almost seemed like they
+[47:21] never would be. And so, it's awesome to
+[47:23] have you on and see how you guys are
+[47:24] enabling that with Magic Patterns and
+[47:26] really appreciate you joining.
+[47:28] >> Yeah, thanks so much.
+[47:29] >> Well, that does it for this episode of
+[47:30] Design Review, and we'll see you on the
+[47:31] next one.
+[47:34] >> [music]

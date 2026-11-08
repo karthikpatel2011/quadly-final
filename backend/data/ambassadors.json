@@ -1,0 +1,29 @@
+{
+  "_note": "Placeholder roster for the onboarding ambassador check. Replace these entries with the real ambassador collection when ambassador profiles ship (each profile will keep this id).",
+  "ambassadors": [
+    {
+      "id": "amb_001",
+      "name": "Diya Sharma",
+      "college": "Vasavi College of Engineering",
+      "handle": "@diya.codes"
+    },
+    {
+      "id": "amb_002",
+      "name": "Aarav Mehta",
+      "college": "CBIT Hyderabad",
+      "handle": "@aarav.dev"
+    },
+    {
+      "id": "amb_003",
+      "name": "Meghna Iyer",
+      "college": "MVSR Engineering College",
+      "handle": "@meghna.ml"
+    },
+    {
+      "id": "amb_004",
+      "name": "Rohit Verma",
+      "college": "Anurag University",
+      "handle": "@rohit.builds"
+    }
+  ]
+}

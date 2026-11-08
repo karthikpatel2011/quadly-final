@@ -1,0 +1,618 @@
+[0:00] 22,265,736
+[0:05] total users on School as of today. And
+[0:08] to get that big, we had to know how to
+[0:10] retain users. And one of the biggest
+[0:12] places we learned this from is the
+[0:14] communities on the platform itself. And
+[0:16] so in this video, I'm going to break
+[0:17] down what we've learned so far that you
+[0:19] can use to retain your customers longer
+[0:21] in any recurring revenue business. And
+[0:23] this is a special shout out to the
+[0:24] School and Sam. I'm taking all the
+[0:26] learnings that he put in the School News
+[0:28] and I'm trying to make them public cuz I
+[0:29] think they're awesome. So number one is
+[0:31] think of churn like a leaky bucket. And
+[0:33] then diagnose what's actually happening.
+[0:36] So your MRR, meaning your monthly
+[0:38] recurring revenue, grows when new
+[0:39] members are greater than churn members.
+[0:42] So for example, if you sell five people
+[0:45] and you lose four, your MRR will grow.
+[0:48] If you sell five new members and five
+[0:51] churn, your growth will be flat. You
+[0:53] begin declining when you have fewer new
+[0:55] people than people who leave. And so
+[0:57] tactically, what you want to do is track
+[0:59] those two numbers on a monthly basis,
+[1:01] joins versus cancels, and then force
+[1:04] yourself to label the businesses
+[1:05] growing, flat, or declining based on
+[1:07] that. That's thing one.
+[1:10] Thing two. You want to use retention
+[1:12] benchmarks. And so this way you can know
+[1:14] if you're good. And so I'll just give
+[1:15] you the School platform averages. Now to
+[1:17] be clear, this isn't uh churn for like
+[1:20] an insurance premium or an alarm system.
+[1:23] But if you sell anything that is, I
+[1:25] would say, a tradi- you know, a consumer
+[1:27] service that's not like a home service,
+[1:29] but just like a weight loss service or
+[1:31] anything that you'd help somebody uh or
+[1:33] remote service or anything that's like
+[1:35] an online service, um these metrics will
+[1:37] probably be much more correlated to what
+[1:39] you're at. And so the platform average
+[1:42] across School is 80% monthly retention.
+[1:44] So said differently, it's 20% churn. So
+[1:46] 80% stay, 20% leave. That's the platform
+[1:48] average. Now the best groups have less
+[1:51] than 10% churn, aka 90% retention month
+[1:53] over month. The not good groups have
+[1:56] less than 70% retention, aka 30% or
+[1:59] higher. And so tactically, if less than
+[2:01] seven out of 10 people want to stay on a
+[2:03] monthly basis, you probably need to work
+[2:05] on your retention more than anything
+[2:07] else. It'll be the highest ROI lever.
+[2:09] Now, to put this in context, if you take
+[2:11] your turn from 20% to 10%,
+[2:13] or said differently, you take your
+[2:15] retention from 80 to 90%, you didn't
+[2:17] just get a 10 or 12% boost, you got a
+[2:20] double in the LTV per customer. Meaning
+[2:22] customers stay twice as long when you
+[2:24] make that change. And so, one of the big
+[2:26] things that people get confused about
+[2:27] these small numbers is that the smaller
+[2:29] the number, the bigger the change by
+[2:31] percentages when you make these small
+[2:33] tweaks. And to be clear, this is all
+[2:35] monthly in comparison to others, not in
+[2:38] comparison to have like a sellable
+[2:39] business or anything like that.
+[2:41] Real quick, I'm going to show you the
+[2:42] exact 10-stage roadmap from zero to 100
+[2:45] million plus that less than 1% of
+[2:47] companies finish. I've now done multiple
+[2:49] times, and so I can say with a lot of
+[2:50] confidence that these are the stages as
+[2:52] head count increases that you need to
+[2:54] get through. And I broke each of these
+[2:56] down by eight different functions of the
+[2:58] business, what the constraint feels
+[3:00] like, like what are the symptoms of it
+[3:01] when you're going through it, and then
+[3:03] what steps we actually took to graduate.
+[3:04] And we've done this across software,
+[3:06] physical products, uh service
+[3:08] businesses, brick-and-mortar, all of
+[3:10] this, and it works. And it's my gift to
+[3:12] you, it's absolutely free. And so, the
+[3:13] link's in the description, but you just
+[3:15] go acquisition.com/roadmap,
+[3:17] just enter your info, and it'll spit it
+[3:18] right back to you all free. So, number
+[3:19] three is the biggest rule is that churn
+[3:23] drops dramatically with time. All right,
+[3:26] so this is like this is a very cool
+[3:28] inference that that uh Sam shared with
+[3:30] me that I thought was really, really
+[3:31] interesting. So, it it it's very easy to
+[3:34] think, "Okay, my average churn is, call
+[3:36] it 10% a month." But when you actually
+[3:38] look at cohorts of churn, meaning people
+[3:40] who are at their sixth month versus
+[3:42] people at the second month versus third
+[3:43] month, etc., the averages across
+[3:45] platform are also very different by
+[3:47] month. And so, for example, month one to
+[3:50] three are the highest churn. So, they're
+[3:53] 20% plus during these months. Now, if
+[3:55] you keep someone 90 days, which seems to
+[3:57] be the first kind of big churn drop-off
+[3:59] point, it drops to around 10% or less.
+[4:02] And you're like, "Huh, that's kind of
+[4:03] interesting." Basically, it drops in
+[4:04] half if you get people to day 90.
+[4:06] Now, by month six, so another 90 days
+[4:09] after that, churn gets extremely low.
+[4:11] So, it goes from like 10% to 2%. All
+[4:14] right, so a 5x decrease or a 5x increase
+[4:17] in LTV, depending on how you want to see
+[4:18] it. And so, the implications of this are
+[4:21] huge because a lot of people will
+[4:23] obsess, myself included, about like,
+[4:24] "How do I get my my monthly churn down,
+[4:27] you know, over and over again?" An
+[4:28] easier way to think about decreasing
+[4:29] your churn is not, "How do I make this
+[4:30] number go down?" but, "How do I get
+[4:31] someone to stay past day 90? How do I
+[4:33] get these people to stay past month
+[4:35] six?" Because those become much more
+[4:36] tactical in terms of like, "This is what
+[4:38] I can do." Now, to be clear, if your
+[4:40] community or recurring revenue thing is
+[4:41] less than 90 days old, then your churn
+[4:43] is always going to be inflated cuz you
+[4:44] haven't even gotten those customers
+[4:45] who've made it past that point that
+[4:47] would, over time, decrease your monthly
+[4:49] churn.
+[4:50] If it's less than six months old, it's
+[4:51] the same thing, just a little bit less.
+[4:54] And so, to be clear, don't overhaul your
+[4:55] entire business because your month one
+[4:57] churn sucks. Uh that's normal for it to
+[5:00] be higher than the other months, unless
+[5:02] basically everyone's leaving, in which
+[5:03] case, yes, you should go fix that. All
+[5:05] right, so that's number three. And I
+[5:06] think that one's like really, really
+[5:07] big, and I want to like hit on that.
+[5:09] Like,
+[5:11] I would say, if you had to focus on
+[5:12] three tactics, have a very specific
+[5:14] strategy for getting people past the
+[5:15] first month cuz that's the biggest month
+[5:17] of churn. So, that's going to come from
+[5:19] activation, onboarding, expectation
+[5:21] setting, selling the right promises on
+[5:24] the front end, showing up every day,
+[5:26] making sure that you're providing
+[5:27] content in that in that environment.
+[5:31] Day 90 is probably going to have to
+[5:32] deliver some sort of outcome, some sort
+[5:33] of change in behavior for them. Month
+[5:35] six, it's usually them connecting with
+[5:36] other people within that community. All
+[5:38] right, and so, this is kind of as these
+[5:40] things develop. Now, number four, ask
+[5:43] people why they canceled, and then look
+[5:45] for the patterns. So, I would say,
+[5:46] earlier on in my career, I would just
+[5:48] like when someone says, "Oh, it costs
+[5:49] too much." I would just ignore them. I'd
+[5:50] be like, "Oh, they just don't understand
+[5:51] the value." But over time, I've learned
+[5:53] to appreciate that like I'll tell you a
+[5:55] a cool little thing. Sam has
+[5:58] the head of customer support sits right
+[6:01] next to him
+[6:02] in the whole office. And the reason for
+[6:04] that is cuz he wanted a very tight
+[6:05] feedback loop between the problems that
+[6:07] customers are experiencing, the reasons
+[6:09] they're canceling, and the things that
+[6:10] are getting built. And that's why School
+[6:12] is such a strong platform, it's so good.
+[6:14] And so tactically, message people who
+[6:16] are canceling say, "Hey, why are you
+[6:17] canceling?" And don't knee-jerk, you
+[6:19] know, on one response to be clear.
+[6:21] They'll be like, "Oh, this one person
+[6:22] canceled." Like, look for patterns,
+[6:23] collect enough feedback uh to see them.
+[6:26] And so tactically, you can create a
+[6:27] simple DM script, and then you can tag
+[6:30] the reason that people have in an Excel
+[6:31] sheet. So, it could be like price,
+[6:33] overwhelm, not using, it's missing a
+[6:35] feature, or it's not what I expected.
+[6:37] And you can look at that, and for every
+[6:39] 20 cancels or so, review the top one or
+[6:41] two reasons, and then fix those. Really
+[6:43] tactical advice, please do this.
+[6:46] Number five, ask your best members why
+[6:48] they stay. So, we're asking the bad
+[6:50] people why they leave, we're asking the
+[6:51] good people why they stay, and then do
+[6:53] more of that. So, identify the longest
+[6:55] tenured people, aka the most engaged
+[6:57] members, and then ask them like, "What
+[6:58] made you stay?
+[7:00] What's the number one value that you get
+[7:02] here?" And so then tactically, whatever
+[7:04] shows up repeatedly becomes your kind of
+[7:06] retention engine. And so everything else
+[7:08] after that is really optional. And I
+[7:09] would I want to emphasize this point.
+[7:11] If you can only do one thing that gets
+[7:13] people to stay, why would you do five?
+[7:16] And this is a lesson that took me too
+[7:17] long to learn because often times, we
+[7:19] believe that in order to fix things, we
+[7:20] need to fix them through addition. When
+[7:22] often times, we need to fix them through
+[7:23] subtraction and amelioration, aka making
+[7:26] it better rather than adding more stuff.
+[7:28] Because if you were to simply fulfill
+[7:30] the promise that you originally made,
+[7:32] they'd probably stay. So, if you think
+[7:33] about, "How do I improve the quality of
+[7:34] a product?" You make a promise, and then
+[7:37] you remove all friction associated with
+[7:39] getting that thing. And so the
+[7:40] businesses, the products, and the
+[7:41] services that win are the ones that
+[7:43] simply make all the things that suck
+[7:45] about achieving the good thing go away.
+[7:47] School fundamentally helps people get
+[7:49] started online. And so all we've done is
+[7:51] try to optimize to make it as easy as
+[7:53] humanly possible, and that doesn't mean
+[7:54] adding more features. It means making
+[7:56] everything in the background just vanish
+[7:58] so it just works, which leads me to
+[8:00] number six.
+[8:02] Price objections. You don't want to
+[8:03] guess, you want to tier based on
+[8:05] evidence. So at School, so us eating our
+[8:08] own dog food, we had a bunch of people
+[8:09] canceling saying, "It's too expensive."
+[8:12] And so what we did is we created a lower
+[8:14] tier while still keeping the higher tier
+[8:16] available with some additional,
+[8:18] uh, you know, metrics and, you know,
+[8:19] additional admins, things that, you
+[8:20] know, unique URLs, you know, no no
+[8:23] sidebars of competitor groups kind of
+[8:25] advertising the same area. We kept that
+[8:28] for the high-level people, but the
+[8:29] people who are lower-level, who are just
+[8:31] kind of hobbyists, who are just getting
+[8:32] started, we created a 11 times cheaper
+[8:35] tier from $99 to $9. Right? And so
+[8:40] this was important for School because a
+[8:42] lot of hobby groups are people getting
+[8:44] started and maybe they're not
+[8:45] necessarily making a ton of money. They
+[8:46] got to figure out a few months, and the
+[8:48] difference between $100 a month and, you
+[8:49] know, uh, $9 a month is pretty huge. And
+[8:52] so that allowed the people who were like
+[8:54] still figuring it out to still be able
+[8:56] to use the tool and stay and then
+[8:57] ultimately be successful longer term.
+[8:59] Now, tactically,
+[9:01] if your ideal customers, this is a very
+[9:03] important point, if your ideal customer
+[9:05] say the price is the issue,
+[9:08] then you can add a lower tier or a
+[9:09] standard plan. If non-ideal people say
+[9:12] it's too expensive, just ignore it. That
+[9:14] means that the price is actually acting
+[9:16] as a good filter, right? Like if you if
+[9:17] you're like, "I want a community for a
+[9:18] million dollar plus business owners,"
+[9:20] and people who are not a million dollars
+[9:21] plus say this is expensive, then it's
+[9:22] like,
+[9:23] "Great. Bingo. It's working." All right?
+[9:26] Um, same thing with whoever your avatar
+[9:28] is, which leads to number seven,
+[9:29] overwhelm. So let's talk about this. The
+[9:31] number one reason people churn, outside
+[9:34] of price, is overwhelm. It is the churn
+[9:38] driver. And this is why doing less can
+[9:40] often retain more. And so, the core idea
+[9:43] behind this is like, I don't have the
+[9:44] time, I can't keep up, I can't utilize
+[9:47] it. And usually just means there's too
+[9:48] much stuff. So, I want to I want to
+[9:49] break down a real-world example of this
+[9:51] outside of school that applied the same
+[9:54] concept. So, Planet Fitness uh is a $10
+[9:57] a month, you know, gym subscription.
+[9:58] They have some upsells, whatever. And
+[10:00] they were able to enter the market in a
+[10:01] place that there's already tons of gyms,
+[10:02] there's already tons of health clubs,
+[10:04] etc. But what they realized when they
+[10:05] surveyed customers is that people joined
+[10:07] health clubs and they were paying $59 a
+[10:08] month or whatever, and they had
+[10:10] basketball courts and racquetball courts
+[10:11] and uh cardio and pool and all this
+[10:14] other stuff, right? And when they
+[10:15] surveyed people, the vast majority
+[10:17] people just used the cardio equipment
+[10:19] and a little bit of weights.
+[10:21] And so, they were like, wait, so these
+[10:22] have these massively built-out things,
+[10:24] but people are only using 10 or 15% of
+[10:26] the facility. And so, what they did,
+[10:27] they said, what if we just took out that
+[10:29] 10 or 15% put it over here and then
+[10:31] charge way less for it? And by doing
+[10:32] that, they had a superior value
+[10:34] proposition. Now, here's where it gets
+[10:35] really interesting.
+[10:37] When you have five things that you pay
+[10:39] for, but you only use one, you feel like
+[10:41] you're only getting 20% of the value.
+[10:44] If for the same price,
+[10:47] you just offer that one thing, people
+[10:48] feel like they're getting 100% of the
+[10:50] value. So, someone is more likely to
+[10:52] churn in this scenario because you added
+[10:54] more stuff because now they feel like
+[10:55] they're using not enough of it. Wild.
+[10:58] So, us as business owners a lot of times
+[10:59] we're thinking, oh, I'm going to I'm
+[11:00] going to add this, you know, I'm going
+[11:01] to add all this extra stuff, but the
+[11:03] reality is all we did is we gave them
+[11:04] more reason to cancel because they never
+[11:06] used it.
+[11:07] And so, we had a community on School
+[11:08] where they found out about this, they
+[11:10] deleted content that they had, and they
+[11:12] took their churn from 30%
+[11:14] month-over-month to five. They had a six
+[11:16] x increase in LTV by simply having fewer
+[11:19] things.
+[11:20] All right? A simple version of this is,
+[11:22] and I'll I'll give you a tactical uh
+[11:25] I'll give you a couple tactics on this.
+[11:26] So, you can make a a little form and
+[11:28] just simply ask your customers, hey, if
+[11:31] I were to delete everything, what one
+[11:33] thing would you fight for? And on the
+[11:34] inverse, if I were to keep everything
+[11:36] and just remove only one feature, which
+[11:39] one thing would you not mind seeing go?"
+[11:41] And then if you chart those on a graph,
+[11:42] what you'll find out is what the number
+[11:44] one and number two most valuable things
+[11:45] are. And often times it's really
+[11:47] outsized. And most of the time, you just
+[11:49] need to do those things and basically
+[11:51] forget about everything else. Cuz one of
+[11:53] the big things we have to remember is
+[11:54] that
+[11:55] people who are using your services are
+[11:58] not full-time using your stuff. They
+[12:00] have lives. And so we want to think
+[12:02] about value per second, not seconds of
+[12:05] value. And in the digital world, that
+[12:07] might mean just one post, one call
+[12:08] recording, or just one single action
+[12:11] that you need to take that's valuable
+[12:12] for them. That's it. If someone just
+[12:13] gets that every week from you, they're
+[12:15] in.
+[12:16] Which leads to number eight. Design for
+[12:18] the extremes. Have a busy path, like the
+[12:21] person who's just kind of like a dabbler
+[12:23] dipping their toe in the water, and then
+[12:24] also have kind of like the power user
+[12:26] depth. And so a busy member should be
+[12:28] able to get value from a distance. They
+[12:32] should be able to keep up and not feel
+[12:33] like they're left behind. On the other
+[12:35] hand, a hardcore person should be able
+[12:38] to go deep all day. And so tactically,
+[12:40] make an explicit start here {slash}
+[12:43] weekly cadence flow for the busy people,
+[12:45] while leaving optional kind of like side
+[12:47] quests and depth for the kind of like
+[12:50] heavy users or heavy Yeah, the heavy
+[12:52] users. Nine, move the ladder closer to
+[12:55] the front. So front-load the thing that
+[12:57] people love. So we use snakes and
+[13:00] ladders as a concept. So you want to
+[13:01] remove the snakes, aka the friction, the
+[13:04] confusion, the overwhelm. And if there's
+[13:06] a long ladder, the thing that makes
+[13:07] people stick, put it in the onboarding.
+[13:09] So tactically, if the calls are the
+[13:11] stickiest thing, or this specific
+[13:13] service, or this specific
+[13:14] implementation, or onboarding, or
+[13:16] activation, the best call replay,
+[13:18] whatever it is, the pin post, put that
+[13:21] sticky sticky thing up front. And you
+[13:23] want to pin, this is now a
+[13:25] school-specific thing, but it still
+[13:26] works with any onboarding, is you want
+[13:28] to pin the fast win up front so new
+[13:29] members hit that value ideally within
+[13:31] the first 24 hours. And this works for
+[13:33] any recurring business, whether you're
+[13:34] teaching someone how to sell, teaching
+[13:35] them to work leads, teaching them how to
+[13:37] pickle pickle jars, whatever. Like, as
+[13:39] long as you have a way to get people a
+[13:41] win fast,
+[13:43] they will like you more. 10, show up
+[13:45] daily and care. So, this is something
+[13:47] that we saw across all communities is
+[13:49] that the owners who showed up in the
+[13:51] community on a daily basis had
+[13:54] significantly higher retention than the
+[13:55] people who didn't. Big surprise. Now,
+[13:58] we've basically never seen this fail.
+[14:01] And so, if a member feels like the owner
+[14:02] isn't active or doesn't care, they
+[14:04] leave. And so, a tactile minimum would
+[14:06] just be like, put an alarm, make it part
+[14:07] of your daily routine.
+[14:09] And so, on a small level, you can clear
+[14:11] notifications, DMs, you know, uh report
+[14:13] whatever content or, you know, deal with
+[14:15] content that people might have reported.
+[14:16] Now, this is talking about school, but
+[14:18] you can apply this to your own business,
+[14:20] which is like, what am I doing every day
+[14:22] to show up for my customers and can I
+[14:23] make that a repeated action that I do
+[14:25] that's high value and high leverage.
+[14:27] This also means like, read the
+[14:28] complaints every morning of customers
+[14:30] who are dealing with issues. Because if
+[14:32] you if you want to hide your head in the
+[14:33] sand,
+[14:35] uh you will be
+[14:37] well, I guess your head will be in the
+[14:37] sand and that will suck cuz then you got
+[14:39] it in your ears and your nose and it's
+[14:40] like, you know, how are you going to
+[14:41] live, right? So, it's that's a tough
+[14:42] life. And so,
+[14:44] so, you know, encourage the good
+[14:46] behavior that you that you have, the the
+[14:48] people who follow what you want. People
+[14:50] leave nice reviews, people leave nice
+[14:52] testimonials. You want to tell people
+[14:53] and say, "Good job." On the other hand,
+[14:56] delete bad stuff and delete bad people.
+[14:58] I cannot tell you how powerful deleting
+[15:01] cancer is is. Like, if they do it in
+[15:03] your body, you should do it in your
+[15:04] community or membership. Which leads me
+[15:06] to number
+[15:07] 11, which is a weekly call and a
+[15:09] recording. And so, live voice / face
+[15:12] deepens relationships. And so,
+[15:14] recordings kind of just like let busy
+[15:16] people keep up. There's very often that
+[15:17] there's like weekly podcasts that have
+[15:19] tremendous retention. It's just like
+[15:21] it's just enough like I think about TV
+[15:23] shows. Like obviously Netflix created
+[15:25] the binge culture but the vast majority
+[15:27] shows are like once a week. It's enough
+[15:28] that people can keep up with it.
+[15:30] And too many of these kind of like extra
+[15:32] add-ons, people kind of revert to that
+[15:35] one thing and you want to make sure that
+[15:36] the one thing they're consuming is the
+[15:37] best one. So if you're unsure what kind
+[15:40] of communication cadence to stick with,
+[15:41] just default to like one big thing per
+[15:44] week uh and then like a best of post.
+[15:47] Very simple. So it could be like weekly
+[15:49] call and weekly post. That's all you
+[15:51] have to do. Very very simple within a
+[15:52] community structure. Let's go to number
+[15:54] 12. So you want to add an annual plan
+[15:56] with a discount. So the reason this
+[15:59] works is that annual always has lower
+[16:01] churn than monthly and it's because you
+[16:02] only need to decide one time rather than
+[16:04] 12. And so annual buyers churn less.
+[16:07] And even beyond the they can't cancel
+[16:10] effect, right? So like because they
+[16:12] can't cancel because they already paid
+[16:13] is one element of that, but the other
+[16:15] element is just that like typically
+[16:17] those people are also more committed.
+[16:18] They also got a lower rate. So there's a
+[16:19] lot of and they're also more qualified
+[16:21] because they've paid more up front. So
+[16:22] there's a lot of and and and. So having
+[16:24] that is valuable. Now a common practice
+[16:26] here is 16 16 or 17% which is usually
+[16:29] buy 10 get two. All right. So if you're
+[16:31] not doing this within whatever service
+[16:33] you sell, have an annual component that
+[16:35] you should implement like today, like
+[16:36] right now, first thing you do after
+[16:38] this. Announce it and expect a
+[16:40] meaningful chunk of people to take it.
+[16:42] And what that does is it stabilizes
+[16:43] retention. 13, you want to build
+[16:46] belonging via one-on-one relationships
+[16:48] and 10 true regulars. Now this isn't a
+[16:50] digital community, but from a business
+[16:53] that has any kind of
+[16:55] community that's involved, real and
+[16:56] person, etc.
+[16:58] Fostering one-on-one relationship which
+[16:59] is thinking like what are the unique
+[17:00] aspects of these people who are coming
+[17:01] in and can I pair them with other people
+[17:04] who are like them? Because if people
+[17:06] find I think there's um
+[17:08] Layla shared this out with me. This is
+[17:09] on the employee side but it totally
+[17:11] transfers which is if an employee has a
+[17:13] friend that they are friends with
+[17:14] outside of work, they stay five times
+[17:17] longer at their job. Think about wow
+[17:19] that is. Just one friend outside of work
+[17:22] or one person that they're like really
+[17:23] good friends with. And so, like hack of
+[17:26] hacks, like get them to make one real
+[17:29] friend. Now, that's easier said than
+[17:30] done, but the nice thing that you should
+[17:32] have hopefully everyone should have one
+[17:33] thing in common, which is that they're
+[17:34] all uh patrons of your business. So,
+[17:37] they at least have that interest someway
+[17:39] in common.
+[17:40] And so, uh the fastest way to do this is
+[17:42] also introduce some of the true regulars
+[17:44] to the new members. And I used to do
+[17:45] this at my gyms. Like, otherwise
+[17:47] everyone just feels brand new. They feel
+[17:48] like in-group out-group. Like, you don't
+[17:49] want to have people feel like they're
+[17:50] walking in on someone else's
+[17:51] conversation. So, if somebody's new to a
+[17:53] party, right? And you're holding a party
+[17:55] and someone walks in, what do you do?
+[17:56] Oh, this is John. John, meet Tina. Meet
+[17:59] you know, meet Jesse. Meet meet Trish.
+[18:01] Uh you know, John's really good at X, Y,
+[18:03] and Z. Trish's great. John, blah blah
+[18:04] blah. Right? And so, it's just like just
+[18:06] help them build rapport, which building
+[18:07] rapport just comes down to like what
+[18:08] things do they have overlap over? That's
+[18:10] all it is. All right. Um but within the
+[18:13] digital community, so going back to
+[18:14] going to school,
+[18:16] you can anchor engagement in community
+[18:17] with 10 regulars. That's it. You just
+[18:19] need 10 regulars. The the tactical piece
+[18:22] of this is that identify the top 10
+[18:24] people. These are your model citizens.
+[18:26] The best customers. Your best avatars.
+[18:28] DM them. Figure out their goals.
+[18:30] Spotlight them, meaning give them public
+[18:32] kudos. Invite them to contribute, not
+[18:34] just like watch them do it. And if you
+[18:36] can, again, publicly recognize in any
+[18:37] way possible, it further reinforces the
+[18:39] behavior. And you want to introduce the
+[18:41] new people to them. AKA matchmaking.
+[18:43] Sometimes tactics can be very
+[18:45] overwhelming. Uh but sometimes they're
+[18:47] exactly what you need. Uh if you have a
+[18:50] recurring revenue business, don't expect
+[18:51] to implement all of the stuff at once.
+[18:53] Just take one thing off the list and do
+[18:55] it. Add it in consistently. And then
+[18:56] once you get consistent with that one,
+[18:57] add another one off the list. And so,
+[18:59] conquering churn or you know
+[19:02] uh trying to have an alliteration for
+[19:03] attention.
+[19:04] Like mastering retention, but I need an
+[19:06] R.
+[19:07] Something retention. Uh remastering
+[19:11] retention.
+[19:12] Um just comes down to doing 100 small
+[19:15] things consistently over a very long
+[19:16] period of time. And so most people think
+[19:18] that growth looks like this,
+[19:21] when in fact, growth really just looks
+[19:22] like a flat retention curve, and then
+[19:24] what happens is it just keeps growing.
+[19:26] And so I hope this helps. Keep crushing
+[19:28] it.

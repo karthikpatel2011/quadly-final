@@ -1,0 +1,9 @@
+{
+  "name": "quadly-workspace",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev.mjs",
+    "dev:backend": "node scripts/dev.mjs --backend-only",
+    "test": "cd frontend && npm test && cd ../backend && npm test"
+  }
+}

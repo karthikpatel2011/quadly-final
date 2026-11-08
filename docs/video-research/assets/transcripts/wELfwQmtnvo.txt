@@ -1,0 +1,223 @@
+[0:00] good design often goes unnoticed
+[0:02] sometimes a simple push and pull of a
+[0:04] door may look straightforward from
+[0:05] outside but there are actually a lot of
+[0:07] hidden principles and laws behind
+[0:09] crafting such seamless experiences in
+[0:11] this video I will explain 12 key ux laws
+[0:14] and principles with real life everyday
+[0:16] examples this principles and laws may
+[0:18] sound complex and confusing at first but
+[0:21] don't worry I'll explain everything in a
+[0:23] simple easy to understand way let's get
+[0:25] right into it number one aesthetic
+[0:27] usability effect you have two glasses of
+[0:29] lemonade one served in a nice glass with
+[0:32] slices of lemon and mint leaves and the
+[0:34] other one is just a lemonade in a
+[0:36] plastic cup which one would you go for
+[0:38] most people would pick the first option
+[0:40] even though the extra lemon and mint
+[0:42] leaves don't add much to the overall
+[0:44] Taste of the drink then why would you
+[0:46] pick the first one well that's because
+[0:48] it looks more attractive and refreshing
+[0:50] even though it's exactly the same
+[0:51] lemonade things that look nice appeal
+[0:54] more to the viewers for example there
+[0:55] are plenty of music apps in the market
+[0:58] yet most people use Spotify because
+[0:59] because of its visually pleasing UI also
+[1:01] the little things like whenever you
+[1:03] share a part of your song's lyrics to
+[1:05] your Instagram story Spotify
+[1:06] automatically adjusts the color and the
+[1:09] theme according to the album art in the
+[1:10] minimal aesthetic design another great
+[1:13] example is that of Apple their products
+[1:15] follow a visual design consistency that
+[1:17] enhances the product's appeal and the
+[1:19] customers's Loyalty it's no surprise
+[1:21] it's the most popular brand in the world
+[1:22] number two dohey threshold everyone
+[1:25] hates waiting even if it's for a few
+[1:27] milliseconds whether you're standing in
+[1:28] a line or you're a web page fastest
+[1:31] fantastic keep the weight time as short
+[1:34] as you can if something needs loading
+[1:36] time make use of a progress bar or a
+[1:38] pre-loaded skeleton to keep the user
+[1:40] engaged for example when you open
+[1:42] LinkedIn you first see the skeleton page
+[1:44] loading rather than showing a blank page
+[1:46] it shows a preview of what is going to
+[1:48] come this gives the user a visual cue
+[1:51] that it will load soon similarly
+[1:52] whenever you click to watch a YouTube
+[1:54] video you get a small loading animation
+[1:56] before the video is played this is
+[1:57] better than a blank screen with the
+[1:59] loading animation the user understands
+[2:01] that the video will start number three
+[2:03] Fitz law the bigger the better bigger
+[2:06] and nearer objects are easier to click
+[2:09] and interact with make the vital UI
+[2:11] components large enough for users to
+[2:13] accurately select them and give ample
+[2:16] spacing between it not only large but
+[2:18] also place the elements nearer in such a
+[2:20] way that it's easier to interact with
+[2:22] for example the most used apps in an
+[2:24] iPhone or an Android phones are placed
+[2:25] at the bottom of the screen because it's
+[2:27] easily accessible by your hands number
+[2:29] four goal gradient effect imagine you're
+[2:32] writing an exam and it's your last one
+[2:35] after 3 hours you'll be free of all the
+[2:37] stress and the last minute preparations
+[2:39] for a long time until the next exam of
+[2:41] course what will you do you'll finish
+[2:43] writing the exam as fast as possible
+[2:46] Right the same thing happens in our
+[2:47] everyday lives as well the closer you
+[2:49] are to completing a goal or a task the
+[2:51] faster you work towards reaching it for
+[2:54] example take a look at the Amazon
+[2:55] checkout page at each step the progress
+[2:57] markers motivate you to complete to the
+[2:59] next step the closer you get to the
+[3:01] Finishing Line the more compelled you
+[3:03] are to complete the transaction number
+[3:05] five hickl it's Sunday and you decide to
+[3:07] Netflix and chill but when you open
+[3:09] Netflix you're bombarded with thousands
+[3:10] of movies and TV shows it's so confusing
+[3:13] and hard to pick one the more the
+[3:15] merrier no when people have too many
+[3:17] choices they often get confused and
+[3:19] overwhelmed which leads to a slower
+[3:21] decision process always remember less is
+[3:24] more repeat with me less is more for
+[3:27] example take a look at the Google
+[3:28] homepage in 199 8 versus the latest one
+[3:31] in 2024 do you notice any change the
+[3:33] homepage in 1998 had so many links and
+[3:36] buttons making it very confusing and
+[3:38] hard to navigate now take a look at the
+[3:40] homepage in 2024 the difference is clear
+[3:43] the newer version is simple and minimal
+[3:44] very easy to use and navigate number six
+[3:47] Jacob's law if ain't broke don't fix it
+[3:49] it's simple people spend most of their
+[3:51] time in other apps and websites so they
+[3:54] expect your apps and websites to work in
+[3:56] a similar way while it's good to be
+[3:58] unique but don't try to be too unique
+[4:01] and break common patterns or else people
+[4:03] will get confused for example error
+[4:05] messages are always indicated with a red
+[4:07] color now if that were to be blue all of
+[4:09] a sudden wouldn't you be confused you
+[4:11] will take an extra few seconds to
+[4:13] analyze and digest the information which
+[4:15] is not desirable also the navigation
+[4:17] menu has a similar structure on all
+[4:19] e-commerce websites people are familiar
+[4:21] and used to it so if you try to do
+[4:23] something new or different they might
+[4:25] get confused so why fix something which
+[4:27] is already solved number seven law of
+[4:29] similarity elements that are visually
+[4:31] similar will be perceived as related for
+[4:33] example take a look at the add new
+[4:35] address page on Amazon the rectangle
+[4:37] boxes with borders are the input fields
+[4:39] and the rectangle boxes with solid
+[4:41] colors are buttons you can see how
+[4:43] elements with a similar appearance are
+[4:44] perceived as related number eight
+[4:46] Miller's law here's a quick challenge
+[4:48] for you try to remember this
+[4:51] number most of you will have a very
+[4:53] pretty hard time now try to remember
+[4:55] this number chances are most of you will
+[4:57] be able to memorize it easily the
+[4:59] difference is clear the more elements
+[5:01] people have to process the easier for
+[5:03] them is to make a mistake our memory and
+[5:06] processing are limited so don't overload
+[5:08] people with too much stuff to process
+[5:10] split tasks into logical easy to process
+[5:13] steps so that users are not overwhelmed
+[5:15] take for example again the checkout
+[5:17] process on e-commerce sites like Amazon
+[5:19] and flip card name address order
+[5:21] overview payment methods instead of
+[5:23] filling all the details at once the
+[5:25] entire process is divided into multiple
+[5:27] steps number nine z iranic effect people
+[5:30] remember unfinished tasks better than
+[5:33] completed ones provide a clear
+[5:34] indication of progress in order to
+[5:36] motivate users to complete the task for
+[5:38] example online learning platforms like
+[5:40] udemy always have a progress bar to show
+[5:42] how far along you are in a course this
+[5:45] motivates the users to complete the
+[5:47] course number 10 V restr effect also
+[5:50] known as the isolation effect just like
+[5:52] a purple cow easily stands out in a herd
+[5:55] unique and different items stand out
+[5:57] they are likely to be remembered more
+[5:59] than the others for example a lot of SAS
+[6:01] apps offer different plans and pricing
+[6:04] options but they always highlight the
+[6:06] most popular plan making it stand out
+[6:08] from the rest it's done to attract and
+[6:10] grab your attention number 11 the law of
+[6:12] pregnance the human eye is lazy and
+[6:15] doesn't like to complicate things just
+[6:16] like anyone else it perceives complex
+[6:19] shapes and images in the simplest
+[6:20] possible form because it requires the
+[6:22] least amount of brain cells for example
+[6:24] the Ikea instruction manual have their
+[6:27] wordless stepbystep illustrtion to
+[6:29] simplify the assembly process they cut
+[6:32] down the information to the essentials
+[6:33] making it easier for the users to
+[6:35] understand and best of all since there
+[6:37] is no text they don't even need to
+[6:39] translate this into different languages
+[6:41] because it's all visuals and visuals are
+[6:43] same in every language number 12 Tesla's
+[6:46] law the law of conservation of
+[6:49] complexity this law states the fact that
+[6:51] while some task may seem unnecessarily
+[6:54] complex this complexity is integral to
+[6:56] the function of the system and can only
+[6:58] be managed and not eliminated for
+[7:01] example when you're booking a flight
+[7:02] ticket online you need to fill in a ton
+[7:04] of details and information now you
+[7:06] cannot simplify this process because the
+[7:07] information is essential for booking the
+[7:09] tickets but what you could do is to
+[7:10] manage them maybe pre-fill some of the
+[7:12] information based on some information
+[7:13] that you might have entered in the past
+[7:15] and so on but you cannot eliminate
+[7:17] because they are essential for the core
+[7:19] functioning of the product I hope these
+[7:21] complex ux laws and principles now make
+[7:23] sense to you so the next time you like
+[7:26] any website or app just think of the ux
+[7:28] principles and the laws behind that make
+[7:30] them so good so if you're interested in
+[7:31] becoming ux designer in 2024 you can
+[7:34] have a look at this video and if you're
+[7:35] looking for free AI tools resources to
+[7:38] design better and faster don't forget to
+[7:40] check out this video of mine until next
+[7:41] time this is sapta see you all in the
+[7:43] next one
