@@ -55,6 +55,53 @@ export function cleanTime(value, fallback = '30 minutes a day') {
   return TIME_SET.has(value) ? value : fallback;
 }
 
+// ---------- Phase-1 onboarding sets (PRD v4.0 §6) — the frontend mirrors these 1:1 ----------
+export const TRACK_OPTIONS = ['Software Engineering', 'AI & ML', 'Cyber Security', 'Not sure'];
+export const YEAR_OPTIONS = ['1st year', '2nd year', '3rd year', '4th year', 'Completed'];
+export const DAILY_TIME_OPTIONS = ['15 minutes a day', '30 minutes a day', '45 minutes a day', '1 hour a day'];
+export const PRACTICE_TIME_OPTIONS = ['Morning', 'Afternoon', 'Evening', 'Night'];
+export const SELF_RATING_OPTIONS = ['Just starting', 'Know the basics', 'Can build small things', 'Nearly job-ready'];
+export const ROLE_OPTIONS_BY_TRACK = {
+  'Software Engineering': ['Backend developer', 'Frontend developer', 'Full-stack developer', 'QA engineer', 'DevOps engineer'],
+  'AI & ML': ['AI/ML engineer', 'Data scientist', 'Data analyst', 'Data engineer'],
+  'Cyber Security': ['Security analyst', 'SOC analyst', 'Penetration tester', 'Security engineer'],
+  'Not sure': ['Backend developer', 'AI/ML engineer', 'Data analyst', 'Security analyst'],
+};
+
+const TRACK_SET = new Set(TRACK_OPTIONS);
+const YEAR_SET = new Set(YEAR_OPTIONS);
+const DAILY_SET = new Set(DAILY_TIME_OPTIONS);
+const PRACTICE_SET = new Set(PRACTICE_TIME_OPTIONS);
+const RATING_SET = new Set(SELF_RATING_OPTIONS);
+const ROLE_SET = new Set(Object.values(ROLE_OPTIONS_BY_TRACK).flat());
+
+export function cleanTrack(value, fallback = 'Not sure') {
+  return TRACK_SET.has(value) ? value : fallback;
+}
+export function cleanYear(value) {
+  return YEAR_SET.has(value) ? value : null;
+}
+export function cleanDailyTime(value) {
+  return DAILY_SET.has(value) ? value : null;
+}
+export function cleanPracticeTime(value) {
+  return PRACTICE_SET.has(value) ? value : null;
+}
+export function cleanSelfRating(value) {
+  return RATING_SET.has(value) ? value : null;
+}
+// Roles are free text (the PRD keeps the question skippable, not enumerated);
+// known chips stay the happy path.
+export function cleanRole(value, max = 60) {
+  return String(value ?? '').trim().slice(0, max) || null;
+}
+export function cleanTargetDate(value) {
+  const s = String(value ?? '');
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+  const d = new Date(s + 'T00:00:00Z');
+  return Number.isNaN(d.getTime()) ? null : s;
+}
+
 // Interest → the opportunity categories it maps to (for the opportunities
 // matcher and the roadmap explainer). Kept small and legible.
 const CATEGORY_BY_INTEREST = {

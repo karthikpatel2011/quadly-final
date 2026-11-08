@@ -89,7 +89,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  width: 150px;
+  width: 190px;
   margin-left: auto;
 }
 
@@ -607,3 +607,42 @@
 .ob-provider__state { font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: rgba(255, 255, 255, 0.45); white-space: nowrap; }
 .ob-provider__state.is-on { color: #22c55e; }
 .ob-textarea { resize: vertical; min-height: 84px; line-height: 1.5; }
+
+/* Phase-1 flow (PRD v4.0): bigger single-choice chips, the target-date input,
+   and the "why this plan" lines on the done screen. */
+.ob-chip--big {
+  font-size: 14.5px;
+  padding: 12px 22px;
+}
+
+.ob-input--date {
+  height: 48px;
+  margin-top: 18px;
+  font-family: var(--font-body);
+  font-size: 16px;
+  color-scheme: dark;
+}
+
+.ob-why {
+  list-style: none;
+  margin: 10px 0 4px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ob-why li {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  padding-left: 18px;
+  position: relative;
+}
+
+.ob-why li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}

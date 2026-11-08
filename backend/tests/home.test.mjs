@@ -47,7 +47,7 @@ async function onboard(token, email, name, college) {
   const r = await api('/onboarding', {
     method: 'POST',
     token,
-    body: { email, name, college, target: { role: 'SDE', company: 'Stripe' }, avatar: '12' },
+    body: { email, name, college, track: 'Software Engineering', role: 'SDE', year: '3rd year', dailyTime: '30 minutes a day' },
   });
   assert.equal(r.status, 201);
   assert.equal(r.json.accountLinked, true);
@@ -176,7 +176,7 @@ test('verified completion: finishing the Daily 15 marks the learn task with its 
   assert.match(learn.result, /Passed \d+\/\d+/);
 });
 
-test('avatar: upload stores and serves privately; delete restores the preset; 2 MB gate works', async () => {
+test('avatar: upload stores and serves privately; delete clears the custom pick; 2 MB gate works', async () => {
   const up = await api('/profile/avatar', { method: 'POST', token: A, body: { dataUrl: TINY_PNG } });
   assert.equal(up.status, 201);
   assert.ok(up.json.avatar.startsWith('/api/avatars/ava_'));
@@ -187,7 +187,7 @@ test('avatar: upload stores and serves privately; delete restores the preset; 2 
 
   const del = await api('/profile/avatar', { method: 'DELETE', token: A });
   assert.equal(del.status, 200);
-  assert.equal(del.json.preset, '12');
+  assert.equal(del.json.preset, null, 'no preset pick since PRD v4.0 — avatars are server-auto-assigned');
 
   // 2 MB gate: a >2 MB random blob (bad magic anyway → 400; the size gate is
   // exercised by the length check first — both reject, never store).

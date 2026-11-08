@@ -204,10 +204,20 @@ export function markOnboarded(email, profile) {
   return true;
 }
 
+// Per-step onboarding save: merges validated fields onto the profile without
+// flipping the onboarded flag (the final POST does that). Unknown account
+// (revoked token mid-flow) → false; the client keeps its local draft.
+export function saveProfileDraft(email, patch) {
+  const account = accounts.get(String(email || '').toLowerCase());
+  if (!account) return false;
+  account.profile = { ...(account.profile || {}), ...patch, updatedAt: new Date().toISOString() };
+  persistAccounts();
+  return true;
+}
+
 // Cross-route session lookup — lets the dashboard tier resolve a Bearer
 // token to its account without exposing the accounts map.
-export function resolveSession(token) {
-  for (const [email, account] of accounts) {
+export function resolveSession(token) {  for (const [email, account] of accounts) {
     if (account.tokens.includes(token)) {
       return { email, account };
     }

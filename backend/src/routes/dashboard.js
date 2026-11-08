@@ -221,6 +221,13 @@ export function buildPayload(email, session) {
     date,
     name: profile.name || null,
     college: profile.college || null,
+    // Phase-1 onboarding answers — the rebuilt Home/Plan surfaces read these.
+    track: profile.track || null,
+    year: profile.year || null,
+    dailyTime: profile.dailyTime || null,
+    practiceTime: profile.practiceTime || null,
+    targetDate: profile.targetDate || null,
+    selfRating: profile.selfRating || null,
     target: profile.target || { role: null, company: null },
     github: profile.github || null,
     avatar: avatarFor(email, profile.avatar),

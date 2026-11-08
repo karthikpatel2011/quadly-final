@@ -9,9 +9,9 @@
     "remote": true,
     "eligibility": "Pre-final year",
     "paid": "paid",
-    "deadline": "2026-11-16T15:09:05.593Z",
-    "postedAt": "2026-11-06T15:09:05.593Z",
-    "lastChecked": "2026-11-06T15:09:05.593Z",
+    "deadline": "2026-11-18T06:00:01.779Z",
+    "postedAt": "2026-11-08T06:00:01.779Z",
+    "lastChecked": "2026-11-08T06:00:01.779Z",
     "verification": "admin-verified"
   },
   {
@@ -24,9 +24,9 @@
     "remote": true,
     "eligibility": null,
     "paid": "unpaid",
-    "deadline": "2026-12-06T15:09:05.593Z",
-    "postedAt": "2026-11-06T15:09:05.593Z",
-    "lastChecked": "2026-11-06T15:09:05.593Z",
+    "deadline": "2026-12-08T06:00:01.779Z",
+    "postedAt": "2026-11-08T06:00:01.779Z",
+    "lastChecked": "2026-11-08T06:00:01.779Z",
     "verification": "admin-verified"
   }
 ]

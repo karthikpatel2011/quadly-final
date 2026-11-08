@@ -1,87 +1,106 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { apiFetch } from '../../lib/api.js';
-import './onboarding-flow.css';
 import Logo from '../Logo.jsx';
+import './onboarding-flow.css';
 
-/* Onboarding — three questions, one optional GitHub connect, under a minute.
-   Composition: blue headline field on top, dark question card straddling the
-   blue→black fall. Step motion is pure CSS (right→left pushes); GSAP only
-   stages the first entrance. No LeetCode, nothing ranked. */
+/* Onboarding — the PRD v4.0 phase-1 flow: eight questions, tap-only, about
+   90 seconds. Every finished step persists immediately (server draft for
+   signed-up students, local draft for visitors), so a closed tab loses
+   nothing. The last screen shows the student's real generated plan plus a
+   "why this plan" line per answer. Composition: blue headline field on top,
+   dark question card straddling the blue→black fall. Step motion is pure
+   CSS (right→left pushes); GSAP only stages the first entrance. */
 
-const ROLE_CHIPS = ['SDE', 'AI/ML Engineer', 'Data Analyst', 'Full-Stack', 'QA Engineer', 'Higher Studies'];
+// Mirrors backend/src/lib/personalize.js — keep both lists identical.
+const TRACK_OPTIONS = ['Software Engineering', 'AI & ML', 'Cyber Security', 'Not sure'];
+const YEAR_OPTIONS = ['1st year', '2nd year', '3rd year', '4th year', 'Completed'];
+const DAILY_TIME_OPTIONS = ['15 minutes a day', '30 minutes a day', '45 minutes a day', '1 hour a day'];
+const PRACTICE_TIME_OPTIONS = ['Morning', 'Afternoon', 'Evening', 'Night'];
+const SELF_RATING_OPTIONS = ['Just starting', 'Know the basics', 'Can build small things', 'Nearly job-ready'];
+const ROLE_OPTIONS_BY_TRACK = {
+  'Software Engineering': ['Backend developer', 'Frontend developer', 'Full-stack developer', 'QA engineer', 'DevOps engineer'],
+  'AI & ML': ['AI/ML engineer', 'Data scientist', 'Data analyst', 'Data engineer'],
+  'Cyber Security': ['Security analyst', 'SOC analyst', 'Penetration tester', 'Security engineer'],
+  'Not sure': ['Backend developer', 'AI/ML engineer', 'Data analyst', 'Security analyst'],
+};
 
-// The brief's option lists — mirrored 1:1 from backend/src/lib/personalize.js.
-const INTEREST_OPTIONS = ['Frontend development', 'Backend development', 'Full-stack development', 'Artificial intelligence', 'Machine learning', 'Data science', 'Cybersecurity', 'Cloud engineering', 'DevOps / Platform engineering', 'Mobile development', 'Game development', 'Blockchain / Web3', 'UI/UX and product design', 'Open source', 'Research', 'Startups / entrepreneurship', 'Competitive programming / problem solving', 'Not sure yet'];
-const GOAL_OPTIONS = ['Figure out what I want to pursue', 'Learn practical skills', 'Build real projects', 'Create a strong portfolio', 'Find project teammates', 'Find a mentor', 'Prepare for interviews', 'Find an internship', 'Find a job', 'Explore hackathons and opportunities', 'Start something of my own'];
-const STAGE_OPTIONS = ['Exploring', 'Learning fundamentals', 'Building projects', 'Preparing for opportunities', 'Already working / interning'];
-const TIME_OPTIONS = ['15 minutes a day', '30 minutes a day', 'Around 1 hour a day', 'A few hours each week', 'My schedule changes'];
-
-// Connect step: only GitHub is real today; the others are honest setup states.
-const PROVIDERS = [
-  { key: 'github', name: 'GitHub', benefit: 'Public profile and the repositories you choose — project evidence for your portfolio.' },
-  { key: 'calendar', name: 'Google Calendar', benefit: 'Interview schedules and mentoring sessions, if you connect it.' },
-  { key: 'drive', name: 'Google Drive', benefit: 'Bring one resume or project doc — only files you pick.' },
-  { key: 'email', name: 'Email', benefit: 'Spot internship and assessment mails — read narrowly, never sent on your behalf.' },
+// Target-date presets — the student's own date, just offered tap-first.
+const TARGET_PRESETS = [
+  { key: '1m', label: 'In 1 month', months: 1 },
+  { key: '3m', label: 'In 3 months', months: 3 },
+  { key: '6m', label: 'In 6 months', months: 6 },
+  { key: 'custom', label: 'Pick a date', custom: true },
 ];
-const AVATARS = Array.from({ length: 40 }, (_, i) => String(i + 1).padStart(2, '0')); // pfp set: /avatars/NN.webp
 
-const STEPS = ['name', 'college', 'target', 'interests', 'goals', 'stage', 'time', 'note', 'connect'];
-const KICKERS = {
-  name: 'Question 1 of 6',
-  college: 'Question 2 of 6',
-  target: 'Question 3 of 6',
-  interests: 'Question 4 of 6',
-  goals: 'Question 5 of 6',
-  stage: 'Question 6 of 6',
-  time: 'Preferences · 10 seconds',
-  note: 'Optional · 10 seconds',
-  connect: 'Optional · make Quadly more useful',
-  done: 'All done',
-};
-
+const STEPS = ['college', 'track', 'role', 'year', 'daily', 'window', 'target', 'level'];
 const PREV_STEP = {
-  name: 'welcome', college: 'name', target: 'college', interests: 'target',
-  goals: 'interests', stage: 'goals', time: 'stage', note: 'time',
-  connect: 'note', done: 'connect',
+  name: 'welcome', college: 'name', track: 'college', role: 'track',
+  year: 'role', daily: 'year', window: 'daily', target: 'window',
+  level: 'target', done: 'level',
 };
+const FILL = { welcome: 0, name: 0, college: 1, track: 2, role: 3, year: 4, daily: 5, window: 6, target: 7, level: 8, done: 8 };
 
 function countLabel(step) {
   if (step === 'welcome') return 'Welcome';
-  if (step === 'time' || step === 'note') return 'Preferences';
-  if (step === 'connect') return 'Optional';
+  if (step === 'name') return 'First, your name';
+  if (step === 'done') return 'All done';
   const i = STEPS.indexOf(step);
-  if (i <= 2) return `Question ${i + 1} of 6`;
-  if (i <= 6) return `Question ${i - 1} of 6`;
-  return '';
+  return `Question ${i + 1} of 8`;
+}
+
+function isoPlusMonths(months) {
+  const d = new Date();
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString().slice(0, 10);
+}
+
+function daysFromToday(iso) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return null;
+  const target = new Date(iso + 'T00:00:00Z').getTime();
+  const today = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z').getTime();
+  return Math.round((target - today) / 86400000);
+}
+
+function prettyDate(iso) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || '')) return '';
+  return new Date(iso + 'T00:00:00Z').toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC',
+  });
+}
+
+const DRAFT_KEY = 'quadly:onboardingDraft';
+const DRAFT_FIELDS = ['name', 'college', 'track', 'role', 'year', 'dailyTime', 'practiceTime', 'targetDate', 'selfRating'];
+
+function readToken() {
+  try {
+    return localStorage.getItem('quadly:token') || '';
+  } catch {
+    return '';
+  }
 }
 
 export default function OnboardingFlow() {
   const [step, setStep] = useState('welcome');
-  const [avatar, setAvatar] = useState('');            // '' = auto-assign at save
   const [leaving, setLeaving] = useState(null); // { step, dir }
   const [name, setName] = useState('');
   const [college, setCollege] = useState('');
-  const [amb, setAmb] = useState({ status: 'idle', match: null }); // idle|checking|found|none|offline
-  const [company, setCompany] = useState('');
+  const [track, setTrack] = useState('');
   const [role, setRole] = useState('');
-  const [ghUser, setGhUser] = useState('');
-  const [gh, setGh] = useState({ status: 'idle', info: null, msg: '' }); // idle|checking|connected|error
-  const [interests, setInterests] = useState([]);
-  const [goalsSel, setGoalsSel] = useState([]);
-  const [stage, setStage] = useState('');
-  const [timeCommitment, setTimeCommitment] = useState('');
-  const [note, setNote] = useState('');
+  const [year, setYear] = useState('');
+  const [dailyTime, setDailyTime] = useState('');
+  const [practiceTime, setPracticeTime] = useState('');
+  const [targetDate, setTargetDate] = useState('');
+  const [targetMode, setTargetMode] = useState('');
+  const [selfRating, setSelfRating] = useState('');
   const [save, setSave] = useState('idle'); // idle|saving|saved|error
-  let hasToken = false;
-  try {
-    hasToken = Boolean(localStorage.getItem('quadly:token'));
-  } catch {
-    /* storage unavailable */
-  }
   const [planPreview, setPlanPreview] = useState(null);
+  const [why, setWhy] = useState([]);
+  const hasToken = Boolean(readToken());
   const shellRef = useRef(null);
   const leaveTimer = useRef(null);
+  const restored = useRef(false);
+  const savedRef = useRef(false);
 
   // First-mount entrance (GSAP only here; every step swap is CSS).
   useEffect(() => {
@@ -93,6 +112,58 @@ export default function OnboardingFlow() {
   }, []);
 
   useEffect(() => () => clearTimeout(leaveTimer.current), []);
+
+  // Restore progress. The local draft lands immediately; the server draft
+  // (signed students) wins once it arrives — no answer is ever asked twice.
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+    const apply = (draft) => {
+      if (!draft || typeof draft !== 'object') return;
+      if (draft.name) setName(draft.name);
+      if (draft.college) setCollege(draft.college);
+      if (draft.track) setTrack(draft.track);
+      if (draft.role) setRole(draft.role);
+      if (draft.year) setYear(draft.year);
+      if (draft.dailyTime) setDailyTime(draft.dailyTime);
+      if (draft.practiceTime) setPracticeTime(draft.practiceTime);
+      if (draft.targetDate) {
+        setTargetDate(draft.targetDate);
+        setTargetMode('custom');
+      }
+      if (draft.selfRating) setSelfRating(draft.selfRating);
+    };
+    let local = {};
+    try {
+      local = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') || {};
+    } catch {
+      /* storage unavailable */
+    }
+    apply(local);
+    if (!hasToken) return undefined;
+    apiFetch('/onboarding/draft', { headers: { Authorization: `Bearer ${readToken()}` } })
+      .then((res) => { if (res?.profile) apply(res.profile); })
+      .catch(() => { /* offline → the local draft still applies */ });
+    return undefined;
+  }, [hasToken]);
+
+  // Persist one answered field the moment it is confirmed.
+  function saveField(field, value) {
+    if (!DRAFT_FIELDS.includes(field)) return;
+    try {
+      const local = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') || {};
+      local[field] = value;
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(local));
+    } catch {
+      /* storage unavailable */
+    }
+    if (!hasToken) return;
+    apiFetch('/onboarding/draft', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${readToken()}` },
+      body: JSON.stringify({ [field]: value }),
+    }).catch(() => { /* the local draft carries the answer either way */ });
+  }
 
   function go(next, dir = 1) {
     if (leaving || next === step) return;
@@ -107,43 +178,7 @@ export default function OnboardingFlow() {
     go(PREV_STEP[step], -1);
   }
 
-  // Debounced ambassador lookup while typing the college.
-  useEffect(() => {
-    if (step !== 'college') return undefined;
-    const v = college.trim();
-    if (v.length < 3) {
-      setAmb({ status: 'idle', match: null });
-      return undefined;
-    }
-    setAmb({ status: 'checking', match: null });
-    const timer = setTimeout(async () => {
-      try {
-        const res = await apiFetch('/onboarding/ambassador-lookup', {
-          method: 'POST',
-          body: JSON.stringify({ college: v }),
-        });
-        setAmb(res.found ? { status: 'found', match: res.ambassador } : { status: 'none', match: null });
-      } catch {
-        setAmb({ status: 'offline', match: null });
-      }
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [step, college]);
-
-  async function connectGitHub() {
-    const username = ghUser.trim();
-    if (!username || gh.status === 'checking') return;
-    setGh({ status: 'checking', info: null, msg: '' });
-    try {
-      const info = await apiFetch(`/onboarding/github?username=${encodeURIComponent(username)}`);
-      setGh({ status: 'connected', info, msg: '' });
-    } catch (err) {
-      setGh({ status: 'error', info: null, msg: err.message });
-    }
-  }
-
   // Save once the final screen is reached.
-  const savedRef = useRef(false);
   useEffect(() => {
     if (step !== 'done' || savedRef.current) return undefined;
     savedRef.current = true;
@@ -156,30 +191,49 @@ export default function OnboardingFlow() {
     }
     apiFetch('/onboarding', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(hasToken ? { Authorization: `Bearer ${readToken()}` } : {}),
+      },
       body: JSON.stringify({
         email,
         name: name.trim(),
         college: college.trim(),
-        ambassador: amb.status === 'found' && amb.match ? amb.match : null,
-        target: { company: company.trim(), role },
-        github: gh.status === 'connected' && gh.info ? gh.info.login : null,
-        avatar: avatar || null,
-        interests,
-        goals: goalsSel,
-        stage,
-        timeCommitment,
-        note: note.trim(),
+        track,
+        role,
+        year,
+        dailyTime,
+        practiceTime,
+        targetDate,
+        selfRating,
       }),
     })
       .then((res) => {
         setPlanPreview(res.plan ?? null);
+        setWhy(Array.isArray(res.why) ? res.why : []);
         setSave('saved');
+        try {
+          localStorage.removeItem(DRAFT_KEY);
+        } catch {
+          /* storage unavailable */
+        }
       })
       .catch(() => setSave('error'));
     return undefined;
   }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const fill = { welcome: 0, name: 0, college: 1, target: 2, interests: 3, goals: 3, stage: 4, time: 4, note: 5, connect: 5, done: 6 }[step];
+  const fill = FILL[step] ?? 0;
+  const roleOptions = ROLE_OPTIONS_BY_TRACK[track || 'Not sure'];
+  const firstName = name.trim().split(' ')[0];
+
+  const targetNote = (() => {
+    const days = daysFromToday(targetDate);
+    if (days === null) return '';
+    if (days === 1) return `${prettyDate(targetDate)} — tomorrow.`;
+    if (days === 0) return 'That is today — the plan starts counting now.';
+    if (days < 0) return 'That date is in the past — pick a day ahead.';
+    return `${prettyDate(targetDate)} — ${days} days away.`;
+  })();
 
   const renderStep = (s) => {
     switch (s) {
@@ -188,8 +242,9 @@ export default function OnboardingFlow() {
           <div className="ob-step">
             <h1 className="ob-question">Welcome to Quadly.</h1>
             <p className="ob-sub">
-              Three quick questions — then a Placement Plan that fits your college, your year and
-              the companies you&rsquo;re aiming at. Squads and streaks come included.
+              Learn by doing: a few focused minutes of real, hands-on practice a
+              day on your track. Eight quick questions and your daily plan is
+              built — around your time, your pace, and the date that matters.
             </p>
             <button type="button" className="ob-btn" onClick={() => go('name')}>
               Let&rsquo;s go
@@ -203,7 +258,10 @@ export default function OnboardingFlow() {
             className="ob-step"
             onSubmit={(e) => {
               e.preventDefault();
-              if (name.trim().length >= 2) go('college');
+              if (name.trim().length >= 2) {
+                saveField('name', name.trim());
+                go('college');
+              }
             }}
           >
             <h1 className="ob-question">What should we call you?</h1>
@@ -216,7 +274,7 @@ export default function OnboardingFlow() {
               onChange={(e) => setName(e.target.value)}
               maxLength={40}
             />
-            <p className="ob-hint">This is how your Coach and squad will greet you.</p>
+            <p className="ob-hint">This is how your plan and your coach greet you.</p>
             <button type="submit" className="ob-btn" disabled={name.trim().length < 2}>
               Continue
             </button>
@@ -229,10 +287,13 @@ export default function OnboardingFlow() {
             className="ob-step"
             onSubmit={(e) => {
               e.preventDefault();
-              go('target');
+              if (college.trim().length >= 3) {
+                saveField('college', college.trim());
+                go('track');
+              }
             }}
           >
-            <h1 className="ob-question">Which college are you from?</h1>
+            <h1 className="ob-question">Where do you study?</h1>
             <input
               className="ob-input"
               aria-label="Your college"
@@ -242,43 +303,165 @@ export default function OnboardingFlow() {
               onChange={(e) => setCollege(e.target.value)}
               maxLength={80}
             />
-            {amb.status === 'checking' && <p className="ob-hint">Checking for your campus ambassador…</p>}
-            {amb.status === 'offline' && <p className="ob-hint">Ambassador check is offline right now — you can still continue.</p>}
-            {amb.status === 'none' && (
-              <p className="ob-hint">
-                {college.trim().length >= 3
-                  ? 'No ambassador linked there yet — your cohort would be the first.'
-                  : 'Keep typing — we need a little more of the name.'}
-              </p>
-            )}
-            {amb.status === 'found' && amb.match && (
-              <>
-                <div className="ob-amb-card" role="group" aria-label="Ambassador found">
-                  <span className="ob-amb-avatar">{amb.match.name.slice(0, 1)}</span>
-                  <span className="ob-amb-meta">
-                    <strong>{amb.match.name}</strong>
-                    <span>{amb.match.college} · Campus Ambassador</span>
-                  </span>
-                </div>
-                <p className="ob-ask">Is this your ambassador?</p>
-                <div className="ob-row">
-                  <button type="button" className="ob-btn ob-btn--half" onClick={() => go('target')}>
-                    Yes, that&rsquo;s them
-                  </button>
-                  <button
-                    type="button"
-                    className="ob-btn ob-btn--half ob-btn--ghost"
-                    onClick={() => setAmb({ status: 'none', match: null })}
-                  >
-                    Not them
-                  </button>
-                </div>
-              </>
-            )}
+            <p className="ob-hint">Saved on your profile only — it never shapes your tasks.</p>
             <button type="submit" className="ob-btn" disabled={college.trim().length < 3}>
               Continue
             </button>
           </form>
+        );
+
+      case 'track':
+        return (
+          <div className="ob-step">
+            <h1 className="ob-question">Pick your track.</h1>
+            <div className="ob-chips" role="radiogroup" aria-label="Track">
+              {TRACK_OPTIONS.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  role="radio"
+                  aria-checked={track === t}
+                  className={`ob-chip ob-chip--big${track === t ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setTrack(t);
+                    if (role && !(ROLE_OPTIONS_BY_TRACK[t] || []).includes(role)) setRole('');
+                    saveField('track', t);
+                    go('role');
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <p className="ob-hint">Tasks, path and interview practice all follow this — you can change it anytime.</p>
+          </div>
+        );
+      case 'role':
+        return (
+          <form
+            className="ob-step"
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (role) {
+                saveField('role', role);
+                go('year');
+              }
+            }}
+          >
+            <h1 className="ob-question">Any target role yet?</h1>
+            <p className="ob-sub">
+              {track === 'Not sure'
+                ? 'No pressure — pick the closest; your path stays flexible.'
+                : `Common first roles on the ${track} track.`}
+            </p>
+            <div className="ob-chips" role="radiogroup" aria-label="Target role">
+              {roleOptions.map((r) => (
+                <button
+                  key={r}
+                  type="button"
+                  role="radio"
+                  aria-checked={role === r}
+                  className={`ob-chip${role === r ? ' is-on' : ''}`}
+                  onClick={() => setRole(role === r ? '' : r)}
+                >
+                  {r}
+                </button>
+              ))}
+            </div>
+            <div className="ob-row">
+              <button type="submit" className="ob-btn ob-btn--half" disabled={!role}>
+                Continue
+              </button>
+              <button
+                type="button"
+                className="ob-btn ob-btn--half ob-btn--ghost"
+                onClick={() => {
+                  setRole('');
+                  saveField('role', '');
+                  go('year');
+                }}
+              >
+                Skip this one
+              </button>
+            </div>
+          </form>
+        );
+
+      case 'year':
+        return (
+          <div className="ob-step">
+            <h1 className="ob-question">Which year are you in?</h1>
+            <div className="ob-chips" role="radiogroup" aria-label="Year">
+              {YEAR_OPTIONS.map((y) => (
+                <button
+                  key={y}
+                  type="button"
+                  role="radio"
+                  aria-checked={year === y}
+                  className={`ob-chip${year === y ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setYear(y);
+                    saveField('year', y);
+                    go('daily');
+                  }}
+                >
+                  {y}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'daily':
+        return (
+          <div className="ob-step">
+            <h1 className="ob-question">How much time will you give it, honestly?</h1>
+            <div className="ob-chips" role="radiogroup" aria-label="Daily time">
+              {DAILY_TIME_OPTIONS.map((d) => (
+                <button
+                  key={d}
+                  type="button"
+                  role="radio"
+                  aria-checked={dailyTime === d}
+                  className={`ob-chip ob-chip--big${dailyTime === d ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setDailyTime(d);
+                    saveField('dailyTime', d);
+                    go('window');
+                  }}
+                >
+                  {d}
+                </button>
+              ))}
+            </div>
+            <p className="ob-hint">Small and steady beats large and imaginary.</p>
+          </div>
+        );
+
+      case 'window':
+        return (
+          <div className="ob-step">
+            <h1 className="ob-question">When in the day will you practice?</h1>
+            <div className="ob-chips" role="radiogroup" aria-label="Practice time">
+              {PRACTICE_TIME_OPTIONS.map((t) => (
+                <button
+                  key={t}
+                  type="button"
+                  role="radio"
+                  aria-checked={practiceTime === t}
+                  className={`ob-chip${practiceTime === t ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setPracticeTime(t);
+                    saveField('practiceTime', t);
+                    go('target');
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <p className="ob-hint">Same time each day is the whole trick — your plan is built around this window.</p>
+          </div>
         );
 
       case 'target':
@@ -287,314 +470,117 @@ export default function OnboardingFlow() {
             className="ob-step"
             onSubmit={(e) => {
               e.preventDefault();
-              go('github');
+              const days = daysFromToday(targetDate);
+              if (targetDate && days !== null && days > 0) {
+                saveField('targetDate', targetDate);
+                go('level');
+              }
             }}
           >
-            <h1 className="ob-question">Where are you headed?</h1>
-            <input
-              className="ob-input"
-              aria-label="Target company"
-              placeholder="Target company — e.g. Google"
-              autoFocus
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              maxLength={60}
-            />
-            <div className="ob-chips" role="radiogroup" aria-label="Target role">
-              {ROLE_CHIPS.map((r) => (
+            <h1 className="ob-question">When&rsquo;s the date that matters?</h1>
+            <p className="ob-sub">
+              The day your preparation has to show results — placement season, a
+              specific drive, or a goal of your own.
+            </p>
+            <div className="ob-chips" role="radiogroup" aria-label="Target date">
+              {TARGET_PRESETS.map((p) => (
                 <button
-                  key={r}
+                  key={p.key}
                   type="button"
                   role="radio"
-                  aria-checked={role === r}
-                  className={`ob-chip ${role === r ? 'is-on' : ''}`}
-                  onClick={() => setRole(role === r ? '' : r)}
+                  aria-checked={targetMode === p.key}
+                  className={`ob-chip${targetMode === p.key ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setTargetMode(p.key);
+                    if (!p.custom) setTargetDate(isoPlusMonths(p.months));
+                  }}
                 >
-                  {r}
+                  {p.label}
                 </button>
               ))}
             </div>
-            <p className="ob-hint">Pick the closest — you can change it anytime.</p>
-            <button type="submit" className="ob-btn">
+            {targetMode === 'custom' && (
+              <input
+                type="date"
+                className="ob-input ob-input--date"
+                aria-label="Target date"
+                min={new Date().toISOString().slice(0, 10)}
+                value={targetDate}
+                onChange={(e) => setTargetDate(e.target.value)}
+              />
+            )}
+            {targetNote && <p className="ob-hint">{targetNote}</p>}
+            <button
+              type="submit"
+              className="ob-btn"
+              disabled={!targetDate || (daysFromToday(targetDate) ?? 0) <= 0}
+            >
               Continue
             </button>
           </form>
         );
 
-      case 'interests':
+      case 'level':
         return (
           <div className="ob-step">
-            <h1 className="ob-question">Which areas of computer science interest you?</h1>
-            <div className="ob-chips" role="group" aria-label="Interests">
-              {INTEREST_OPTIONS.map((o) => (
-                <button key={o} type="button" aria-pressed={interests.includes(o)} className={`ob-chip ${interests.includes(o) ? 'is-on' : ''}`} onClick={() => setInterests((v) => (v.includes(o) ? v.filter((x) => x !== o) : [...v, o].slice(0, 6)))}>
-                  {o}
-                </button>
-              ))}
-            </div>
-            <p className="ob-hint">Pick up to six. “Not sure yet” is a real answer — Quadly will help you explore.</p>
-            <button type="button" className="ob-btn" onClick={() => go('goals')}>Continue</button>
-          </div>
-        );
-
-      case 'goals':
-        return (
-          <div className="ob-step">
-            <h1 className="ob-question">What are you trying to achieve right now?</h1>
-            <div className="ob-chips" role="group" aria-label="Goals">
-              {GOAL_OPTIONS.map((o) => (
-                <button key={o} type="button" aria-pressed={goalsSel.includes(o)} className={`ob-chip ${goalsSel.includes(o) ? 'is-on' : ''}`} onClick={() => setGoalsSel((v) => (v.includes(o) ? v.filter((x) => x !== o) : [...v, o].slice(0, 6)))}>
-                  {o}
-                </button>
-              ))}
-            </div>
-            <p className="ob-hint">As many as apply — goals change, and so will your plan.</p>
-            <button type="button" className="ob-btn" onClick={() => go('stage')}>Continue</button>
-          </div>
-        );
-
-      case 'stage':
-        return (
-          <div className="ob-step">
-            <h1 className="ob-question">Where are you right now?</h1>
-            <div className="ob-chips" role="radiogroup" aria-label="Current stage">
-              {STAGE_OPTIONS.map((o) => (
-                <button key={o} type="button" role="radio" aria-checked={stage === o} className={`ob-chip ${stage === o ? 'is-on' : ''}`} onClick={() => setStage(o)}>
-                  {o}
-                </button>
-              ))}
-            </div>
-            <p className="ob-hint">A self-description, not a judgement.</p>
-            <button type="button" className="ob-btn" disabled={!stage} onClick={() => go('time')}>Continue</button>
-          </div>
-        );
-
-      case 'time':
-        return (
-          <div className="ob-step">
-            <h1 className="ob-question">How much time do you realistically have?</h1>
-            <div className="ob-chips" role="radiogroup" aria-label="Time commitment">
-              {TIME_OPTIONS.map((o) => (
-                <button key={o} type="button" role="radio" aria-checked={timeCommitment === o} className={`ob-chip ${timeCommitment === o ? 'is-on' : ''}`} onClick={() => setTimeCommitment(o)}>
-                  {o}
-                </button>
-              ))}
-            </div>
-            <p className="ob-hint">Small and steady beats large and imaginary.</p>
-            <button type="button" className="ob-btn" disabled={!timeCommitment} onClick={() => go('note')}>Continue</button>
-          </div>
-        );
-
-      case 'note':
-        return (
-          <form
-            className="ob-step"
-            onSubmit={(e) => {
-              e.preventDefault();
-              go('connect');
-            }}
-          >
-            <h1 className="ob-question">Anything else Quadly should know?</h1>
-            <textarea
-              className="ob-input ob-textarea"
-              aria-label="Anything else"
-              placeholder={'e.g. “I know basic Python but don’t know what to build”'}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              maxLength={300}
-              rows={3}
-            />
-            <p className="ob-hint">No passwords, private keys, or sensitive personal data — this field is stored with your profile.</p>
-            <button type="submit" className="ob-btn">Continue</button>
-          </form>
-        );
-
-      case 'connect':
-        return (
-          <div className="ob-step">
-            <h1 className="ob-question">Make Quadly more useful</h1>
-            <p className="ob-sub">Optional connections. Skip them — nothing on the dashboard is blocked.</p>
-            <p className="ob-avatar-label">Pick your avatar — shows next to your name</p>
-            <div className="ob-avatars" role="radiogroup" aria-label="Choose a profile picture">
-              {AVATARS.map((a, i) => (
+            <h1 className="ob-question">Where are you today, honestly?</h1>
+            <div className="ob-chips" role="radiogroup" aria-label="Skill self-rating">
+              {SELF_RATING_OPTIONS.map((r) => (
                 <button
-                  key={a}
+                  key={r}
                   type="button"
                   role="radio"
-                  aria-checked={avatar === a}
-                  className={`ob-avatar-btn${avatar === a ? ' is-on' : ''}`}
-                  onClick={() => setAvatar(avatar === a ? '' : a)}
+                  aria-checked={selfRating === r}
+                  className={`ob-chip ob-chip--big${selfRating === r ? ' is-on' : ''}`}
+                  onClick={() => {
+                    setSelfRating(r);
+                    saveField('selfRating', r);
+                    go('done');
+                  }}
                 >
-                  <img src={`/avatars/${a}.webp`} alt={`Avatar option ${i + 1}`} />
+                  {r}
                 </button>
               ))}
             </div>
-            <div className="ob-providers">
-              {PROVIDERS.map((p) => (
-                <div className="ob-provider" key={p.key} data-provider={p.key}>
-                  <div className="ob-provider__meta">
-                    <b>{p.name}</b>
-                    <span>{p.benefit}</span>
-                  </div>
-                  {p.key === 'github' ? (
-                    gh.status === 'connected' ? (
-                      <span className="ob-provider__state is-on">Connected ✓</span>
-                    ) : (
-                      <span className="ob-provider__state">Username below ↓</span>
-                    )
-                  ) : (
-                    <span className="ob-provider__state">Needs app setup</span>
-                  )}
-                </div>
-              ))}
-            </div>
-            <p className="ob-hint">
-              GitHub connects your public profile only. Calendar, Drive and email turn on after the OAuth apps are
-              approved — nothing here pretends to be connected.
-            </p>
-            <div className="ob-row">
-              <input
-                className="ob-input ob-input--row"
-                aria-label="GitHub username"
-                placeholder="GitHub username"
-                value={ghUser}
-                disabled={gh.status === 'connected'}
-                onChange={(e) => setGhUser(e.target.value)}
-                maxLength={39}
-              />
-              {gh.status === 'connected' ? (
-                <button type="button" className="ob-btn ob-btn--row" onClick={() => go('done')}>
-                  Continue
-                </button>
-              ) : (
-                <button type="button" className="ob-btn ob-btn--row" onClick={connectGitHub} disabled={gh.status === 'checking' || ghUser.trim().length < 2}>
-                  {gh.status === 'checking' ? <span className="ob-dots"><i /><i /><i /></span> : 'Connect GitHub'}
-                </button>
-              )}
-            </div>
-            {gh.status === 'connected' && gh.info && (
-              <div className="ob-gh-card">
-                <img className="ob-gh-avatar" src={gh.info.avatarUrl} alt={`${gh.info.login} avatar`} width="52" height="52" />
-                <span className="ob-gh-meta">
-                  <strong>{gh.info.name || gh.info.login}</strong>
-                  <span>
-                    @{gh.info.login} · {gh.info.publicRepos} public repos
-                  </span>
-                </span>
-                <span className="ob-gh-check">Connected ✓</span>
-              </div>
-            )}
-            {gh.status === 'error' && <p className="ob-hint ob-hint--error">{gh.msg}</p>}
-            <button type="button" className="ob-linkish" onClick={() => go('done')}>
-              Skip for now
-            </button>
+            <p className="ob-hint">No judgement — it only sets the level day 1 starts at.</p>
           </div>
         );
 
-      case 'github-unused':
-        return (
-          <div className="ob-step">
-            <h1 className="ob-question">Show your work</h1>
-            <p className="ob-sub">
-              Connect GitHub — public profile only. What you practice stays yours; nothing here is ever ranked.
-            </p>
-            <p className="ob-avatar-label">Pick your avatar — shows next to your name</p>
-            <div className="ob-avatars" role="radiogroup" aria-label="Choose a profile picture">
-              {AVATARS.map((a, i) => (
-                <button
-                  key={a}
-                  type="button"
-                  role="radio"
-                  aria-checked={avatar === a}
-                  className={`ob-avatar-btn${avatar === a ? ' is-on' : ''}`}
-                  onClick={() => setAvatar(avatar === a ? '' : a)}
-                >
-                  <img src={`/avatars/${a}.webp`} alt={`Avatar option ${i + 1}`} />
-                </button>
-              ))}
-            </div>
-            <div className="ob-row">
-              <input
-                className="ob-input ob-input--row"
-                aria-label="GitHub username"
-                placeholder="GitHub username"
-                value={ghUser}
-                disabled={gh.status === 'connected'}
-                onChange={(e) => setGhUser(e.target.value)}
-                maxLength={39}
-              />
-              {gh.status === 'connected' ? (
-                <button type="button" className="ob-btn ob-btn--row" onClick={() => go('done')}>
-                  Continue
-                </button>
-              ) : (
-                <button type="button" className="ob-btn ob-btn--row" onClick={connectGitHub} disabled={gh.status === 'checking' || ghUser.trim().length < 2}>
-                  {gh.status === 'checking' ? <span className="ob-dots"><i /><i /><i /></span> : 'Connect'}
-                </button>
-              )}
-            </div>
-            {gh.status === 'connected' && gh.info && (
-              <div className="ob-gh-card">
-                <img className="ob-gh-avatar" src={gh.info.avatarUrl} alt={`${gh.info.login} avatar`} width="52" height="52" />
-                <span className="ob-gh-meta">
-                  <strong>{gh.info.name || gh.info.login}</strong>
-                  <span>
-                    @{gh.info.login} · {gh.info.publicRepos} public repos · {gh.info.followers} followers
-                  </span>
-                </span>
-                <span className="ob-gh-check">Connected ✓</span>
-              </div>
-            )}
-            {gh.status === 'error' && <p className="ob-hint ob-hint--error">{gh.msg}</p>}
-            {gh.status !== 'connected' && (
-              <button type="button" className="ob-linkish" onClick={() => go('done')}>
-                Skip for now
-              </button>
-            )}
-          </div>
-        );
-
-      default: {
-        const firstName = name.trim().split(' ')[0];
+      default:
         return (
           <div className="ob-step">
             <h1 className="ob-question">You&rsquo;re all set{firstName ? `, ${firstName}` : ''}.</h1>
             <div className="ob-summary">
-              {college.trim() && (
+              {track && (
                 <p>
-                  <span>College</span> {college.trim()}
+                  <span>Track</span> {track}{role ? ` · ${role}` : ''}
                 </p>
               )}
-              {amb.status === 'found' && amb.match && (
+              {year && (
                 <p>
-                  <span>Ambassador</span> {amb.match.name} — linked when profiles ship
+                  <span>Year</span> {year}
                 </p>
               )}
-              {(company.trim() || role) && (
+              {dailyTime && (
                 <p>
-                  <span>Target</span> {[company.trim(), role].filter(Boolean).join(' · ')}
+                  <span>Daily</span> {dailyTime}
                 </p>
               )}
-              {interests.length > 0 && (
+              {practiceTime && (
                 <p>
-                  <span>Interests</span> {interests.join(', ')}
+                  <span>Window</span> {practiceTime}
                 </p>
               )}
-              {stage && (
+              {targetDate && (
                 <p>
-                  <span>Stage</span> {stage} · {timeCommitment}
-                </p>
-              )}
-              {gh.status === 'connected' && gh.info && (
-                <p>
-                  <span>GitHub</span> @{gh.info.login}
+                  <span>Target</span> {targetNote || prettyDate(targetDate)}
                 </p>
               )}
               {planPreview && (
                 <div className="ob-planpreview" role="note">
-                  <b>Your 90-day plan is ready</b>
+                  <b>Your {planPreview.totalDays}-day plan is ready</b>
                   <p className="ob-planpreview__meta">
-                    {planPreview.week1Theme} · 3 tasks a day · {planPreview.totalDays} days
+                    {planPreview.week1Theme} · 3 tasks a day · day 1 opens on your dashboard
                   </p>
                   <ul>
                     {planPreview.firstTasks.map((t) => (
@@ -603,30 +589,30 @@ export default function OnboardingFlow() {
                   </ul>
                 </div>
               )}
+              {why.length > 0 && (
+                <ul className="ob-why" aria-label="Why this plan">
+                  {why.map((w) => (
+                    <li key={w}>{w}</li>
+                  ))}
+                </ul>
+              )}
             </div>
             <p className={`ob-hint ${save === 'error' ? 'ob-hint--error' : 'ob-hint--ok'}`}>
               {save === 'saving' && 'Saving…'}
-              {save === 'saved' && 'Saved ✓ — your Coach picks up from here.'}
+              {save === 'saved' && 'Saved ✓ — every answer stays yours to change.'}
               {save === 'error' && "Couldn't save — is the backend running? Your answers stay on this screen."}
             </p>
             <button
               type="button"
               className="ob-btn"
               onClick={() => {
-                let token = null;
-                try {
-                  token = localStorage.getItem('quadly:token');
-                } catch {
-                  /* storage unavailable */
-                }
-                window.location.assign(token ? '/app' : '/');
+                window.location.assign(hasToken ? '/app' : '/');
               }}
             >
               {hasToken ? 'Open my dashboard' : 'Back to home'}
             </button>
           </div>
         );
-      }
     }
   };
 
@@ -638,11 +624,11 @@ export default function OnboardingFlow() {
         </header>
 
         <div className="ob-hero">
-          <p className="ob-kicker">Set up your profile · Under a minute</p>
-          <h1 className="ob-hero-title">Six questions. One plan.</h1>
+          <p className="ob-kicker">Your daily practice plan · Under 90 seconds</p>
+          <h1 className="ob-hero-title">Eight questions. One plan.</h1>
           <p className="ob-hero-sub">
-            Tell us where you&rsquo;re headed — your Placement Plan, squads and streaks shape
-            themselves around it.
+            Real, hands-on practice on your track — planned around the time you
+            will actually sit down, and the date you are working toward.
           </p>
         </div>
 
@@ -650,8 +636,8 @@ export default function OnboardingFlow() {
           <div className="ob-card-head">
             <span className="ob-card-step">{countLabel(step)}</span>
             <div className="ob-progress" aria-hidden="true">
-              {[0, 1, 2].map((i) => (
-                <span key={i} className={`ob-progress__seg ${i < fill ? 'is-filled' : ''}`}>
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <span key={i} className={`ob-progress__seg ${i <= fill ? 'is-filled' : ''}`}>
                   <span className="ob-progress__fill" />
                 </span>
               ))}
@@ -669,7 +655,7 @@ export default function OnboardingFlow() {
             </div>
           </div>
 
-          {step !== 'name' && step !== 'welcome' && step !== 'done' && (
+          {step !== 'welcome' && step !== 'name' && step !== 'done' && (
             <button type="button" className="ob-back" onClick={back} disabled={Boolean(leaving)}>
               ‹ Back
             </button>

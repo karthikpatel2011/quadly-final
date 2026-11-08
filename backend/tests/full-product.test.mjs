@@ -29,6 +29,7 @@ const api = async (path, { method = 'GET', token, body } = {}) => {
 };
 
 const stamp = Date.now();
+const isoIn = (days) => new Date(Date.now() + days * 864e5).toISOString().slice(0, 10);
 let A, B, C_TOKEN, C_EMAIL;
 
 const seedListing = () => {
@@ -66,30 +67,36 @@ before(async () => {
   B = b.json.token;
   await api('/onboarding', { method: 'POST', token: A, body: {
     email: `fa${stamp}@t.dev`, name: 'Full Onboard', college: 'IIT Bombay',
-    target: { company: 'Google', role: 'SDE' }, avatar: '07',
-    interests: ['Backend development', 'Open source'],
-    goals: ['Build real projects', 'Find an internship', 'Prepare for interviews'],
-    stage: 'Building projects',
-    timeCommitment: 'Around 1 hour a day',
-    note: 'I know basic Python but don’t know what to build.',
+    track: 'Software Engineering', role: 'Backend developer', year: '3rd year',
+    dailyTime: '1 hour a day', practiceTime: 'Evening',
+    targetDate: isoIn(90), selfRating: 'Can build small things',
   }});
   await api('/onboarding', { method: 'POST', token: B, body: {
     email: `fb${stamp}@t.dev`, name: 'Other Student', college: 'Radford University',
-    avatar: '12', interests: ['Cybersecurity'], goals: ['Learn practical skills'], stage: 'Learning fundamentals',
+    track: 'Cyber Security', role: 'Security analyst', year: '2nd year',
+    dailyTime: '15 minutes a day', practiceTime: 'Morning', selfRating: 'Just starting',
   }});
 });
 
-test('V1 onboarding answers persist and drive the personalization', async () => {
+test('PRD onboarding answers persist and surface on the dashboard', async () => {
+  const d = await api('/dashboard', { token: A });
+  assert.equal(d.status, 200);
+  assert.equal(d.json.track, 'Software Engineering');
+  assert.equal(d.json.year, '3rd year');
+  assert.equal(d.json.dailyTime, '1 hour a day');
+  assert.equal(d.json.practiceTime, 'Evening');
+  assert.equal(d.json.selfRating, 'Can build small things');
+  assert.equal(d.json.target.role, 'Backend developer', 'the legacy role mirror stays in step');
+
+  // The personalization service still answers honestly with the thinner
+  // PRD profile: interests are no longer collected, so the deterministic
+  // fallback is the truthful "exploring" base.
   const p = await api('/personalize', { token: A });
   assert.equal(p.status, 200);
-  const d = p.json.result ?? p.json;
-  assert.match(d.directionSummary, /Backend development/);
-  assert.equal(d.stage, 'Building projects');
-  assert.deepEqual(d.nearTermGoals, ['Build real projects', 'Find an internship', 'Prepare for interviews']);
-  assert.equal(d.firstAction.label, 'Ship one commit to your project');
-  assert.deepEqual(d.opportunityCategories.slice(0, 2), ['job', 'internship']);
-  assert.ok(d.missingInfo.length >= 1, 'no projects yet → honest missing info');
-  assert.ok(['quadly-rules', 'llm'].includes(p.json.meta?.source ?? d.meta?.source ?? 'quadly-rules'));
+  const card = p.json.result ?? p.json;
+  assert.equal(card.stage, 'Exploring');
+  assert.ok(card.missingInfo.length >= 1, 'honest missing info');
+  assert.ok(['quadly-rules', 'llm'].includes(p.json.meta?.source ?? card.meta?.source ?? 'quadly-rules'));
 });
 
 test('profile edit updates the answers and the personalization follows', async () => {
@@ -172,9 +179,12 @@ test('account deletion scrubs the student from every store', async () => {
   seedListing();
 });
 
-test('personalization isolation: B’s direction is B’s own', async () => {
+test('personalization isolation: B’s card is B’s own', async () => {
   const b = await api('/personalize', { token: B });
   const d = b.json.result ?? b.json;
-  assert.match(d.directionSummary, /Cybersecurity|Learning fundamentals/);
-  assert.ok(!JSON.stringify(d).includes('Backend development'), 'A’s interests never leak into B’s card');
+  const card = JSON.stringify(d);
+  assert.ok(!card.includes('Backend developer'), 'A’s role never leaks into B’s card');
+  assert.ok(!card.includes('Software Engineering'), 'A’s track never leaks into B’s card');
+  assert.ok(!card.includes('IIT Bombay'), 'A’s college never leaks into B’s card');
+  assert.ok(['quadly-rules', 'llm'].includes(b.json.meta?.source ?? d.meta?.source ?? 'quadly-rules'));
 });

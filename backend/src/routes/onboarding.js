@@ -1,13 +1,14 @@
 import { Router } from 'express';
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { llmAvailable, llmComplete } from '../lib/llm.js';
-import { markOnboarded, resolveSession } from './auth.js';
+import { markOnboarded, resolveSession, saveProfileDraft } from './auth.js';
+import { ensurePlan } from '../lib/plangenerator.js';
 import {
   INTEREST_OPTIONS, GOAL_OPTIONS, STAGE_OPTIONS, TIME_OPTIONS,
   cleanList, cleanStage, cleanTime,
+  cleanTrack, cleanYear, cleanDailyTime, cleanPracticeTime,
+  cleanSelfRating, cleanTargetDate, cleanRole,
 } from '../lib/personalize.js';
-import { ensurePlan } from '../lib/plangenerator.js';
 
 const DATA_DIR = fileURLToPath(new URL('../../data/', import.meta.url));
 
@@ -23,102 +24,129 @@ const str = (v, max) => String(v ?? '').trim().slice(0, max) || null;
 
 const router = Router();
 
-// "Check via LLM whether an ambassador is connected to this college."
-// Tries an exact match, then name-variant matching, then the LLM (only when a
-// key is configured); without an LLM the heuristic still answers.
-router.post('/ambassador-lookup', async (req, res) => {
-  const college = String(req.body?.college || '').trim();
-  if (college.length < 3) {
-    return res.status(400).json({ error: 'College name is too short.' });
+function sessionFrom(req) {
+  const header = req.get('authorization') || '';
+  return resolveSession(header.startsWith('Bearer ') ? header.slice(7) : '');
+}
+
+// Validate every onboarding field that is present in the request body.
+// Unknown fields are ignored — the client only ever sends known answers.
+function profilePatch(b = {}) {
+  const patch = {};
+  if (b.name !== undefined) {
+    const name = str(b.name, 60);
+    if (name) patch.name = name;
   }
+  if (b.college !== undefined) patch.college = str(b.college, 120);
+  if (b.track !== undefined) patch.track = cleanTrack(b.track);
+  if (b.role !== undefined) patch.role = cleanRole(b.role);
+  if (b.year !== undefined) patch.year = cleanYear(b.year);
+  if (b.dailyTime !== undefined) patch.dailyTime = cleanDailyTime(b.dailyTime);
+  if (b.practiceTime !== undefined) patch.practiceTime = cleanPracticeTime(b.practiceTime);
+  if (b.targetDate !== undefined) patch.targetDate = cleanTargetDate(b.targetDate);
+  if (b.selfRating !== undefined) patch.selfRating = cleanSelfRating(b.selfRating);
+  return patch;
+}
 
-  const roster = await readJSON('ambassadors.json', { ambassadors: [] });
-  const list = roster.ambassadors || [];
-  const norm = (s) => String(s).toLowerCase().replace(/[^a-z0-9]/g, '');
-  const q = norm(college);
+function daysUntil(dateISO, now = new Date()) {
+  if (!dateISO) return null;
+  const target = Date.parse(dateISO + 'T00:00:00Z');
+  if (!Number.isFinite(target)) return null;
+  const today = Date.parse(now.toISOString().slice(0, 10) + 'T00:00:00Z');
+  return Math.round((target - today) / 86400000);
+}
 
-  let ambassador = list.find((a) => norm(a.college) === q) || null;
-  let matchedVia = ambassador ? 'exact' : null;
+function formatDate(dateISO) {
+  const d = new Date(dateISO + 'T00:00:00Z');
+  if (Number.isNaN(d.getTime())) return dateISO;
+  return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+}
 
-  if (!ambassador) {
-    ambassador =
-      list.find((a) => norm(a.college).includes(q) || q.includes(norm(a.college))) || null;
-    matchedVia = ambassador ? 'fuzzy' : null;
+// "Why this plan" — every line traces back to an answer the student gave.
+// Nothing invented, no promises about features that don't exist yet.
+function planWhy(p = {}) {
+  const lines = [];
+  const track = p.track && p.track !== 'Not sure' ? p.track : null;
+  if (track) {
+    lines.push(p.role
+      ? `${track} track — pointed at ${p.role}.`
+      : `${track} track — the skills that get you hired first.`);
   }
-
-  if (!ambassador && llmAvailable()) {
-    const answer = await llmComplete(
-      `A student typed this college name: "${college}". ` +
-        `Here is the ambassador roster: ${JSON.stringify(list.map(({ id, name, college: c }) => ({ id, name, college: c })))}. ` +
-        `If exactly one roster entry is the same college (allow spelling variants and abbreviations), reply with only its id. Otherwise reply with only: none`,
-    );
-    const id = answer && answer.trim().replace(/"/g, '');
-    if (id && id.toLowerCase() !== 'none') {
-      ambassador = list.find((a) => a.id === id) || null;
-      matchedVia = ambassador ? 'llm' : null;
-    }
+  if (p.selfRating) {
+    lines.push(`Day 1 meets you where you are: ${p.selfRating.toLowerCase()}.`);
   }
+  if (p.dailyTime) {
+    lines.push(`${p.dailyTime.replace(' a day', '')} a day — small enough to actually happen.`);
+  }
+  if (p.practiceTime) {
+    lines.push(`Your practice window is ${p.practiceTime.toLowerCase()} — the plan is built around it.`);
+  }
+  const days = daysUntil(p.targetDate);
+  if (days !== null && days > 0) {
+    lines.push(`${days} day${days === 1 ? '' : 's'} to your target (${formatDate(p.targetDate)}) — everything counts down to it.`);
+  }
+  lines.push('One path at a time. Change any answer later and the plan adapts.');
+  return lines;
+}
 
-  res.json({ found: Boolean(ambassador), ambassador, matchedVia });
+// GET /api/onboarding/draft — the server half of per-step saving: a student
+// who bookmarks mid-flow or switches tabs gets their answered steps back.
+router.get('/draft', (req, res) => {
+  const session = sessionFrom(req);
+  if (!session) {
+    return res.status(401).json({ error: 'Not signed in.' });
+  }
+  res.json({
+    ok: true,
+    onboarded: Boolean(session.account.onboarded),
+    profile: session.account.profile || {},
+  });
 });
 
-// Public GitHub profile lookup — read-only, no OAuth, no LeetCode-style scoring.
-router.get('/github', async (req, res) => {
-  const username = String(req.query.username || '').trim();
-  if (!/^[a-z\d](?:[a-z\d]|-(?=[a-z\d])){0,38}$/i.test(username)) {
-    return res.status(400).json({ error: 'That is not a valid GitHub username.' });
+// POST /api/onboarding/draft — one completed question at a time. Fails soft:
+// the client keeps a local draft too, so a revoked token loses nothing.
+router.post('/draft', (req, res) => {
+  const session = sessionFrom(req);
+  if (!session) {
+    return res.status(401).json({ error: 'Not signed in.' });
   }
-
-  try {
-    const r = await fetch(`https://api.github.com/users/${encodeURIComponent(username)}`, {
-      headers: { 'User-Agent': 'quadly-onboarding', Accept: 'application/vnd.github+json' },
-    });
-    if (r.status === 404) {
-      return res.status(404).json({ error: 'We could not find that GitHub username.' });
-    }
-    if (!r.ok) {
-      return res.status(502).json({ error: 'GitHub is not responding right now — try again in a moment.' });
-    }
-    const u = await r.json();
-    res.json({
-      login: u.login,
-      name: u.name,
-      avatarUrl: u.avatar_url,
-      publicRepos: u.public_repos,
-      followers: u.followers,
-      bio: u.bio,
-    });
-  } catch {
-    res.status(502).json({ error: 'GitHub is not responding right now — try again in a moment.' });
+  if (session.account.onboarded) {
+    return res.status(409).json({ error: 'This account already finished onboarding.' });
   }
+  const patch = profilePatch(req.body || {});
+  if (Object.keys(patch).length === 0) {
+    return res.status(400).json({ error: 'Nothing to save.' });
+  }
+  saveProfileDraft(session.email, patch);
+  res.json({ ok: true, saved: Object.keys(patch) });
 });
 
-// Save the finished onboarding. When the visitor is a signed-up user
-// (email from the join flow), the save also flips their account's
-// onboarded flag server-side — that is the "has not completed onboarding
-// yet" gate the login flow checks.
+// Save the finished onboarding. A signed-in student's account flips its
+// onboarded flag (the gate the login flow checks); a visitor's answers are
+// still recorded, just not linked to an account.
 router.post('/', async (req, res) => {
   const b = req.body || {};
+  const patch = profilePatch(b);
+  const session = sessionFrom(req);
+  const email = (session && session.email) || str(b.email, 120);
+
   const profile = {
-    email: str(b.email, 120),
-    name: str(b.name, 60),
-    college: str(b.college, 120),
-    ambassador: b.ambassador?.id
-      ? {
-          id: str(b.ambassador.id, 40),
-          name: str(b.ambassador.name, 80),
-          college: str(b.ambassador.college, 120),
-          linked: false, // placeholder until ambassador profiles ship
-        }
-      : null,
-    target: { company: str(b.target?.company, 60), role: str(b.target?.role, 60) },
-    github: str(b.github, 40),
-    avatar: str(b.avatar, 40),
-    interests: cleanList(b.interests, new Set(INTEREST_OPTIONS), 6),
-    goals: cleanList(b.goals, new Set(GOAL_OPTIONS), 6),
-    stage: cleanStage(str(b.stage, 40)),
-    timeCommitment: cleanTime(str(b.timeCommitment, 40)),
-    note: str(b.note, 300), // free text — clients must warn against secrets
+    email,
+    name: patch.name ?? null,
+    college: patch.college ?? null,
+    // College rides on the profile only — per the PRD it never personalizes
+    // anything (single-student product, no college features).
+    track: patch.track ?? 'Not sure',
+    role: patch.role ?? null,
+    year: patch.year ?? null,
+    dailyTime: patch.dailyTime ?? null,
+    practiceTime: patch.practiceTime ?? null,
+    targetDate: patch.targetDate ?? null,
+    selfRating: patch.selfRating ?? null,
+    // Legacy mirror: the dashboard/plan generators read target.role.
+    target: { role: patch.role ?? null, company: '' },
+    ambassador: null,
+    avatar: null,
     createdAt: new Date().toISOString(),
   };
 
@@ -126,22 +154,22 @@ router.post('/', async (req, res) => {
     return res.status(400).json({ error: 'Name is required.' });
   }
 
-  const linked = profile.email
-    ? markOnboarded(profile.email, {
-        name: profile.name, college: profile.college, target: profile.target,
-        github: profile.github, ambassador: profile.ambassador, avatar: profile.avatar,
-        interests: profile.interests, goals: profile.goals, stage: profile.stage,
-        timeCommitment: profile.timeCommitment, note: profile.note,
-      })
-    : false;
+  let linked = false;
+  if (email) {
+    // Fresh answers win; anything the draft/Settings already stored that the
+    // new flow doesn't collect is preserved, not wiped.
+    const { email: _e, createdAt: _c, ...fresh } = profile;
+    const merged = { ...(session?.account?.profile || {}), ...fresh };
+    linked = markOnboarded(email, merged);
+  }
 
   const doc = await readJSON('onboarding-profiles.json', []);
   doc.push(profile);
   await writeFile(DATA_DIR + 'onboarding-profiles.json', JSON.stringify(doc, null, 2));
 
-  // The onboarding delivers the student's real 90-day plan: generated from
-  // their role/company/ambassador, persisted per student, served on /app.
-  const plan = linked ? ensurePlan(profile.email, profile, new Date().toISOString().slice(0, 10)) : null;
+  // The onboarding delivers the student's real plan: generated from their
+  // answers, persisted per student, served on /app.
+  const plan = linked ? ensurePlan(email, profile, new Date().toISOString().slice(0, 10)) : null;
   const planPreview = plan
     ? {
         startedAt: plan.startedAt,
@@ -151,15 +179,19 @@ router.post('/', async (req, res) => {
       }
     : null;
 
-  res.status(201).json({ ok: true, savedAt: profile.createdAt, accountLinked: linked, plan: planPreview });
+  res.status(201).json({
+    ok: true,
+    savedAt: profile.createdAt,
+    accountLinked: linked,
+    plan: planPreview,
+    why: planWhy(profile),
+  });
 });
-
 
 // Edit the signed-in student's profile (Settings). Only provided fields are
 // merged; lists are validated against the same option sets as onboarding.
 router.put('/', (req, res) => {
-  const header = req.get('authorization') || '';
-  const session = resolveSession(header.startsWith('Bearer ') ? header.slice(7) : '');
+  const session = sessionFrom(req);
   if (!session) {
     return res.status(401).json({ error: 'Not signed in.' });
   }
@@ -175,6 +207,13 @@ router.put('/', (req, res) => {
     profile.name = name;
   }
   if (b.college !== undefined) profile.college = str(b.college, 120);
+  if (b.track !== undefined) profile.track = cleanTrack(b.track);
+  if (b.role !== undefined) profile.role = cleanRole(b.role);
+  if (b.year !== undefined) profile.year = cleanYear(b.year);
+  if (b.dailyTime !== undefined) profile.dailyTime = cleanDailyTime(b.dailyTime);
+  if (b.practiceTime !== undefined) profile.practiceTime = cleanPracticeTime(b.practiceTime);
+  if (b.targetDate !== undefined) profile.targetDate = cleanTargetDate(b.targetDate);
+  if (b.selfRating !== undefined) profile.selfRating = cleanSelfRating(b.selfRating);
   if (b.target !== undefined) {
     profile.target = {
       company: str(b.target?.company, 60) || '',
@@ -189,10 +228,13 @@ router.put('/', (req, res) => {
   if (b.note !== undefined) profile.note = str(b.note, 300);
   if (b.aiPersonalization !== undefined) profile.aiPersonalization = b.aiPersonalization === true;
 
+  // Keep the legacy role mirror in step with the canonical field.
+  if (b.role !== undefined && profile.target) profile.target.role = profile.role;
+
   profile.updatedAt = new Date().toISOString();
   markOnboarded(session.email, profile);
 
-  // The saved answers changed → the personalization cache refreshes on next read.
+  // The saved answers changed → caches refresh on next read.
   res.json({ ok: true, profile });
 });
 
