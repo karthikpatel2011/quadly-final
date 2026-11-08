@@ -7,5 +7,21 @@
     "createdAt": "2026-11-01T09:44:03.761Z",
     "nudgesSent": {},
     "nudgesReceived": {}
+  },
+  "NLQY3R": {
+    "name": "Sqa’s squad",
+    "members": [
+      "sqa-1794143526763@test.quadly",
+      "sqb-1794143527158@test.quadly"
+    ],
+    "createdAt": "2026-11-08T13:12:10.041Z",
+    "nudgesSent": {
+      "2026-11-08": {
+        "sqb-1794143527158@test.quadly": 1
+      }
+    },
+    "nudgesReceived": {
+      "sqa-1794143526763@test.quadly": 1
+    }
   }
 }

@@ -5,6 +5,7 @@ import './dashboard.css';
 import Logo from '../Logo.jsx';
 import PracticePage from './PracticePage.jsx';
 import ReplayPage from './ReplayPage.jsx';
+import SquadPage from './SquadPage.jsx';
 import ContestssPage from './ContestsPage.jsx';
 import InterviewsDashboard from './interviews/InterviewsDashboard.jsx';
 import InterviewSetup from './interviews/InterviewSetup.jsx';
@@ -30,6 +31,7 @@ const NAV_ITEMS = [
       { id: 'practice/replay', label: 'Mistake replay' },
     ],
   },
+  { id: 'squad', label: 'Squad' },
   {
     id: 'interviews',
     label: 'Interviews',
@@ -60,7 +62,7 @@ function routeFromLocation() {
   if (sub === 'practice') return 'practice/daily';
   if (sub === 'interviews') return 'interviews/dash';
   for (const n of NAV_ITEMS) {
-    if (n.children?.some((c) => c.id === sub)) return sub;
+    if (n.id === sub || n.children?.some((c) => c.id === sub)) return sub;
   }
   if (EXTRA_ROUTES.has(sub)) return sub;
   return 'app';
@@ -348,6 +350,7 @@ export default function Dashboard() {
       {/* Home waits on the rebuilt feed; the two workspaces are live. */}
       {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
       {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
+      {route === 'squad' && <main className="qd-home"><SquadPage /></main>}
       {route === 'interviews/dash' && <main className="qd-ivrhome"><InterviewsDashboard /></main>}
       {route === 'interviews/setup' && <main className="qd-ivrhome"><InterviewSetup /></main>}
       {route === 'interviews/report' && <main className="qd-ivrhome"><InterviewReport /></main>}
