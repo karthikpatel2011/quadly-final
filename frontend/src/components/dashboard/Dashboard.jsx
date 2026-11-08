@@ -348,7 +348,7 @@ export default function Dashboard() {
       )}
 
       {/* Home waits on the rebuilt feed; the two workspaces are live. */}
-      {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
+      {route === 'practice/daily' && <main className="qd-home qd-home--midnight"><PracticePage /></main>}
       {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
       {route === 'squad' && <main className="qd-home"><SquadPage /></main>}
       {route === 'interviews/dash' && <main className="qd-ivrhome"><InterviewsDashboard /></main>}

@@ -3,10 +3,10 @@ import { apiFetch } from '../../lib/api.js';
 import './practice.css';
 import './dashboard.css';
 
-/* Daily Practice player — carbon/amber "code editor" skin (Linear/Raycast/Vercel
-   direction): recessed IDE code block with line numbers, keycap answer cards,
-   keyboard-first controls (1–4/A–D to pick, Enter to check), one-row action
-   footer. Quiz logic, state and endpoints unchanged. */
+/* Daily Practice — "Midnight Slate & Emerald" layout: compact top bar with a
+   horizontal 5-step stepper, then a 12-col split (scenario + IDE code window
+   left; question, options and actions right). Palette is deep midnight slate
+   with a single emerald accent. Quiz state, endpoints and scoring unchanged. */
 
 const TYPE_LABELS = {
   'predict-output': 'Predict the output',
@@ -16,13 +16,7 @@ const TYPE_LABELS = {
   'write-query': 'Write the query',
 };
 
-const TYPE_FILE = {
-  javascript: 'snippet.js',
-  python: 'snippet.py',
-  sql: 'query.sql',
-  log: 'output.log',
-  text: 'notes.txt',
-};
+const EXT_BY_LANG = { javascript: 'js', python: 'py', sql: 'sql', log: 'log', text: 'txt' };
 
 const authHeaders = () => ({
   'Content-Type': 'application/json',
@@ -31,7 +25,7 @@ const authHeaders = () => ({
 
 function DiffDots({ level }) {
   return (
-    <span className="qd-diff" aria-label={`Difficulty ${level} of 3`}>
+    <span className="qv2-dots" aria-label={`Difficulty ${level} of 3`}>
       {[1, 2, 3].map((n) => <i key={n} className={n <= level ? 'is-on' : ''} aria-hidden="true" />)}
     </span>
   );
@@ -39,9 +33,9 @@ function DiffDots({ level }) {
 
 function RowsTable({ columns, rows, label }) {
   return (
-    <div className="qd-tablewrap">
-      {label && <p className="qd-tablecap">{label}</p>}
-      <table className="qd-table">
+    <div className="qv2-tablewrap">
+      {label && <p className="qv2-tablecap">{label}</p>}
+      <table className="qv2-table">
         <thead><tr>{columns.map((c) => <th key={c}>{c}</th>)}</tr></thead>
         <tbody>
           {rows.map((r, i) => <tr key={i}>{r.map((v, j) => <td key={j}>{String(v)}</td>)}</tr>)}
@@ -49,6 +43,14 @@ function RowsTable({ columns, rows, label }) {
       </table>
     </div>
   );
+}
+
+function fileNameFor(item) {
+  const concept = String(item.concept || 'snippet');
+  const lang = EXT_BY_LANG[item.language] ?? 'txt';
+  const stripped = concept.replace(/^(js|py|sql)-/, '');
+  if (item.type === 'write-query' || item.language === 'sql') return `${stripped}.${lang}`;
+  return `${stripped}.${lang}`;
 }
 
 export default function PracticePage() {
@@ -62,6 +64,7 @@ export default function PracticePage() {
   const [sql, setSql] = useState({});
   const [runs, setRuns] = useState({});
   const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState('');
 
   const load = useCallback(() => {
     setPhase('loading');
@@ -150,6 +153,11 @@ export default function PracticePage() {
     }
   };
 
+  const solvedCount = items.filter((it) => it.answered || results[it.id]).length;
+  const firstOpenIdx = items.findIndex((it) => !it.answered && !results[it.id]);
+  const unlockedMax = firstOpenIdx === -1 ? items.length - 1 : firstOpenIdx;
+  const setComplete = items.length > 0 && items.every((it) => it.answered || results[it.id]);
+  const freshFeedbackUp = Boolean(freshResult);
   const goto = (i) => {
     if (i < 0 || i > unlockedMax || i === index) return;
     setIndex(i);
@@ -158,10 +166,9 @@ export default function PracticePage() {
 
   const next = () => {
     if (unlockedMax > index) goto(index + 1);
-    else window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    else window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // keyboard-first: 1–4 / A–D pick an option, Enter checks
   useEffect(() => {
     if (phase !== 'ready' || !item || freshResult) return undefined;
     const onKey = (e) => {
@@ -169,10 +176,7 @@ export default function PracticePage() {
       if (item.options) {
         const idx = ['1', '2', '3', '4'].indexOf(e.key) !== -1 ? Number(e.key) - 1
           : ['a', 'b', 'c', 'd'].indexOf(e.key.toLowerCase());
-        if (idx !== -1 && idx < item.options.length) {
-          setPicks((p) => ({ ...p, [item.id]: idx }));
-          return;
-        }
+        if (idx !== -1 && idx < item.options.length) { setPicks((p) => ({ ...p, [item.id]: idx })); return; }
       }
       if (e.key === 'Enter') check();
     };
@@ -180,288 +184,265 @@ export default function PracticePage() {
     return () => window.removeEventListener('keydown', onKey);
   }); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const setComplete = items.length > 0 && items.every((it) => it.answered || results[it.id]);
-  const solvedCount = items.filter((it) => it.answered || results[it.id]).length;
-  const firstOpenIdx = items.findIndex((it) => !it.answered && !results[it.id]);
-  const unlockedMax = firstOpenIdx === -1 ? items.length - 1 : firstOpenIdx;
-  const viewingLastFeedback = Boolean(freshResult);
 
   if (phase === 'loading') {
     return (
-      <div className="qd-p">
-        <div className="qd-card skeleton" style={{ height: 64 }} />
-        <div className="qd-card skeleton" style={{ height: 300 }} />
+      <div className="qv2">
+        <div className="qv2-inner">
+          <div className="qv2-card skeleton" style={{ height: 64 }} />
+          <div className="qv2-grid"><div className="qv2-card skeleton" style={{ height: 340 }} /><div className="qv2-card skeleton" style={{ height: 340 }} /></div>
+        </div>
       </div>
     );
   }
 
   if (phase === 'error') {
     return (
-      <div className="qd-p" role="alert">
-        <div className="qd-card qd-p__err">
-          <h2 className="qd-h2">Practice couldn’t load</h2>
-          <p className="qd-muted">{error}</p>
-          <button type="button" className="qd-btn qd-btn--primary" onClick={load}>Retry</button>
+      <div className="qv2" role="alert">
+        <div className="qv2-inner">
+          <div className="qv2-card qd-p__err">
+            <h2 className="qv2-heading">Practice couldn’t load</h2>
+            <p className="qv2-dim">{error}</p>
+            <button type="button" className="qv2-cta" onClick={load}>Retry</button>
+          </div>
         </div>
       </div>
     );
   }
 
-  if (setComplete && !viewingLastFeedback) {
+  if (setComplete && !freshFeedbackUp) {
     return (
-      <div className="qd-p">
-        <div className="qd-card qd-done">
-          <p className="qd-kicker">Daily practice</p>
-          <h2 className="qd-h2">Today’s set is done.</h2>
-          <p className="qd-muted">
-            <b>{data.score} of {data.total}</b> on the first try.
-            {' '}Level {data.level} of 3 — it lifts after two good days and eases after two weak ones, never mid-set.
-          </p>
-          <p className="qd-muted">
-            {items.some((it) => it.answered?.correct === false || (results[it.id] && !results[it.id].correct))
-              ? 'The ideas you missed come back in 1, 3, and 7 days — your review slot is already reserved.'
-              : 'Clean sweep. A fresh set opens after 4 am IST tomorrow.'}
-          </p>
-          <button type="button" className="qd-btn qd-btn--primary" onClick={() => { window.location.assign('/app'); }}>
-            Back to Home
-          </button>
+      <div className="qv2">
+        <div className="qv2-inner">
+          <div className="qv2-card qv2-done">
+            <p className="qv2-kicker">Daily practice</p>
+            <h2 className="qv2-heading">{data.score} of {data.total} on the first try.</h2>
+            <p className="qv2-dim">Level {data.level} of 3 — it lifts after two good days and eases after two weak ones, never mid-set.</p>
+            <p className="qv2-dim">
+              {items.some((it) => it.answered?.correct === false || (results[it.id] && !results[it.id].correct))
+                ? 'The ideas you missed come back in 1, 3, and 7 days — your review slot is already reserved.'
+                : 'Clean sweep. A fresh set opens after 4 am IST tomorrow.'}
+            </p>
+            <div className="qv2-actions">
+              <button type="button" className="qv2-cta" onClick={() => { window.location.assign('/app'); }}>Back to Home</button>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
-  const mcq = Boolean(item.options);
-  const hint = hints[item.id];
-  const codeLines = (item.code || '').split('\n');
+  const mcq = Boolean(item?.options);
+  const hint = item ? hints[item.id] : undefined;
+  const codeLines = (item?.code || '').split('\n');
 
   return (
-    <div className="qd-p">
-      <header className="qd-p__head">
-        <div>
-          <p className="qd-eyebrow">Daily practice</p>
-          <h2 className="qd-h2">{items.length} activities. First try counts.</h2>
-          <p className="qd-muted">
-            {data.targetMinutes > data.servedMinutes
-              ? `Planned for your ${data.targetMinutes} minutes — today’s opening set covers ${data.servedMinutes}. The bank grows daily, and so will the sets.`
-              : 'Sized to the practice time you committed to — fresh material, your weak spots, and a review of what bit you.'}
-          </p>
-        </div>
-        <div className="qd-statusb" role="status" aria-label={`Level ${data.level} of 3, ${data.servedMinutes} of ${data.targetMinutes} minutes`}>
-          <span className="qd-statusb__lv">LV {data.level}/3</span>
-          <span className="qd-statusb__seg" aria-hidden="true">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <i key={i} className={i <= Math.min(5, Math.round((solvedCount / Math.max(1, items.length)) * 5)) ? 'is-on' : ''} />
-            ))}
-          </span>
-          <span className="qd-statusb__min">{data.servedMinutes}/{data.targetMinutes} min</span>
-        </div>
-      </header>
-
-      <div className="qd-p__grid">
-        <aside className="qd-rail" aria-label="Today’s set">
-          <p className="qd-rail__cap">Today’s set</p>
-          <ol className="qd-rail__list">
+    <div className="qv2">
+      <div className="qv2-inner">
+        <header className="qv2-bar">
+          <div className="qv2-bar__title">
+            <b>Daily Practice</b>
+            <span className="qv2-chip">{data.servedMinutes}/{data.targetMinutes} min planned</span>
+          </div>
+          <nav className="qv2-steps" aria-label="Activities">
             {items.map((it, i) => {
               const done = Boolean(it.answered || results[it.id]);
+              const cls = i === index ? ' is-active' : done ? ' is-done' : '';
               return (
-                <li key={it.id}>
-                  <button
-                    type="button"
-                    className={`qd-rail__item${i === index ? ' is-current' : ''}${done ? ' is-done' : ''}`}
-                    aria-current={i === index ? 'step' : undefined}
-                    disabled={i > unlockedMax}
-                    onClick={() => goto(i)}
-                  >
-                    <span className="qd-rail__badge" aria-hidden="true">{done ? '✓' : i + 1}</span>
-                    <span className="qd-rail__body">
-                      <span className="qd-rail__type">{TYPE_LABELS[it.type]}</span>
-                      <span className="qd-rail__meta">{it.minutes} min · {it.concept}</span>
-                    </span>
-                  </button>
-                </li>
+                <button
+                  key={it.id}
+                  type="button"
+                  className={`qv2-step${cls}${i > unlockedMax ? ' is-locked' : ''}`}
+                  aria-current={i === index ? 'step' : undefined}
+                  disabled={i > unlockedMax}
+                  onClick={() => goto(i)}
+                >
+                  {i === index && <span className="qv2-step__dot" aria-hidden="true" />}
+                  {done && i !== index && <span className="qv2-step__check" aria-hidden="true">✓</span>}
+                  <span className="qv2-step__label">{TYPE_LABELS[it.type]}</span>
+                </button>
               );
             })}
-          </ol>
-          <p className="qd-rail__minutes">{data.servedMinutes} of {data.targetMinutes} practice minutes planned</p>
-        </aside>
+          </nav>
+        </header>
 
-        <div className="qd-p__main">
-          {item && (
-            <section className="qd-act" aria-label={TYPE_LABELS[item.type]}>
-              <div className="qd-act__kicker">
-                <span className="qd-act__type">{TYPE_LABELS[item.type]}</span>
+        {item ? (
+          <div className="qv2-grid">
+            <section className="qv2-card qv2-left" aria-label="Scenario and code">
+              <div className="qv2-meta">
+                <span className="qv2-tag">{TYPE_LABELS[item.type]}</span>
                 <DiffDots level={item.difficulty} />
-                <span className="qd-act__mono">{item.minutes} min</span>
-                <span className="qd-act__mono">{item.concept}</span>
+                <span className="qv2-mono">{item.minutes} min</span>
+                <span className="qv2-mono">{item.concept}</span>
               </div>
-
-              <p className="qd-act__sit">{item.situation}</p>
-
+              <p className="qv2-scenario">{item.situation}</p>
               {item.code && (
-                <div className="qd-codeide" role="figure" aria-label="Code snippet">
-                  <div className="qd-codeide__chrome">
-                    <span>{TYPE_FILE[item.language] ?? 'snippet.txt'}</span>
-                    <span className="qd-codeide__lang">{item.language}</span>
+                <div className="qv2-code">
+                  <div className="qv2-code__head">
+                    <span className="qv2-code__dots" aria-hidden="true"><i /><i /><i /></span>
+                    <span className="qv2-code__name">{fileNameFor(item)}</span>
+                    <span className="qv2-code__lang">{item.language}</span>
                   </div>
-                  <div className="qd-codeide__body">
-                    <div className="qd-codeide__gutter" aria-hidden="true">
+                  <div className="qv2-code__body">
+                    <div className="qv2-code__gutter" aria-hidden="true">
                       {codeLines.map((_, i) => <span key={i}>{i + 1}</span>)}
                     </div>
-                    <pre className="qd-codeide__code"><code>{item.code}</code></pre>
+                    <pre className="qv2-code__text"><code>{item.code}</code></pre>
                   </div>
                 </div>
               )}
-
-              <h3 className="qd-act__q">{item.question}</h3>
-
-              {mcq ? (
-                <div className="qd-opts" role="radiogroup" aria-label="Answer options">
-                  {item.options.map((opt, i) => {
-                    const picked = picks[item.id] === i;
-                    const state = freshResult && !freshResult.error
-                      ? (i === freshResult.answerIndex ? ' is-right' : (picked ? ' is-wrongpick' : ''))
-                      : (picked ? ' is-pick' : '');
-                    return (
-                      <button
-                        key={i}
-                        type="button"
-                        role="radio"
-                        aria-checked={picked}
-                        className={`qd-opt${state}`}
-                        disabled={busy || Boolean(freshResult)}
-                        onClick={() => setPicks((p) => ({ ...p, [item.id]: i }))}
-                      >
-                        <span className="qd-opt__key" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
-                        <span className="qd-opt__text">{opt}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              ) : (
-                <div className="qd-sqlwrap">
-                  <div className="qd-schema">
+              {item.type === 'write-query' && (
+                <>
+                  <div className="qv2-meta" style={{ marginTop: 16 }}>
                     {item.schema.tables.map((t) => (
                       <RowsTable key={t.name} label={t.name} columns={t.columns} rows={t.rows} />
                     ))}
-                    {item.expectedColumns?.length > 0 && (
-                      <p className="qd-muted qd-sqlhint">Expected columns: {item.expectedColumns.join(', ')}</p>
-                    )}
                   </div>
                   <textarea
-                    className="qd-sql"
+                    className="qv2-sql"
                     aria-label="Your SQL query"
                     placeholder="SELECT …"
                     value={sql[item.id] ?? ''}
-                    disabled={busy || Boolean(freshResult)}
                     onChange={(e) => setSql((s) => ({ ...s, [item.id]: e.target.value }))}
                     spellCheck="false"
                   />
-                  <div className="qd-act__actions">
-                    <button type="button" className="qd-hintbtn" disabled={busy || Boolean(freshResult) || !(sql[item.id] ?? '').trim()} onClick={runQuery}>
+                  <div className="qv2-actions" style={{ marginTop: 10 }}>
+                    <button type="button" className="qv2-ghost" disabled={busy || !(sql[item.id] ?? '').trim()} onClick={runQuery}>
                       Run (sandbox — free)
-                    </button>
-                    <button type="button" className="qd-cta qd-cta--primary" disabled={busy || Boolean(freshResult) || !(sql[item.id] ?? '').trim()} onClick={check}>
-                      Submit answer
                     </button>
                   </div>
                   {runs[item.id] && !runs[item.id].error && (
-                    <RowsTable label={`Result of your run (${runs[item.id].rows.length} row${runs[item.id].rows.length === 1 ? '' : 's'})`} columns={runs[item.id].columns} rows={runs[item.id].rows} />
+                    <RowsTable label={`Result of your run (${runs[item.id].rows.length} rows)`} columns={runs[item.id].columns} rows={runs[item.id].rows} />
                   )}
-                  {runs[item.id]?.error && <p className="qd-error" role="alert">{runs[item.id].error}</p>}
-                </div>
-              )}
-
-              {mcq && !freshResult && (
-                <div className="qd-act__foot">
-                  <button type="button" className="qd-hintbtn" disabled={busy} onClick={applyHint}>
-                    Hint {(hint?.level ?? 0)}/3
-                  </button>
-                  <button type="button" className="qd-checkbtn" disabled={busy || picks[item.id] === undefined} onClick={check}>
-                    Check answer
-                  </button>
-                </div>
-              )}
-
-              {!mcq && !freshResult && (
-                <div className="qd-act__foot">
-                  <span className="qd-hintbtn qd-hintbtn--passive">{(hint?.level ?? 0) > 0 ? hint.text.slice(0, 60) + (hint.text.length > 60 ? '…' : '') : ''}</span>
-                  <button type="button" className="qd-hintbtn" disabled={busy || (hint?.level ?? 0) >= 3} onClick={applyHint}>
-                    {(hint?.level ?? 0) >= 3 ? 'No more hints' : `Hint ${(hint?.level ?? 0) + 1}/3`}
-                  </button>
-                </div>
-              )}
-
-              {hint && !freshResult && (
-                <p className="qd-hinttext">{hint.text}</p>
-              )}
-
-              {freshResult?.error && <p className="qd-error" role="alert">{freshResult.error}</p>}
-
-              {freshResult && !freshResult.error && (
-                <div className={`qd-fb ${freshResult.correct ? 'is-ok' : 'is-no'}`} role="status">
-                  <p className="qd-fb__head">
-                    {freshResult.correct ? '✓ Correct — and the first try is what counts.' : '✗ Not quite — the first try is recorded; retries are for understanding.'}
-                  </p>
-                  {mcq && !freshResult.correct && freshResult.chosenNote && (
-                    <p className="qd-fb__note">Your pick: {freshResult.chosenNote}</p>
-                  )}
-                  {mcq && !freshResult.correct && (
-                    <p className="qd-fb__note">Correct answer: {item.options[freshResult.answerIndex]}</p>
-                  )}
-                  {!mcq && !freshResult.correct && (
-                    <div className="qd-fb__tables">
-                      <RowsTable label="Your result" columns={freshResult.yourColumns} rows={freshResult.yourRows} />
-                      <RowsTable label="Expected result" columns={freshResult.expectedColumns} rows={freshResult.expectedRows} />
-                    </div>
-                  )}
-                  <p className="qd-fb__note">{freshResult.explanation}</p>
-                  <p className="qd-take"><b>Say it out loud:</b> “{freshResult.takeaway}”</p>
-                  <div className="qd-act__actions">
-                    {mcq && !freshResult.correct && (
-                      <button type="button" className="qd-hintbtn" onClick={() => {
-                        setResults((r) => { const c = { ...r }; delete c[item.id]; return c; });
-                        setPicks((p) => { const c = { ...p }; delete c[item.id]; return c; });
-                      }}>
-                        Try another
-                      </button>
-                    )}
-                    {unlockedMax > index && (
-                      <button type="button" className="qd-cta qd-cta--primary" onClick={next}>Next</button>
-                    )}
-                    {setComplete && index === items.length - 1 && (
-                      <button
-                        type="button"
-                        className="qd-cta qd-cta--primary"
-                        onClick={() => {
-                          setResults((r) => { const c = { ...r }; delete c[item.id]; return c; });
-                          setPicks((p) => { const c = { ...p }; delete c[item.id]; return c; });
-                          window.scrollTo({ top: 0, behavior: 'smooth' });
-                        }}
-                      >
-                        Finish the set
-                      </button>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {item.answered && !freshResult && (
-                <div className={`qd-fb ${item.answered.correct ? 'is-ok' : 'is-no'}`} role="status">
-                  <p className="qd-fb__head">
-                    {item.answered.correct ? '✓ Already answered — first try: correct.' : '✗ Already answered — first try: incorrect (recorded).'}
-                  </p>
-                  <p className="qd-fb__note">The record stands. Come back tomorrow for a fresh set{item.answered.correct ? '' : ' — this concept returns in your review slot'}.</p>
-                  {unlockedMax > index && (
-                    <div className="qd-act__actions">
-                      <button type="button" className="qd-cta qd-cta--primary" onClick={next}>Next</button>
-                    </div>
-                  )}
-                </div>
+                  {runs[item.id]?.error && <p className="qv2-err" role="alert">{runs[item.id].error}</p>}
+                </>
               )}
             </section>
-          )}
-        </div>
+
+            <section className="qv2-card qv2-right" aria-label="Question and options">
+              <h3 className="qv2-question">{item.question}</h3>
+              {mcq && (
+                <>
+                  <div className="qv2-opts" role="radiogroup" aria-label="Answer options">
+                    {item.options.map((opt, i) => {
+                      const picked = picks[item.id] === i;
+                      const state = freshResult && !freshResult.error
+                        ? (i === freshResult.answerIndex ? ' is-right' : (picked ? ' is-wrongpick' : ''))
+                        : (picked ? ' is-pick' : '');
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          role="radio"
+                          aria-checked={picked}
+                          className={`qv2-opt${state}`}
+                          disabled={busy || Boolean(freshResult)}
+                          onClick={() => setPicks((p) => ({ ...p, [item.id]: i }))}
+                        >
+                          <span className="qv2-opt__badge" aria-hidden="true">{String.fromCharCode(65 + i)}</span>
+                          <span className="qv2-opt__text">{opt}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="qv2-foot">
+                    <button type="button" className="qv2-ghost" disabled={busy} onClick={applyHint}>
+                      Hint {(hint?.level ?? 0)}/3
+                    </button>
+                    <button type="button" className="qv2-cta" disabled={busy || picks[item.id] === undefined} onClick={check}>
+                      Check answer
+                    </button>
+                  </div>
+                </>
+              )}
+              {!mcq && (
+                <>
+                  <textarea
+                    className="qv2-sql"
+                    aria-label="Your SQL query"
+                    placeholder="SELECT …"
+                    value={sql[item.id] ?? ''}
+                    onChange={(e) => setSql((s) => ({ ...s, [item.id]: e.target.value }))}
+                    spellCheck="false"
+                  />
+                  <div className="qv2-foot">
+                    <button type="button" className="qv2-ghost" disabled={busy} onClick={applyHint}>
+                      Hint {(hint?.level ?? 0)}/3
+                    </button>
+                    <button type="button" className="qv2-cta" disabled={busy || !(sql[item.id] ?? '').trim()} onClick={check}>
+                      Submit answer
+                    </button>
+                  </div>
+                </>
+              )}
+              {hint && <p className="qv2-hinttext">{hint.text}</p>}
+              {notice && <p className="qv2-err" role="alert">{notice}</p>}
+              <p className="qv2-privacy">First try counts. Retries are for understanding — the record never changes.</p>
+            </section>
+          </div>
+        ) : null}
+
+        {freshResult && !freshResult.error && (
+          <section className={`qv2-card qv2-debrief ${(freshResult.correct ? 'is-ok' : 'is-no')}`} role="status">
+            <p className="qv2-debrief__head">
+              {freshResult.correct ? '✓ Correct — first try recorded.' : '✗ Not quite — first try recorded; retries are for understanding.'}
+            </p>
+            <div className="qv2-debrief__body">
+              {mcq && !freshResult.correct && freshResult.chosenNote && <p className="qv2-dim">Your pick: {freshResult.chosenNote}</p>}
+              {mcq && !freshResult.correct && <p className="qv2-dim">Correct answer: {item.options[freshResult.answerIndex]}</p>}
+              {!mcq && !freshResult.correct && (
+                <div className="qv2-debrief__tables">
+                  <RowsTable label="Your result" columns={freshResult.yourColumns} rows={freshResult.yourRows} />
+                  <RowsTable label="Expected result" columns={freshResult.expectedColumns} rows={freshResult.expectedRows} />
+                </div>
+              )}
+              <p className="qv2-dim">{freshResult.explanation}</p>
+              <p className="qv2-take"><b>Say it out loud:</b> “{freshResult.takeaway}”</p>
+              <div className="qv2-actions">
+                {mcq && !freshResult.correct && (
+                  <button type="button" className="qv2-ghost" onClick={() => {
+                    setResults((r) => { const c = { ...r }; delete c[item.id]; return c; });
+                    setPicks((p) => { const c = { ...p }; delete c[item.id]; return c; });
+                  }}>
+                    Try another
+                  </button>
+                )}
+                {unlockedMax > index && (
+                  <button type="button" className="qv2-cta" onClick={next}>Next</button>
+                )}
+                {setComplete && index === items.length - 1 && (
+                  <button
+                    type="button"
+                    className="qv2-cta"
+                    onClick={() => {
+                      setResults((r) => { const c = { ...r }; delete c[item.id]; return c; });
+                      setPicks((p) => { const c = { ...p }; delete c[item.id]; return c; });
+                    }}
+                  >
+                    Finish the set
+                  </button>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {item && item.answered && !freshResult && (
+          <section className={`qv2-card qv2-debrief ${(item.answered.correct ? 'is-ok' : 'is-no')}`} role="status">
+            <p className="qv2-debrief__head">
+              {item.answered.correct ? '✓ Already answered — first try: correct.' : '✗ Already answered — first try: incorrect (recorded).'}
+            </p>
+            {unlockedMax > index && (
+              <div className="qv2-actions">
+                <button type="button" className="qv2-cta" onClick={next}>Next</button>
+              </div>
+            )}
+          </section>
+        )}
+
+        {notice && <p className="qv2-err" role="alert">{notice}</p>}
       </div>
     </div>
   );
 }
+
