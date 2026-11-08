@@ -63,6 +63,11 @@ export default function App() {
     };
   }, []);
 
+  const joinInvite = /^join\/([A-Z0-9]{6})$/i.exec(page);
+  if (joinInvite) {
+    return <JoinPage inviteCode={joinInvite[1].toUpperCase()} />;
+  }
+
   if (page === 'join') {
     return <JoinPage />;
   }

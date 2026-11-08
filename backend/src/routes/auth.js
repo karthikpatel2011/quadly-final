@@ -178,14 +178,17 @@ router.delete('/account', (req, res) => {
   scrubFile('onboarding-profiles.json', (doc) => (Array.isArray(doc) ? doc.filter((p) => p.email !== email) : doc));
   scrubFile('squads.json', (doc) => {
     if (!doc || typeof doc !== 'object') return doc;
-    for (const code of Object.keys(doc)) {
-      const sq = doc[code];
-      if (!sq || !Array.isArray(sq.members) || !sq.members.includes(email)) continue;
-      sq.members = sq.members.filter((m) => m !== email);
-      for (const side of ['nudgesSent', 'nudgesReceived']) {
-        if (sq[side] && sq[side][email] !== undefined) delete sq[side][email];
+    for (const id of Object.keys(doc)) {
+      const sq = doc[id];
+      if (!sq || !Array.isArray(sq.members)) continue;
+      const had = sq.members.some((m) => (typeof m === 'string' ? m : m.studentId) === email);
+      if (!had) continue;
+      sq.members = sq.members.filter((m) => (typeof m === 'string' ? m : m.studentId) !== email);
+      if (sq.ownerId === email) {
+        const nextOwner = [...sq.members].sort((a, b) => ((a.joinedAt || '') < (b.joinedAt || '') ? -1 : 1))[0];
+        if (nextOwner) { sq.ownerId = nextOwner.studentId; nextOwner.role = 'owner'; }
       }
-      if (sq.members.length === 0) delete doc[code];
+      if (sq.members.length === 0) delete doc[id];
     }
     return doc;
   });

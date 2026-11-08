@@ -28,3 +28,9 @@ backend/data/daily-practice-state.json
 backend/data/interview-voice.json
 backend/data/opportunities.json
 backend/data/interview-sessions.json
+backend/data/squads.json
+backend/data/squad-daily.json
+backend/data/squad-nudges.json
+backend/data/squad-events.json
+backend/data/squad-pending.json
+backend/data/squad-attempts.json

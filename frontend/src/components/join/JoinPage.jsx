@@ -26,7 +26,8 @@ function EyeIcon() {
   );
 }
 
-export default function JoinPage() {
+export default function JoinPage({ inviteCode = null }) {
+  const invite = inviteCode ? inviteCode.toUpperCase() : null;
   const [mode, setMode] = useState('signup'); // 'signup' (Try Now) | 'login'
   const [showPw, setShowPw] = useState(false);
   const [status, setStatus] = useState('idle'); // idle | loading | done | error
@@ -131,6 +132,7 @@ export default function JoinPage() {
         const res = await apiFetch('/auth/register', { method: 'POST', body: JSON.stringify({ email, password, confirm }) });
         try {
           localStorage.setItem('quadly:token', res.token);
+          if (invite) sessionStorage.setItem('quadly:pendingInvite', JSON.stringify({ code: invite }));
           localStorage.setItem('quadly:email', res.email);
         } catch {
           /* storage unavailable */
@@ -196,6 +198,11 @@ export default function JoinPage() {
             <a className="join-logo" href="/" aria-label="Quadly home"><Logo /></a>
           </header>
 
+          {invite && (
+            <p className="qd-iv-capsnote" role="note" style={{ marginBottom: 12 }}>
+              <b>You’ve been invited to a Quadly squad</b> (code {invite}). Create your account — we’ll put the code back in when you reach the squad page.
+            </p>
+          )}
           <div className="join-form-area" ref={formRef}>
             <div className="join-seg join-fade" data-mode={mode} role="tablist" aria-label="Choose a mode">
               <span className="join-seg__thumb" aria-hidden="true" />

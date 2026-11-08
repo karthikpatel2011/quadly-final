@@ -45,7 +45,7 @@ export function createApp() {
   app.use('/api/practice', dailyPracticeRoutes);
   app.use('/api/skills', skillsRoutes);
   app.use('/api/drive', driveRoutes);
-  app.use('/api/squad', squadRoutes);
+  app.use('/api/squads', squadRoutes); // Squad v2 (shareable codes, shared streak)
   app.use('/api/interview', interviewRoutes);
   app.use('/api/interviews', interviewSessionsRoutes);
   app.use('/api/projects', projectsRoutes);

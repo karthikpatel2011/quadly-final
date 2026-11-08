@@ -3,77 +3,167 @@ import { apiFetch } from '../../lib/api.js';
 import './squad.css';
 import './dashboard.css';
 
-/* Squad — study groups of 2–4 with a shareable join code and honest
-   accountability: "done today" comes only from a squadmate's live session
-   (no live session ⇒ shown as offline, never guessed). Nudges are polite by
-   design: 2 per sender per day, quiet hours 10 PM–6 AM IST. The page polls
-   while open so presence stays fresh (the backend contract expects it). */
+/* Squad v2 — a private 3–5 person group with a SHARED streak built from
+   verified tasks in the student accounts store (no checkboxes anywhere).
+   Design contract: rich detail in exactly three places — the join code, the
+   WhatsApp invite, and the board's hierarchy — minimal everywhere else.
+   Calm words: Away members are not shamed, a broken streak gets a clean
+   restart line. */
 
 const authHeaders = () => ({
   'Content-Type': 'application/json',
   Authorization: `Bearer ${localStorage.getItem('quadly:token') || ''}`,
 });
-
-function memberName(m) {
-  return m.name || (m.email ? m.email.split('@')[0] : 'Squadmate');
-}
+const CACHE_KEY = 'quadly:squadCache';
 
 export default function SquadPage() {
   const [phase, setPhase] = useState('loading'); // loading | ready | error
   const [error, setError] = useState('');
-  const [state, setState] = useState(null);
+  const [board, setBoard] = useState(null);
+  const [offline, setOffline] = useState(false);
+  const [mode, setMode] = useState('choose'); // choose | create | join
   const [name, setName] = useState('');
   const [code, setCode] = useState('');
+  const [joinError, setJoinError] = useState('');
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState('');
   const [copied, setCopied] = useState(false);
-  const timerRef = useRef(null);
+  const [celebrate, setCelebrate] = useState(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
+  const [reportId, setReportId] = useState(null);
+  const [reportReason, setReportReason] = useState('');
+  const [typed, setTyped] = useState('');
+  const prefillRef = useRef(null);
+  const pollRef = useRef(null);
 
-  const load = useCallback(() => {
-    apiFetch('/squad/state', { headers: authHeaders() })
-      .then((res) => { setState(res); setPhase('ready'); setError(''); })
+  const api = (path, method = 'GET', body = null) => apiFetch(path, { method, headers: authHeaders(), body: body ? JSON.stringify(body) : undefined });
+
+  const load = useCallback((silent = false) => {
+    if (!silent) setPhase('loading');
+    apiFetch('/squads/me', { headers: authHeaders() })
+      .then(async (me) => {
+        if (me.squad) {
+          const boardRes = await apiFetch(`/squads/${me.squad.id}/board`, { headers: authHeaders() });
+          setBoard(boardRes.board);
+          setOffline(false);
+          try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), board: boardRes.board })); } catch { /* storage */ }
+          setPhase('ready');
+          return;
+        }
+        setBoard(null);
+        setOffline(false);
+        setPhase('ready');
+      })
       .catch((err) => {
         if (/401|Not signed in/i.test(err.message)) { window.location.assign('/join'); return; }
+        let cached = null;
+        try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch { /* none */ }
+        if (cached?.board) {
+          setBoard(cached.board);
+          setOffline(true);
+          setPhase('ready');
+          return;
+        }
         setError(err.message);
         setPhase('error');
       });
   }, []);
 
   useEffect(() => {
+    let pending = null;
+    try { pending = JSON.parse(sessionStorage.getItem('quadly:pendingInvite') || 'null'); } catch { /* none */ }
+    if (pending?.code) {
+      setMode('join');
+      setCode(pending.code);
+      prefillRef.current = pending.token ?? null;
+      sessionStorage.removeItem('quadly:pendingInvite');
+    }
     load();
-    timerRef.current = setInterval(load, 45000); // keep presence fresh while the page is open
-    return () => clearInterval(timerRef.current);
+    pollRef.current = setInterval(() => load(true), 30000); // real-time via polling fallback
+    return () => clearInterval(pollRef.current);
   }, [load]);
 
-  const act = async (path, body, successNote) => {
+  const boardAct = useCallback(async (fn) => {
     setBusy(true);
     setNotice('');
     try {
-      const res = await apiFetch(path, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body ?? {}) });
-      setState(res);
-      if (successNote) setNotice(successNote);
-      return true;
+      const res = await fn();
+      if (res && res.board) setBoard(res.board);
+      if (res && res.deletedSquad) {
+        setBoard(null);
+        load(true);
+      }
+      return res;
     } catch (err) {
       setNotice(err.message);
-      return false;
+      return null;
+    } finally {
+      setBusy(false);
+    }
+  }, []);
+
+  // A correct replay of a wrong answer never happens here; joining uses the
+  // pending invite token when one exists (deep links).
+  const doJoin = async (codeSix) => {
+    setBusy(true);
+    setJoinError('');
+    try {
+      const res = await api('/squads/join', 'POST', { code: codeSix, pendingToken: prefillRef.current });
+      setBoard(res.board);
+      prefillRef.current = null;
+      load(true);
+    } catch (err) {
+      setJoinError(err.message);
     } finally {
       setBusy(false);
     }
   };
 
-  const copyCode = async () => {
+  // Milestone celebration fires once per fresh sweep result (7/14/30 days).
+  useEffect(() => {
+    const hit = board?.streak?.milestone;
+    if (hit) {
+      setCelebrate(hit);
+      const t = setTimeout(() => { setCelebrate(null); setBoard((b) => (b ? { ...b, streak: { ...b.streak, milestone: null } } : b)); }, 2600);
+      return () => clearTimeout(t);
+    }
+  }, [board?.streak?.milestone]);
+
+  const shareInvite = async () => {
+    const url = `${window.location.origin}${board.invite.joinUrl}`;
+    const text = `Join my Quadly squad and keep each other on track. Code: ${board.code}. ${url}`;
+    if (navigator.share) {
+      try { await navigator.share({ title: 'Quadly squad', text, url }); return; } catch { /* cancelled → fall through */ }
+    }
+    window.open(board.invite.whatsapp, '_blank', 'noopener');
+  };
+
+  const copy = async (text) => {
     try {
-      await navigator.clipboard.writeText(state.squad.code);
+      await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
+      setTimeout(() => setCopied(false), 2000);
+      return true;
     } catch {
-      setNotice('Copy failed — select the code manually.');
+      setNotice('Clipboard blocked — write it down.');
+      return false;
     }
   };
 
+  const leave = () => {
+    if (!window.confirm('Leave this squad? Two taps and it’s done.')) return;
+    if (!window.confirm('Really leave? Your shared streak continues without you.')) return;
+    boardAct(async () => {
+      const r = await api(`/squads/${board.id}/leave`, 'POST');
+      return { ...r, deletedSquad: r.deletedSquad };
+    });
+  };
+
   if (phase === 'loading') {
-    return <div className="qd-home"><div className="qd-card skeleton" style={{ height: 240 }} /></div>;
+    return <div className="qd-home"><div className="qd-card skeleton" style={{ height: 250 }} /></div>;
   }
+
   if (phase === 'error') {
     return (
       <div className="qd-home" role="alert">
@@ -86,128 +176,287 @@ export default function SquadPage() {
     );
   }
 
-  const squad = state?.squad ?? null;
+  if (offline) {
+    return (
+      <div className="qd-home" role="status">
+        <div className="qd-card">
+          <h2 className="qd-h2">{board?.name ?? 'Squad'} — offline</h2>
+          <p className="qd-muted">You’re offline, so this is the last saved board (read-only). Reconnect for fresh progress and nudges.</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!board) {
+    if (mode === 'join') {
+      return (
+        <div className="qd-home">
+          <section className="qd-card qd-sq-join" aria-label="Join a squad">
+            <p className="qd-muted">
+              {prefillRef.current ? 'Welcome back — your invite is waiting. Enter its code.' : 'Ask your friend for the six-character code from their squad board.'}
+            </p>
+            <CodeBoxes
+              value={code}
+              onChange={setCode}
+              onSubmit={(six) => doJoin(six)}
+              disabled={busy}
+            />
+            {joinError && <p className="qd-error" role="alert">{joinError}</p>}
+            {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
+            <div className="qd-act__actions">
+              <button type="button" className="qd-btn qd-btn--primary" disabled={busy || code.length !== 6} onClick={() => doJoin(code)}>Join the squad</button>
+              <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setMode('choose'); setJoinError(''); }}>Back</button>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    if (mode === 'create') {
+      return (
+        <div className="qd-home">
+          <section className="qd-card qd-sq-join" aria-label="Create a squad">
+            <p className="qd-muted">Name it (3–30 characters) and share the code with your people.</p>
+            <input className="qd-sq-input" placeholder="Squad name" value={name} maxLength={30} onChange={(e) => setName(e.target.value)} autoFocus />
+            {name.length > 0 && name.trim().length < 3 && <p className="qd-muted">A little longer — 3 to 30 characters.</p>}
+            {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
+            <div className="qd-act__actions">
+              <button type="button" className="qd-btn qd-btn--primary" disabled={busy || name.trim().length < 3} onClick={async () => {
+                setBusy(true);
+                try {
+                  const res = await api('/squads', 'POST', { name: name.trim() });
+                  setBoard(res.board);
+                  load(true);
+                } catch (err) { setNotice(err.message); } finally { setBusy(false); }
+              }}>{busy ? 'Preparing the room…' : 'Create and get my code'}</button>
+              <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setMode('choose'); setName(''); }}>Back</button>
+            </div>
+          </section>
+        </div>
+      );
+    }
+    return (
+      <div className="qd-home">
+        <section className="qd-card qd-sq-choose" aria-label="Squad">
+          <h2 className="qd-h2">Keep each other on track.</h2>
+          <p className="qd-muted">A small private squad of 3–5 keeps the daily work honest — one shared streak, gentle nudges, nothing public.</p>
+          <div className="qd-act__actions">
+            <button type="button" className="qd-btn qd-btn--primary" onClick={() => setMode('create')}>Create a squad</button>
+            <button type="button" className="qd-btn qd-btn--ghost" onClick={() => setMode('join')}>Join with a code</button>
+          </div>
+        </section>
+        {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
+      </div>
+    );
+  }
+
+    const notDone = board.members.filter((m) => !m.doneToday);
+    const doneMembers = board.members.filter((m) => m.doneToday);
+    const waiting = board.members.length < 3;
 
   return (
     <div className="qd-home">
+      {celebrate && (
+        <div className="qd-sq-celebrate" role="status">
+          <b>{celebrate}-day squad streak</b>
+          <span>Held. Same time tomorrow.</span>
+        </div>
+      )}
+
       <header className="qd-sq-head">
         <div>
           <p className="qd-kicker">Squad</p>
-          <h2 className="qd-h2">{squad ? squad.name : 'Study with two to four friends.'}</h2>
-          <p className="qd-muted">
-            One code, honest accountability: see who finished today’s work, and nudge —
-            politely — who didn’t. Two nudges a day, nobody gets buzzed after 10 PM IST.
-          </p>
+          <h2 className="qd-h2" title={board.name}>{board.name.length > 40 ? `${board.name.slice(0, 39)}…` : board.name}</h2>
+        </div>
+        <div className="qd-sq-menuwrap">
+          <button type="button" className="qd-btn qd-btn--ghost" aria-haspopup="menu" aria-expanded={menuOpen} onClick={() => setMenuOpen((o) => !o)}>Settings</button>
+          {menuOpen && (
+            <div className="qd-sq-menu" role="menu">
+              {board.isOwner && (
+                <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); const n = window.prompt('New squad name (3–30 characters)', board.name); if (n && n.trim().length >= 3) boardAct(() => api(`/squads/${board.id}`, 'PATCH', { name: n.trim() })); }}>Rename</button>
+              )}
+              {board.isOwner && (
+                <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); boardAct(() => api(`/squads/${board.id}/invite/reset`, 'POST')); }}>Reset invite code</button>
+              )}
+              {board.isOwner && (
+                <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); boardAct(() => api(`/squads/${board.id}`, 'PATCH', { freezeEnabled: !board.freeze.enabled })); }}>
+                  {board.freeze.enabled ? 'Turn off this week’s freeze' : 'Turn on this week’s freeze'}
+                </button>
+              )}
+              <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); boardAct(() => api(`/squads/${board.id}`, 'PATCH', { nudgesMuted: !board.members.find((m) => m.isMe)?.nudgesMuted })); }}>
+                {board.members.find((m) => m.isMe)?.nudgesMuted ? 'Unmute nudges' : 'Mute nudges for me'}
+              </button>
+              <button type="button" role="menuitem" onClick={() => { setMenuOpen(false); setReportOpen(true); }}>Report a member</button>
+              <button type="button" role="menuitem" onClick={leave}>Leave squad</button>
+            </div>
+          )}
         </div>
       </header>
-      {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
 
-      {!squad ? (
-        <section className="qd-card qd-sq-join" aria-label="Start or join a squad">
-          <p className="qd-muted">Create a squad and share the code with up to three friends — or join theirs. Same streak, same rules.</p>
+      <section className="qd-card qd-sq-streak" aria-label={`Shared streak ${board.streak.current} days`}>
+        <p className="qd-sq-streaknum">{board.streak.current}</p>
+        <p className="qd-sq-streakunit">day{board.streak.current === 1 ? '' : 's'} together</p>
+        <p className="qd-sq-streakline">Everyone needs one task a day.</p>
+        {board.today.complete && <span className="qd-pill qd-sq-donetoday">Day complete ✓</span>}
+        {board.streak.current === 0 && !board.today.complete && (
+          <p className="qd-muted">Fresh start — one complete squad day begins the streak.</p>
+        )}
+      </section>
 
-          <div className="qd-sq-option">
-            <b className="qd-sq-optiontitle">Start a new one</b>
-            <input
-              className="qd-sq-input"
-              placeholder="Squad name (optional)"
-              value={name}
-              maxLength={40}
-              onChange={(e) => setName(e.target.value)}
-            />
-            <button
-              type="button"
-              className="qd-btn qd-btn--primary qd-btn--block"
-              disabled={busy}
-              onClick={() => act('/squad/create', { name }, 'Squad created — share the code below.')}
-            >
-              {busy ? 'Working…' : 'Create my squad'}
-            </button>
+      <p className="qd-sq-today" aria-live="polite">
+        <b>{board.today.done} of {board.today.total}</b> done today{waiting ? ` · ${3 - board.members.length > 0 ? `${3 - board.members.length} more member${3 - board.members.length === 1 ? '' : 's'} needed to start the shared streak` : ' — the streak is running'}` : ''}
+      </p>
+
+      <section className="qd-card qd-sq-members" aria-label="Members">
+        <ul className="qd-sq-list">
+          {[...notDone.filter((m) => !m.away), ...notDone.filter((m) => m.away), ...doneMembers].map((m) => (
+            <li key={m.id} className="qd-sq-row">
+              <span className="qd-sq-avatar" aria-hidden="true">{m.initials}</span>
+              <div className="qd-sq-rowmain">
+                <b title={m.id}>{m.isMe ? 'You' : m.firstName}{m.role === 'owner' ? ' · owner' : ''}{m.away ? ' · away' : ''}</b>
+                <span>
+                  {m.away
+                    ? 'Away for a while — not blocking the streak'
+                    : m.doneToday
+                      ? `Done, ${m.taskCount} task${m.taskCount === 1 ? '' : 's'}`
+                      : m.isMe
+                        ? 'Not finished yet — one task puts the squad over the line'
+                        : 'Not yet'}
+                </span>
+              </div>
+              <div className="qd-sq-rowend">
+                {m.doneToday && <span className="qd-pill qd-sq-donepill">done</span>}
+                {!m.isMe && !m.doneToday && !m.away && (
+                  <button type="button" className="qd-btn" disabled={busy} onClick={() => boardAct(() => api(`/squads/${board.id}/nudge`, 'POST', { toId: m.id }))}>
+                    Nudge
+                  </button>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {board.invite && (
+        <section className="qd-card qd-sq-codecard" aria-label="Invite">
+          <div>
+            <p className="qd-sq-codelabel">Invite code — the board fills up to five</p>
+            <p className="qd-sq-code">{board.code}</p>
           </div>
-
-          <div className="qd-sq-divider" role="separator"><span>or join with a code</span></div>
-
-          <div className="qd-sq-option">
-            <div className="qd-sq-coderow">
-              <input
-                className="qd-sq-input qd-sq-codeinput"
-                placeholder="A1B2C3"
-                value={code}
-                maxLength={6}
-                onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
-              />
-              <button
-                type="button"
-                className="qd-btn"
-                disabled={busy || code.trim().length !== 6}
-                onClick={() => act('/squad/join', { code: code.trim() }, 'You\u2019re in the squad.')}
-              >
-                Join
-              </button>
-            </div>
+          <div className="qd-sq-inviteact">
+            <button type="button" className="qd-btn" onClick={() => copy(board.code)}>{copied ? 'Copied' : 'Copy code'}</button>
+            <button type="button" className="qd-btn" onClick={shareInvite}>Share on WhatsApp</button>
+            <button type="button" className="qd-btn qd-btn--ghost" onClick={() => copy(`${window.location.origin}${board.invite.joinUrl}`)}>{copied ? 'Copied ✓' : 'Copy link'}</button>
+            {board.isOwner && <button type="button" className="qd-linkish" onClick={() => boardAct(() => api(`/squads/${board.id}/invite/reset`, 'POST'))}>Reset code</button>}
           </div>
         </section>
-            ) : (
-        <>
-          <section className="qd-card qd-sq-codecard" aria-label="Squad code">
-            <div>
-              <p className="qd-sq-codelabel">Join code — share it with up to {Math.max(0, squad.maxMembers - squad.members.length)} more friend{Math.max(0, squad.maxMembers - squad.members.length) === 1 ? '' : 's'}</p>
-              <p className="qd-sq-code">{squad.code}</p>
-            </div>
-            <button type="button" className="qd-btn" onClick={copyCode}>{copied ? 'Copied ✓' : 'Copy code'}</button>
-          </section>
-
-          <section className="qd-card qd-sq-members" aria-label="Squad members">
-            <div className="qd-sq-membershead">
-              <h3 className="qd-iv-section" style={{ margin: 0 }}>{squad.members.length}/{squad.maxMembers} members</h3>
-              <span className="qd-pill">{squad.nudgesLeft}/{squad.nudgeCap} nudges left today</span>
-            </div>
-            <ul className="qd-sq-list">
-              {squad.members.map((m) => (
-                <li key={m.email} className="qd-sq-row">
-                  <span className={`qd-sq-dot${m.online ? ' is-online' : ''}`} aria-hidden="true" />
-                  <div className="qd-sq-rowmain">
-                    <b>{m.isMe ? 'You' : memberName(m)}</b>
-                    <span>
-                      {m.online
-                        ? (m.doneToday ? 'Finished today ✓' : 'Hasn’t finished today yet')
-                        : 'Offline — no live session, no judgement'}
-                    </span>
-                  </div>
-                  <div className="qd-sq-rowend">
-                    {m.doneToday && <span className="qd-pill qd-pill--tiny qd-sq-donepill">done</span>}
-                    {!m.isMe && (
-                      <button
-                        type="button"
-                        className="qd-btn"
-                        disabled={busy || squad.nudgesLeft <= 0 || squad.quiet.active}
-                        title={squad.quiet.active ? `Quiet hours ${squad.quiet.window}` : `Nudge ${memberName(m)}`}
-                        onClick={() => act('/squad/nudge', { member: m.email }, `Nudged ${memberName(m)}.`)}
-                      >
-                        Nudge
-                      </button>
-                    )}
-                  </div>
-                </li>
-              ))}
-            </ul>
-            {squad.quiet.active && (
-              <p className="qd-sq-quiet" role="status">
-                Quiet hours ({squad.quiet.window}) — nudges reopen after 6 AM IST.
-              </p>
-            )}
-            <button
-              type="button"
-              className="qd-linkish"
-              style={{ marginTop: 10 }}
-              disabled={busy}
-              onClick={() => { if (window.confirm('Leave this squad? The code keeps working for the rest.')) act('/squad/leave'); }}
-            >
-              Leave squad
-            </button>
-          </section>
-        </>
       )}
+
+      {(board.events.length > 0 || board.weeklyRecap) && (
+        <section className="qd-card qd-sq-activity" aria-label="Recent activity">
+          <h3 className="qd-iv-section" style={{ margin: '0 0 8px' }}>Recent activity</h3>
+          <ul className="qd-sq-events">
+            {board.weeklyRecap && <li key="recap">{board.weeklyRecap}</li>}
+            {board.events.map((e, i) => <li key={`${i}-${e.text}`}>{e.text}</li>)}
+          </ul>
+        </section>
+      )}
+
+      {reportOpen && (
+        <div className="qd-room-confirm" role="alertdialog" aria-label="Report a member">
+          {!reportId ? (
+            <>
+              <p><b>Report a member</b></p>
+              {board.members.filter((m) => !m.isMe).map((m) => (
+                <button key={m.id} type="button" className="qd-sq-reportrow" onClick={() => setReportId(m.id)}>
+                  {m.firstName}
+                </button>
+              ))}
+              <button type="button" className="qd-btn qd-btn--ghost" onClick={() => setReportOpen(false)}>Cancel</button>
+            </>
+          ) : (
+            <>
+              <p><b>What happened with {board.members.find((m) => m.id === reportId)?.firstName}?</b></p>
+              <input className="qd-sq-input" placeholder="Short reason for a human reviewer" value={reportReason} maxLength={300} onChange={(e) => setReportReason(e.target.value)} />
+              <div className="qd-act__actions" style={{ justifyContent: 'center' }}>
+                <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setReportOpen(false); setReportId(null); setReportReason(''); }}>Cancel</button>
+                <button
+                  type="button"
+                  className="qd-btn qd-room-end"
+                  disabled={busy || reportReason.trim().length < 3}
+                  onClick={async () => {
+                    boardAct(() => api(`/squads/${board.id}/report`, 'POST', { memberEmail: reportId, reason: reportReason.trim() }));
+                    setReportOpen(false);
+                    setReportId(null);
+                    setReportReason('');
+                    setNotice('Reported to a human reviewer.');
+                  }}
+                >
+                  Send report
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+
+      {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
+      {joinError === '' ? null : <p className="qd-error" role="alert">{joinError}</p>}
     </div>
   );
+}
+
+function CodeBoxes({ value, onChange, onSubmit, disabled }) {
+  const refs = useRef([]);
+  const chars = Array.from({ length: 6 }, (_, i) => value[i] ?? '');
+  const spread = (text, from) => {
+    const next = (value.slice(0, from) + text).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+    onChange(next);
+    return next;
+  };
+  return (
+    <div className="qd-sq-boxes" role="group" aria-label="Six-character squad code">
+      {chars.map((ch, i) => (
+        <input
+          key={i}
+          ref={(el) => { refs.current[i] = el; }}
+          className="qd-sq-box"
+          inputMode="text"
+          autoCapitalize="characters"
+          autoComplete={i === 0 ? 'one-time-code' : 'off'}
+          maxLength={1}
+          disabled={disabled}
+          aria-label={`Character ${i + 1} of 6`}
+          value={ch === ' ' ? '' : ch}
+          onChange={(e) => {
+            const raw = e.target.value.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+            if (!raw) { onChange((value.slice(0, i) + ' ' + value.slice(i + 1)).slice(0, 6)); return; }
+            if (raw.length > 1) {
+              const next = spread(raw, i);
+              refFocusFor(refs, Math.min(5, i + raw.length - 1));
+              if (next.length === 6 && !next.includes(' ')) onSubmit(next);
+              return;
+            }
+            const next = spread(raw, i);
+            refFocusFor(refs, Math.min(5, i + 1));
+            if (next.length === 6 && !next.includes(' ')) onSubmit(next);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Backspace' && !chars[i] && i > 0) refFocusFor(refs, i - 1);
+          }}
+          onPaste={(e) => {
+            e.preventDefault();
+            const pasted = (e.clipboardData.getData('text') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6);
+            if (!pasted) return;
+            const next = spread(pasted, i);
+            refFocusFor(refs, Math.min(5, pasted.length - 1));
+            if (next.length === 6 && !next.includes(' ')) onSubmit(next);
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function refFocusFor(refs, index) {
+  refs.current?.[index]?.focus?.();
 }
