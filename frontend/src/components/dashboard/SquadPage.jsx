@@ -205,7 +205,10 @@ export default function SquadPage() {
             {joinError && <p className="qd-error" role="alert">{joinError}</p>}
             {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
             <div className="qd-act__actions">
-              <button type="button" className="qd-btn qd-btn--primary" disabled={busy || code.length !== 6} onClick={() => doJoin(code)}>Join the squad</button>
+              <button type="button" className="qd-cta qd-cta--primary" disabled={busy || code.length !== 6} onClick={() => doJoin(code)}>
+              <Icon name="hash" size={18} strokeWidth={1.75} />
+              Join the squad
+            </button>
               <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setMode('choose'); setJoinError(''); }}>Back</button>
             </div>
           </section>
@@ -221,7 +224,7 @@ export default function SquadPage() {
             {name.length > 0 && name.trim().length < 3 && <p className="qd-muted">A little longer — 3 to 30 characters.</p>}
             {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
             <div className="qd-act__actions">
-              <button type="button" className="qd-btn qd-btn--primary" disabled={busy || name.trim().length < 3} onClick={async () => {
+              <button type="button" className="qd-cta qd-cta--primary" disabled={busy || name.trim().length < 3} onClick={async () => {
                 setBusy(true);
                 try {
                   const res = await api('/squads', 'POST', { name: name.trim() });
@@ -246,16 +249,14 @@ export default function SquadPage() {
           <p className="qd-sq-headline">Keep each other on track.</p>
           <p className="qd-sq-sub">In a small private squad of three to five people. Keep the daily streak, gentle nudges, nothing public.</p>
 
-          <div className="qd-sq-squares" role="group" aria-label="Join or create squad">
-            <button type="button" className="qd-sq-tile is-accent" onClick={() => setMode('create')}>
-              <Icon name="squad" size={30} />
-              <b>Create a squad</b>
-              <span>Start fresh and get your code</span>
+          <div className="qd-cta-row" role="group" aria-label="Join or create squad">
+            <button type="button" className="qd-cta qd-cta--primary" onClick={() => setMode('create')}>
+              <Icon name="plus" size={18} strokeWidth={2} />
+              Create squad
             </button>
-            <button type="button" className="qd-sq-tile" onClick={() => setMode('join')}>
-              <Icon name="code" size={30} />
-              <b>Join a squad</b>
-              <span>Have a code from a friend</span>
+            <button type="button" className="qd-cta qd-cta--ghost" onClick={() => setMode('join')}>
+              <Icon name="hash" size={18} strokeWidth={1.75} />
+              Join squad
             </button>
           </div>
         </div>

@@ -13,15 +13,17 @@ export const ICONS = {
   launch: 'M13 4.5c3.5 0 6.5 3 6.5 6.5-2 2.5-5 5-8.5 6l-3-3c1-3.5 3.5-7.5 5-9.5zM7.5 14c-1.5.5-2.5 2-3 4.5 2.5-.5 4-1.5 4.5-3M14.5 9.5h.01',
   check: 'M5 12.5 10 17.5 19 7',
   code: 'M9 7 5 12l4 5M15 7l4 5-4 5',
+  plus: 'M12 5v14M5 12h14',
+  hash: 'M9.5 4.5 8 19.5M16 4.5 14.5 19.5M4.5 9.5h15M4.5 14.5h15',
   work: 'M4 8.5h16v11H4zM9 8.5V6h6v2.5M4 13.5h16',
   moon: 'M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z',
   sun: 'M12 5V3M12 21v-2M5 12H3M21 12h-2M6.4 6.4 5 5M19 19l-1.4-1.4M6.4 17.6 5 19M19 5l-1.4 1.4M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8z',
 };
 
-export function Icon({ name, size = 20 }) {
+export function Icon({ name, size = 20, strokeWidth = 1.7 }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" className="qd-ic">
-      <path d={ICONS[name] || ICONS.home} fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={ICONS[name] || ICONS.home} fill="none" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

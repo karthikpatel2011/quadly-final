@@ -244,34 +244,67 @@
   max-width: 360px;
 }
 
-.qd-sq-tile {
-  aspect-ratio: 1 / 1;
+
+/* CTA pair — strict hierarchy: solid inverted primary, ghost secondary.
+   Identical heights/radius; icons inherit currentColor. */
+.qd-cta-row {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  flex-wrap: wrap;
+}
+@media (max-width: 480px) {
+  .qd-cta-row { flex-direction: column; align-items: stretch; }
+}
+
+.qd-cta {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 12px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  padding: 14px;
-  border: 1px solid var(--qd-border);
-  border-radius: var(--radius-card);
-  background: var(--qd-surface);
-  color: var(--qd-text);
+  font-family: var(--font-body);
+  font-size: 14px;
   cursor: pointer;
-  transition: border-color 0.15s ease, transform 0.12s ease;
+  border: 1px solid transparent;
+  transition: filter 0.15s ease, transform 0.12s ease, background 0.15s ease;
+}
+
+.qd-cta--primary {
+  background: var(--sq-cta-bg);
+  color: var(--sq-cta-fg);
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 @media (hover: hover) and (pointer: fine) {
-  .qd-sq-tile:hover { border-color: var(--qd-primary); transform: translateY(-2px); }
+  .qd-cta--primary:hover:not(:disabled) { filter: brightness(0.96); transform: translateY(-1px); }
 }
-.qd-sq-tile:active { transform: scale(0.98); }
-.qd-sq-tile b { font-size: 13.5px; font-weight: 600; }
-.qd-sq-tile span { font-size: 11px; color: var(--qd-muted); line-height: 1.4; max-width: 20ch; }
+.qd-cta--primary:active { transform: scale(0.99); }
+.qd-cta--primary:disabled { opacity: 0.55; cursor: default; transform: none; }
 
-.qd-sq-tile.is-accent { border-color: var(--qd-primary); }
-.qd-sq-tile.is-accent svg {
-  color: var(--qd-primary);
-  background: var(--qd-primary-soft);
-  border-radius: 50%;
-  padding: 8px;
-  width: 40px;
-  height: 40px;
+.qd-cta--ghost {
+  background: transparent;
+  border: 1px solid var(--qd-border);
+  color: var(--qd-text);
+  font-weight: 500;
 }
+@media (hover: hover) and (pointer: fine) {
+  .qd-cta--ghost:hover:not(:disabled) { background: var(--qd-surface-2); }
+}
+.qd-cta--ghost:disabled { opacity: 0.5; cursor: default; }
+
+/* the join-code showcase card is neutral now — accent lives on the CTA only */
+.qd-sq-codecard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 18px 22px;
+  background: var(--qd-surface-2);
+  border: 1px solid var(--qd-border);
+}
+.qd-sq-codelabel { margin: 0 0 4px; font-size: 12px; color: var(--qd-muted); }

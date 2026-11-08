@@ -102,6 +102,9 @@
 
   --qd-primary-soft: var(--qd-ramp-700);   /* selected-state fill, dark theme */
   --qd-primary-on-soft: var(--qd-ramp-150);
+  /* Squads CTA pair: solid inverted primary, per the squads design spec */
+  --sq-cta-bg: #fafafa;
+  --sq-cta-fg: #09090b;
   --qd-heat-1: var(--qd-ramp-600);
   --qd-heat-2: var(--qd-ramp-500);
   --qd-heat-3: var(--qd-ramp-baseline);
@@ -119,6 +122,8 @@
   /* Same frozen hue; light theme selects the lighter end of the ramp. */
   --qd-primary-soft: var(--qd-ramp-050);
   --qd-primary-on-soft: var(--qd-ramp-500);
+  --sq-cta-bg: #18181b;
+  --sq-cta-fg: #fafafa;
   --qd-heat-1: var(--qd-ramp-050);
   --qd-heat-2: var(--qd-ramp-100);
   --qd-heat-3: var(--qd-ramp-baseline);
