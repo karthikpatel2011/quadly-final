@@ -193,3 +193,85 @@
 }
 .qd-sq-box:focus { outline: none; border-color: var(--qd-primary); }
 @media (max-width: 420px) { .qd-sq-box { width: 42px; height: 52px; font-size: 20px; } .qd-sq-boxes { gap: 7px; } }
+
+/* No-squad hero: faces, one line of truth, two square doors. */
+.qd-sq-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 34px 20px 30px;
+}
+
+.qd-sq-faces {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 18px;
+}
+.qd-sq-face {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 3px solid var(--qd-bg);
+  object-fit: cover;
+  background: var(--qd-surface-2);
+}
+.qd-sq-face + .qd-sq-face { margin-left: -10px; }
+
+.qd-sq-headline {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 3vw, 28px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--qd-text);
+}
+
+.qd-sq-sub {
+  margin: 0 0 26px;
+  max-width: 46ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--qd-muted);
+}
+
+.qd-sq-squares {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.qd-sq-tile {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--qd-border);
+  border-radius: var(--radius-card);
+  background: var(--qd-surface);
+  color: var(--qd-text);
+  cursor: pointer;
+  transition: border-color 0.15s ease, transform 0.12s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .qd-sq-tile:hover { border-color: var(--qd-primary); transform: translateY(-2px); }
+}
+.qd-sq-tile:active { transform: scale(0.98); }
+.qd-sq-tile b { font-size: 13.5px; font-weight: 600; }
+.qd-sq-tile span { font-size: 11px; color: var(--qd-muted); line-height: 1.4; max-width: 20ch; }
+
+.qd-sq-tile.is-accent { border-color: var(--qd-primary); }
+.qd-sq-tile.is-accent svg {
+  color: var(--qd-primary);
+  background: var(--qd-primary-soft);
+  border-radius: 50%;
+  padding: 8px;
+  width: 40px;
+  height: 40px;
+}

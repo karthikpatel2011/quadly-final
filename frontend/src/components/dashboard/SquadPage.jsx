@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { apiFetch } from '../../lib/api.js';
 import './squad.css';
 import './dashboard.css';
+import { Icon } from './icons.jsx';
 
 /* Squad v2 — a private 3–5 person group with a SHARED streak built from
    verified tasks in the student accounts store (no checkboxes anywhere).
@@ -236,14 +237,28 @@ export default function SquadPage() {
     }
     return (
       <div className="qd-home">
-        <section className="qd-card qd-sq-choose" aria-label="Squad">
-          <h2 className="qd-h2">Keep each other on track.</h2>
-          <p className="qd-muted">A small private squad of 3–5 keeps the daily work honest — one shared streak, gentle nudges, nothing public.</p>
-          <div className="qd-act__actions">
-            <button type="button" className="qd-btn qd-btn--primary" onClick={() => setMode('create')}>Create a squad</button>
-            <button type="button" className="qd-btn qd-btn--ghost" onClick={() => setMode('join')}>Join with a code</button>
+        <div className="qd-sq-hero" role="note">
+          <div className="qd-sq-faces" aria-hidden="true">
+            {[3, 9, 16, 27].map((n, i) => (
+              <img key={n} className="qd-sq-face" src={`/avatars/${String(n).padStart(2, '0')}.webp`} alt="" style={{ zIndex: 4 - i }} />
+            ))}
           </div>
-        </section>
+          <p className="qd-sq-headline">Keep each other on track.</p>
+          <p className="qd-sq-sub">In a small private squad of three to five people. Keep the daily streak, gentle nudges, nothing public.</p>
+
+          <div className="qd-sq-squares" role="group" aria-label="Join or create squad">
+            <button type="button" className="qd-sq-tile is-accent" onClick={() => setMode('create')}>
+              <Icon name="squad" size={30} />
+              <b>Create a squad</b>
+              <span>Start fresh and get your code</span>
+            </button>
+            <button type="button" className="qd-sq-tile" onClick={() => setMode('join')}>
+              <Icon name="code" size={30} />
+              <b>Join a squad</b>
+              <span>Have a code from a friend</span>
+            </button>
+          </div>
+        </div>
         {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
       </div>
     );
