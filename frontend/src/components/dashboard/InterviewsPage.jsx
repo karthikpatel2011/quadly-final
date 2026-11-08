@@ -3,13 +3,13 @@ import { apiFetch } from '../../lib/api.js';
 import './practice.css';
 import './dashboard.css';
 
-/* Voice interview practice (English) — speak the answer, see the score the
-   code computed: key-point coverage, length, pace, fillers. The transcript
-   is yours to fix before scoring, and to delete after. Audio is never stored.
-   Browsers without speech recognition fall back to typing — the scoring is
-   identical, which keeps the surface honest for everyone. */
-
-const TYPE_PILL = { Behavioural: 'Behavioural', HR: 'HR' };
+/* The mock interview room — built to feel like the real thing: the question
+   is framed as the interviewer speaking it, the mic is the only furniture on
+   the stage, and the outline ("what a strong answer covers") appears only in
+   the debrief AFTER you answer. Scores are computed by code (key-point
+   coverage, length, pace, fillers). No audio is stored; the transcript is
+   yours to fix, and to delete. Typed answers are the honest fallback where
+   speech recognition is missing — identical scoring. */
 
 const authHeaders = () => ({
   'Content-Type': 'application/json',
@@ -19,12 +19,12 @@ const authHeaders = () => ({
 const SR = typeof window !== 'undefined' ? (window.SpeechRecognition || window.webkitSpeechRecognition) : null;
 
 export default function InterviewsPage() {
-  const [phase, setPhase] = useState('loading');
+  const [phase, setPhase] = useState('loading'); // loading | ready | error
   const [error, setError] = useState('');
-  const [question, setQuestion] = useState(null); // { id, topic, question, timeSec }
+  const [question, setQuestion] = useState(null);
   const [progress, setProgress] = useState({ attempted: 0, remaining: 0, total: 0 });
   const [summary, setSummary] = useState(null);
-  const [detail, setDetail] = useState(null); // outline reveal
+  const [detail, setDetail] = useState(null); // outline — debrief only
   const [listening, setListening] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const [transcript, setTranscript] = useState('');
@@ -71,7 +71,6 @@ export default function InterviewsPage() {
     clearInterval(timerRef.current);
   }, []);
 
-  // Auto-stop at three minutes: an interview answer is not a monologue.
   useEffect(() => {
     if (listening && seconds >= 180) stopRec();
   });
@@ -127,19 +126,6 @@ export default function InterviewsPage() {
     setInterim('');
   }
 
-  const revealOutline = async () => {
-    if (detail) { setDetail(null); return; }
-    setBusy(true);
-    try {
-      const res = await apiFetch(`/interview/questions/${question.id}`, { headers: authHeaders() });
-      setDetail(res.question);
-    } catch (err) {
-      setNotice(err.message);
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const submit = async () => {
     if (busy) return;
     setBusy(true);
@@ -156,7 +142,6 @@ export default function InterviewsPage() {
         remaining: Math.max(0, p.remaining - 1),
         total: p.total,
       }));
-      // Refresh only the trajectory — the fresh score panel stays up.
       apiFetch('/interview/voice/summary', { headers: authHeaders() })
         .then((s) => setSummary(s?.ok ? s : null))
         .catch(() => {});
@@ -207,178 +192,165 @@ export default function InterviewsPage() {
 
   if (phase === 'loading') {
     return (
-      <div className="qd-p">
-        <div className="qd-card skeleton" style={{ height: 64 }} />
-        <div className="qd-card skeleton" style={{ height: 300 }} />
+      <div className="qd-ivrhome">
+        <div className="qd-ivr">
+          <div className="qd-iv-room skeleton" style={{ height: 280 }} />
+        </div>
       </div>
     );
   }
 
   if (phase === 'error') {
     return (
-      <div className="qd-p" role="alert">
-        <div className="qd-card qd-p__err">
-          <h2 className="qd-h2">Interviews couldn’t load</h2>
-          <p className="qd-muted">{error}</p>
-          <button type="button" className="qd-btn qd-btn--primary" onClick={load}>Retry</button>
+      <div className="qd-ivrhome" role="alert">
+        <div className="qd-ivr">
+          <div className="qd-iv-room qd-p__err">
+            <h2 className="qd-h2">The interview room couldn’t load</h2>
+            <p className="qd-muted">{error}</p>
+            <button type="button" className="qd-btn qd-btn--primary" onClick={load}>Retry</button>
+          </div>
         </div>
       </div>
     );
   }
 
-  const summaryRows = summary?.rows ?? [];
+  const answeredById = Object.fromEntries((summary?.rows ?? []).map((r) => [r.qid, r]));
+  const retryRound = question && answeredById[question.id];
+  const counter = question
+    ? (retryRound
+        ? `Retry · ${retryRound.attempts} attempt${retryRound.attempts === 1 ? '' : 's'} so far · last ${retryRound.score}/100`
+        : `Question ${Math.min(progress.attempted + 1, progress.total)} of ${progress.total}`)
+    : '';
   const fixPlan = summary?.fixPlan ?? [];
+  const debrief = result && !result.error ? result : null;
 
   return (
-    <div className="qd-p">
-      <header className="qd-p__head">
-        <div>
-          <p className="qd-kicker">Interview practice · English</p>
-          <h2 className="qd-h2">Say the answer. The code scores it.</h2>
-          <p className="qd-muted">
-            Speak like it’s the real room — the scorer counts the key points a strong answer covers,
-            how tight it is, your pace, and the fillers. No audio is ever stored; only your transcript,
-            which you can delete below.
-          </p>
-        </div>
-        <div className="qd-pills">
-          <span className="qd-pill">{progress.attempted}/{progress.total} attempted</span>
-          {summary?.avgScore != null && <span className="qd-pill">Avg {summary.avgScore}/100</span>}
-        </div>
-      </header>
+    <div className="qd-ivrhome">
+      <div className="qd-ivr">
+        {question ? (
+          <section className="qd-iv-room" aria-label="Interview room">
+            <div className="qd-iv-roomhead">
+              <span className="qd-iv-topic">{question.topic}</span>
+              {counter && <span className="qd-iv-count">{counter}</span>}
+            </div>
 
-      <div className="qd-p__grid">
-        <aside className="qd-rail" aria-label="Your interview progress">
-          <p className="qd-rail__cap">Trajectory</p>
-          <div className="qd-rail__stats">
-            <p className="qd-rail__statnum">{summary?.answered ?? 0}<span>/{summary?.total ?? '—'}</span></p>
-            <p className="qd-rail__statlabel">questions scored{summary?.avgScore != null ? ` · avg ${summary.avgScore}/100` : ''}</p>
-          </div>
-          {fixPlan.length > 0 && (
-            <>
-              <p className="qd-rail__cap" style={{ marginTop: 8 }}>3-day fix plan</p>
-              <ol className="qd-rail__list">
-                {fixPlan.map((r, i) => (
-                  <li key={r.qid}>
-                    <button type="button" className="qd-rail__item" disabled={busy} onClick={() => loadQuestionById(r.qid)} title={r.question}>
-                      <span className="qd-rail__num">{i + 1}</span>
-                      <span className="qd-rail__body">
-                        <span className="qd-rail__type">{r.topic}</span>
-                        <span className="qd-rail__meta">last {r.score}/100 · retried {r.attempts}×</span>
-                      </span>
-                    </button>
-                  </li>
-                ))}
-              </ol>
-            </>
-          )}
-          <button type="button" className="qd-linkish" style={{ marginTop: 10 }} disabled={busy} onClick={clearTranscripts}>
-            Delete my transcripts
-          </button>
-        </aside>
+            <div className="qd-iv-interviewer">
+              <span className="qd-iv-avatar" aria-hidden="true">Q</span>
+              <span className="qd-iv-name">Interviewer</span>
+            </div>
+            <p className="qd-iv-question">“{question.question}”</p>
 
-        <div className="qd-p__main">
-          {question ? (
-            <section className="qd-card qd-act" aria-label="Interview question">
-              <div className="qd-act__kicker">
-                <span className="qd-act__type">{TYPE_PILL[question.topic] ?? question.topic}</span>
-                <span className="qd-pill qd-pill--tiny">spoken · ~2 min</span>
-              </div>
-
-              <h3 className="qd-act__q" style={{ fontSize: 19, lineHeight: 1.4 }}>{question.question}</h3>
-
-              <div className="qd-iv__recrow">
-                <button
-                  type="button"
-                  className={`qd-mic${listening ? ' is-live' : ''}`}
-                  aria-label={listening ? 'Stop recording' : 'Start answering aloud'}
-                  onClick={() => (listening ? stopRec() : startRec())}
-                  disabled={!SR && !listening}
-                >
-                  <span className="qd-mic__dot" aria-hidden="true" />
-                </button>
-                <div className="qd-iv__recmeta">
-                  {listening
-                    ? <p className="qd-iv__live">Listening… {seconds}s — answer out loud, then stop.</p>
-                    : SR
-                      ? <p className="qd-iv__livestatic">Hit the mic and speak. Stop, check what it heard, then score.</p>
-                      : <p className="qd-iv__livestatic">This browser can’t listen — type the answer below; the scoring is identical.</p>}
-                  {seconds > 0 && !listening && <p className="qd-iv__livestatic">Recorded {seconds}s.</p>}
-                  {interim && <p className="qd-iv__interim">…{interim}</p>}
-                </div>
-              </div>
-
-              <textarea
-                className="qd-sql"
-                aria-label="Your answer transcript"
-                placeholder={SR ? 'Your spoken words land here — fix mishears, then score.' : 'Type your answer — the scoring is identical to voice.'}
-                value={transcript}
-                onChange={(e) => setTranscript(e.target.value)}
-                spellCheck="false"
-              />
-              <p className="qd-muted" style={{ fontSize: 12, margin: '6px 0 0' }}>
-                {transcript.split(/\s+/).filter(Boolean).length} words{seconds > 0 ? ` · ${seconds}s` : ''}
-              </p>
-
-              <div className="qd-act__actions">
-                <button type="button" className="qd-btn qd-btn--primary" disabled={busy || transcript.trim().split(/\s+/).filter(Boolean).length < 5 || listening} onClick={submit}>
-                  Score my answer
-                </button>
-                <button type="button" className="qd-btn qd-btn--ghost" disabled={busy} onClick={revealOutline}>
-                  {detail ? 'Hide the outline' : 'What a strong answer covers'}
-                </button>
-              </div>
-              {notice && <p className="qd-error" role="alert">{notice}</p>}
-
-              {detail && (
-                <div className="qd-fb is-ok" role="note">
-                  <p className="qd-fb__head">A strong answer covers</p>
-                  <ul className="qd-outline">
-                    {detail.outline.map((o) => <li key={o}>{o}</li>)}
-                  </ul>
-                </div>
-              )}
-
-              {result && !result.error && (
-                <div className={`qd-fb ${result.score >= 60 ? 'is-ok' : result.score >= 40 ? '' : 'is-no'}`} role="status">
-                  <p className="qd-fb__head">
-                    {result.score}/100
-                    {result.firstScore != null && result.attemptNumber > 1 ? ` — before ${result.firstScore}, now ${result.score}.` : ' — first scored attempt.'}
-                  </p>
-                  <div className="qd-bar" role="img" aria-label={`Score ${result.score} of 100`}>
-                    <i style={{ width: `${result.score}%` }} />
-                  </div>
-                  <p className="qd-fb__note"><b>Key points:</b> {result.breakdown.keyPointsHit}/{result.breakdown.keyPointsTotal} covered.</p>
-                  {result.breakdown.hitPoints?.map((p) => <p key={p} className="qd-fb__note">✓ {p}</p>)}
-                  {result.breakdown.missedPoints?.map((p) => <p key={p} className="qd-fb__note">✗ {p}</p>)}
-                  <p className="qd-fb__note">
-                    Length: {result.breakdown.wordCount} words (target ~{result.breakdown.targetWords})
-                    {result.breakdown.wpm ? ` · pace ${result.breakdown.wpm} wpm` : ''} · filler words: {result.breakdown.fillers}
-                  </p>
-                  <p className="qd-fb__note">Time the answer aloud again — the same question, tighter. That’s the rep that moves interviews.</p>
-                  <div className="qd-act__actions">
-                    <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setResult(null); setTranscript(''); setSeconds(0); setInterim(''); }}>
-                      Answer again
-                    </button>
-                    <button type="button" className="qd-btn qd-btn--primary" onClick={nextQuestion}>
-                      {progress.remaining > 0 ? 'Next question' : 'Recheck summary'}
-                    </button>
-                  </div>
-                </div>
-              )}
-            </section>
-          ) : (
-            <div className="qd-card qd-done">
-              <p className="qd-kicker">Interview practice</p>
-              <h2 className="qd-h2">Every question has a score.</h2>
-              <p className="qd-muted">
-                {progress.total > 0
-                  ? 'Answer again from the fix plan on the left — or re-attempt any question by reloading; the strongest attempts stay on record.'
-                  : 'The question bank is unavailable right now.'}
+            <div className="qd-iv-stagefoot">
+              <button
+                type="button"
+                className={`qd-mic${listening ? ' is-live' : ''}`}
+                aria-label={listening ? 'Stop answering' : 'Start answering aloud'}
+                onClick={() => (listening ? stopRec() : startRec())}
+                disabled={Boolean(debrief)}
+              >
+                <span className="qd-mic__dot" aria-hidden="true" />
+              </button>
+              <p className="qd-iv-stagestatus">
+                {listening
+                  ? <>Listening — {seconds}s. Answer out loud; stop when you’ve finished.</>
+                  : SR
+                    ? <>Hit the mic, say your answer, stop. One take counts.</>
+                    : <>This browser can’t listen — write the answer below; it scores identically.</>}
+                {seconds > 0 && !listening ? ` Recorded ${seconds}s.` : ''}
               </p>
             </div>
-          )}
+          </section>
+        ) : (
+          <section className="qd-iv-room" aria-label="Round complete">
+            <div className="qd-iv-roomhead">
+              <span className="qd-iv-topic">Round complete</span>
+              <span className="qd-iv-count">{progress.attempted}/{progress.total} scored</span>
+            </div>
+            <p className="qd-iv-question">“That’s the round. Take this into the fix plan below.”</p>
+          </section>
+        )}
+
+        {question && (
+          <section className="qd-iv-transcriptbox" aria-label="Your answer transcript">
+            <p className="qd-iv-transcap">
+              {SR ? 'Your words land here — fix any mishears, then submit for scoring.' : 'Type your answer — the scoring is identical to voice.'}
+            </p>
+            <textarea
+              className="qd-sql"
+              value={transcript}
+              onChange={(e) => setTranscript(e.target.value)}
+              placeholder="Speak your answer above, or type it here…"
+              spellCheck="false"
+            />
+            <div className="qd-act__actions" style={{ marginTop: 10 }}>
+              <button type="button" className="qd-btn qd-btn--primary" disabled={busy || Boolean(debrief) || listening || transcript.trim().split(/\s+/).filter(Boolean).length < 5} onClick={submit}>
+                Submit — get scored
+              </button>
+              <span className="qd-iv-words">{transcript.split(/\s+/).filter(Boolean).length} words{seconds > 0 && !listening ? ` · ${seconds}s` : ''}</span>
+            </div>
+            {notice && <p className="qd-error" role="alert">{notice}</p>}
+          </section>
+        )}
+
+        {debrief && (
+          <section className={`qd-fb ${debrief.score >= 60 ? 'is-ok' : debrief.score >= 40 ? '' : 'is-no'}`} role="status" aria-label="Debrief">
+            <p className="qd-fb__head">
+              Debrief — {debrief.score}/100
+              {debrief.firstScore != null && debrief.attemptNumber > 1 ? ` (before ${debrief.firstScore})` : ' (first attempt)'}
+            </p>
+            <div className="qd-bar" role="img" aria-label={`Score ${debrief.score} of 100`}>
+              <i style={{ width: `${debrief.score}%` }} />
+            </div>
+            <p className="qd-fb__note"><b>Key points:</b> {debrief.breakdown.keyPointsHit}/{debrief.breakdown.keyPointsTotal} covered.</p>
+            {debrief.breakdown.hitPoints?.map((p) => <p key={p} className="qd-fb__note">✓ {p}</p>)}
+            {debrief.breakdown.missedPoints?.map((p) => <p key={p} className="qd-fb__note">✗ {p}</p>)}
+            <p className="qd-fb__note">
+              Length: {debrief.breakdown.wordCount} of ~{debrief.breakdown.targetWords} words
+              {debrief.breakdown.wpm ? ` · pace ${debrief.breakdown.wpm} wpm` : ''} · fillers: {debrief.breakdown.fillers}
+            </p>
+            {detail && (
+              <>
+                <p className="qd-fb__head" style={{ marginTop: 12 }}>What a strong answer covers</p>
+                <ul className="qd-outline">
+                  {detail.outline.map((o) => <li key={o}>{o}</li>)}
+                </ul>
+              </>
+            )}
+            <div className="qd-act__actions">
+              {!detail && (
+                <button type="button" className="qd-btn qd-btn--ghost" disabled={busy} onClick={async () => {
+                  setBusy(true);
+                  try {
+                    const res = await apiFetch(`/interview/questions/${question.id}`, { headers: authHeaders() });
+                    setDetail(res.question);
+                  } finally { setBusy(false); }
+                }}>
+                  Show what a strong answer covers
+                </button>
+              )}
+              <button type="button" className="qd-btn qd-btn--ghost" onClick={() => { setResult(null); setTranscript(''); setSeconds(0); setInterim(''); }}>
+                Answer again
+              </button>
+              {progress.remaining > 0 && (
+                <button type="button" className="qd-btn qd-btn--primary" onClick={nextQuestion}>Next question</button>
+              )}
+            </div>
+          </section>
+        )}
+
+        <div className="qd-iv-strip">
+          <span className="qd-iv-strippill">{summary?.answered ?? 0}/{summary?.total ?? '—'} scored</span>
+          {summary?.avgScore != null && <span className="qd-iv-strippill">avg {summary.avgScore}/100</span>}
+          {fixPlan.map((r, i) => (
+            <button key={r.qid} type="button" className="qd-iv-chip" disabled={busy} onClick={() => loadQuestionById(r.qid)} title={r.question}>
+              Fix {i + 1}: {String(r.score)}/100 — {r.question.length > 34 ? r.question.slice(0, 34) + '…' : r.question}
+            </button>
+          ))}
+          <button type="button" className="qd-linkish" disabled={busy} onClick={clearTranscripts}>
+            Delete my transcripts
+          </button>
         </div>
+        <p className="qd-iv-privacy">No audio is stored — only your transcript, deletable above. Answers are scored by code: key-point coverage, length, pace, fillers.</p>
       </div>
     </div>
   );

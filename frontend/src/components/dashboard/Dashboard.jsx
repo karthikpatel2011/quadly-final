@@ -4,14 +4,16 @@ import { Icon } from './icons.jsx';
 import './dashboard.css';
 import Logo from '../Logo.jsx';
 import PracticePage from './PracticePage.jsx';
+import ReplayPage from './ReplayPage.jsx';
 import InterviewsPage from './InterviewsPage.jsx';
 import ContestsPage from './ContestsPage.jsx';
-import ReplayPage from './ReplayPage.jsx';
 
-/* Signed-in dashboard shell: chrome plus the routes that have shipped. The
-   Practice workspace grows one entry per landed surface; unknown routes
-   resolve back to Home — no placeholder text, no dead links. The 401 gate
-   and the verified sign-out stay. */
+/* Signed-in dashboard shell: chrome plus the routes that have shipped. Two
+   workspaces, kept deliberately separate (student's call): Practice = the
+   skill-repair loop (daily + mistakes); Interviews = anything interview-shaped
+   (the mock interview room and the Saturday mock drive). Unknown routes fall
+   back to Home; legacy paths keep working via ROUTE_ALIASES. The 401 gate and
+   the verified sign-out stay. */
 
 const THEME_KEY = 'quadly:theme';
 
@@ -22,18 +24,34 @@ const NAV_ITEMS = [
     label: 'Practice',
     children: [
       { id: 'practice/daily', label: 'Daily practice' },
-      { id: 'practice/interviews', label: 'Interviews' },
-      { id: 'practice/contests', label: 'Contests' },
       { id: 'practice/replay', label: 'Mistake replay' },
+    ],
+  },
+  {
+    id: 'interviews',
+    label: 'Interviews',
+    children: [
+      { id: 'interviews/mock', label: 'Mock interview' },
+      { id: 'interviews/drive', label: 'Mock drive' },
     ],
   },
 ];
 
+const ROUTE_ALIASES = {
+  // Pre-split deep links keep working after the Practice/Interviews divider.
+  'practice/interviews': 'interviews/mock',
+  'practice/contests': 'interviews/drive',
+};
+
+const NAV_LABELS = Object.fromEntries(NAV_ITEMS.flatMap((n) => [n, ...(n.children ?? [])]).map((n) => [n.id, n.label]));
+
 function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '');
   if (path === '' || path === '/app') return 'app';
-  const sub = path.replace(/^\/app\/?/, ''); // '' | 'practice' | 'practice/daily' | 'practice/interviews' | …
+  const sub = path.replace(/^\/app\/?/, '');
+  if (ROUTE_ALIASES[sub]) return ROUTE_ALIASES[sub];
   if (sub === 'practice') return 'practice/daily';
+  if (sub === 'interviews') return 'interviews/mock';
   for (const n of NAV_ITEMS) {
     if (n.children?.some((c) => c.id === sub)) return sub;
   }
@@ -43,6 +61,7 @@ function routeFromLocation() {
 function navPath(id) {
   if (id === 'app') return '/app';
   if (id === 'practice/daily') return '/app/practice';
+  if (id === 'interviews/mock') return '/app/interviews';
   return `/app/${id}`;
 }
 
@@ -113,7 +132,7 @@ export default function Dashboard() {
   }, [theme]);
 
   useEffect(() => {
-    document.title = route === 'app' ? 'Quadly — Home' : `Quadly — ${(NAV_ITEMS.find((n) => n.id === route.split('/')[0])?.children ?? NAV_ITEMS).find((n) => n.id === route)?.label ?? 'Quadly'}`;
+    document.title = route === 'app' ? 'Quadly — Home' : `Quadly — ${NAV_LABELS[route] ?? 'Quadly'}`;
   }, [route]);
 
   useEffect(() => {
@@ -311,11 +330,11 @@ export default function Dashboard() {
         />
       )}
 
-      {/* Home waits on the rebuilt feed; the Practice surfaces are live. */}
+      {/* Home waits on the rebuilt feed; the two workspaces are live. */}
       {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
-      {route === 'practice/interviews' && <main className="qd-home"><InterviewsPage /></main>}
-      {route === 'practice/contests' && <main className="qd-home"><ContestsPage /></main>}
       {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
+      {route === 'interviews/mock' && <main className="qd-ivrhome"><InterviewsPage /></main>}
+      {route === 'interviews/drive' && <main className="qd-home"><ContestsPage /></main>}
       {route === 'app' && <main className="qd-home" aria-label="Home" />}
     </div>
   );
