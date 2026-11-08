@@ -193,6 +193,14 @@
 .qd-bar { height: 6px; border-radius: var(--radius-pill); background: var(--qd-surface-2); overflow: hidden; margin: 10px 0 4px; }
 .qd-bar i { display: block; height: 100%; border-radius: inherit; background: var(--qd-primary); }
 
+/* Contests (mock drive) */
+.qd-drive { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px 22px; }
+.qd-drive__day { margin: 0 0 4px; font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.qd-drive__cta { display: flex; align-items: center; gap: 10px; }
+.qd-live { color: var(--color-success); border-color: var(--color-success); }
+.qd-p__note { padding: 14px 18px; }
+.qd-p__note .qd-muted { margin: 0; font-size: 13px; line-height: 1.55; }
+
 @media (max-width: 880px) {
   .qd-p__grid { grid-template-columns: 1fr; }
   .qd-rail { position: static; }

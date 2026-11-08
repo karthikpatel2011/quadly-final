@@ -5,6 +5,8 @@ import './dashboard.css';
 import Logo from '../Logo.jsx';
 import PracticePage from './PracticePage.jsx';
 import InterviewsPage from './InterviewsPage.jsx';
+import ContestsPage from './ContestsPage.jsx';
+import ReplayPage from './ReplayPage.jsx';
 
 /* Signed-in dashboard shell: chrome plus the routes that have shipped. The
    Practice workspace grows one entry per landed surface; unknown routes
@@ -21,6 +23,8 @@ const NAV_ITEMS = [
     children: [
       { id: 'practice/daily', label: 'Daily practice' },
       { id: 'practice/interviews', label: 'Interviews' },
+      { id: 'practice/contests', label: 'Contests' },
+      { id: 'practice/replay', label: 'Mistake replay' },
     ],
   },
 ];
@@ -310,6 +314,8 @@ export default function Dashboard() {
       {/* Home waits on the rebuilt feed; the Practice surfaces are live. */}
       {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
       {route === 'practice/interviews' && <main className="qd-home"><InterviewsPage /></main>}
+      {route === 'practice/contests' && <main className="qd-home"><ContestsPage /></main>}
+      {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
       {route === 'app' && <main className="qd-home" aria-label="Home" />}
     </div>
   );

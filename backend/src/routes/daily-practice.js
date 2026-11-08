@@ -467,6 +467,41 @@ router.post('/daily/run', async (req, res) => {
 
 // The graded answer. The first recorded attempt IS the score; retries return
 // the same feedback contract but never overwrite the record.
+// Shared grader for both surfaces (the daily set and mistake replay): same
+// answer keys, same feedback contract, same safety rails.
+function gradeSubmission(item, body = {}) {
+  if (MCQ_TYPES.has(item.type)) {
+    const choice = body?.choice;
+    if (!Number.isInteger(choice) || choice < 0 || choice > 3) {
+      return { error: 'Pick one of the four options.', status: 400 };
+    }
+    const correct = choice === item.answerIndex;
+    return { grading: {
+      correct,
+      answerIndex: item.answerIndex,
+      explanation: item.explanation,
+      optionNotes: item.optionNotes ?? null,
+      chosenNote: correct ? null : (item.optionNotes?.[choice] ?? null),
+      takeaway: item.takeaway,
+    } };
+  }
+  if (item.type === 'write-query') {
+    const result = runSelect(item, body?.sql);
+    if (result.error) return { error: result.error, status: 400 };
+    const correct = rowsEqual(result.rows, item.expected?.rows ?? []);
+    return { grading: {
+      correct,
+      yourColumns: result.columns,
+      yourRows: result.rows,
+      expectedColumns: item.expected?.columns ?? [],
+      expectedRows: item.expected?.rows ?? [],
+      explanation: item.explanation,
+      takeaway: item.takeaway,
+    } };
+  }
+  return { error: 'Unknown activity type.', status: 400 };
+}
+
 router.post('/daily/answer', async (req, res) => {
   const session = requireUser(req, res);
   if (!session) return;
@@ -498,39 +533,11 @@ router.post('/daily/answer', async (req, res) => {
   const rec = todayRecord(s, dayKey);
   const alreadyRecording = rec[item.id] !== undefined;
 
-  let grading;
-  if (MCQ_TYPES.has(item.type)) {
-    const choice = req.body?.choice;
-    if (!Number.isInteger(choice) || choice < 0 || choice > 3) {
-      return res.status(400).json({ error: 'Pick one of the four options.' });
-    }
-    const correct = choice === item.answerIndex;
-    grading = {
-      correct,
-      answerIndex: item.answerIndex,
-      explanation: item.explanation,
-      optionNotes: item.optionNotes ?? null,
-      chosenNote: correct ? null : (item.optionNotes?.[choice] ?? null),
-      takeaway: item.takeaway,
-    };
-  } else if (item.type === 'write-query') {
-    const result = runSelect(item, req.body?.sql);
-    if (result.error) {
-      return res.status(400).json({ ok: false, error: result.error });
-    }
-    const correct = rowsEqual(result.rows, item.expected?.rows ?? []);
-    grading = {
-      correct,
-      yourColumns: result.columns,
-      yourRows: result.rows,
-      expectedColumns: item.expected?.columns ?? [],
-      expectedRows: item.expected?.rows ?? [],
-      explanation: item.explanation,
-      takeaway: item.takeaway,
-    };
-  } else {
-    return res.status(400).json({ error: 'Unknown activity type.' });
+  const graded = gradeSubmission(item, req.body);
+  if (graded.error) {
+    return res.status(graded.status).json({ ok: false, error: graded.error });
   }
+  const grading = graded.grading;
 
   if (!alreadyRecording) {
     rec[item.id] = {
@@ -595,6 +602,64 @@ router.get('/daily/summary', async (req, res) => {
 });
 
 const itemsMinutes = (ids, byId) => ids.reduce((n, id) => n + (byId.get(id)?.minutes ?? 3), 0);
+
+// Mistake replay (PRD §7: redo until you cannot) — on-demand redo sessions
+// for concepts missed in the last two weeks. Replay attempts never touch the
+// daily score or the plan; the first correct replay retires the concept from
+// the 1/3/7-day review queue.
+router.get('/replay', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const { byId } = await bankById();
+  const state = await getState();
+  const s = studentFor(state, session.email);
+  const dayKey = istDayKey();
+  const items = [];
+  for (const [concept, miss] of Object.entries(s.conceptMiss || {})) {
+    const diff = dayDiff(miss.date, dayKey);
+    if (diff < 0 || diff > 14) continue;
+    const activity = byId.get(miss.activityId);
+    if (activity) items.push({ activity, concept, diff });
+  }
+  items.sort((x, y) => y.diff - x.diff); // the oldest miss comes back first
+  const capped = items.slice(0, 8);
+  res.json({
+    ok: true,
+    total: capped.length,
+    items: capped.map(({ activity, concept, diff }) => ({
+      ...sanitizeItem(activity),
+      concept,
+      missedDaysAgo: diff,
+      clearedToday: Boolean(s.replay?.[dayKey]?.[activity.id]?.correct),
+    })),
+  });
+});
+
+router.post('/replay/answer', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const { byId } = await bankById();
+  const item = byId.get(String(req.body?.id || ''));
+  if (!item) return res.status(404).json({ error: 'That activity is not in the bank.' });
+  const state = await getState();
+  const s = studentFor(state, session.email);
+  const dayKey = istDayKey();
+  const graded = gradeSubmission(item, req.body);
+  if (graded.error) return res.status(graded.status).json({ ok: false, error: graded.error });
+  const grading = graded.grading;
+  s.replay = s.replay || {};
+  s.replay[dayKey] = s.replay[dayKey] || {};
+  s.replay[dayKey][item.id] = { correct: grading.correct, at: new Date().toISOString() };
+  const replayKeys = Object.keys(s.replay).sort();
+  while (replayKeys.length > 35) delete s.replay[replayKeys.shift()];
+  let cleared = false;
+  if (grading.correct && s.conceptMiss?.[item.concept]) {
+    delete s.conceptMiss[item.concept];
+    cleared = true;
+  }
+  try { await persistState(state); } catch { /* cache holds it */ }
+  res.json({ ok: true, ...grading, cleared });
+});
 
 // Pure selection/leveling rules, exported for the engine's tests.
 export { buildSet, deriveLevel, pickReview };
