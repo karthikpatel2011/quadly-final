@@ -85,3 +85,23 @@
   color: var(--color-success);
   font-size: 13px;
 }
+
+/* Single card, two options: create | join with a code */
+.qd-sq-join { padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 4px; }
+.qd-sq-join > .qd-muted { margin: 0 0 12px; }
+.qd-sq-option { display: flex; flex-direction: column; gap: 10px; }
+.qd-sq-optiontitle { font-size: 13px; font-weight: 600; color: var(--qd-text); }
+.qd-sq-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 18px 0 16px;
+  color: var(--qd-muted);
+  font-size: 12px;
+}
+.qd-sq-divider::before, .qd-sq-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--qd-border);
+}
+.qd-sq-coderow { display: flex; gap: 10px; }
+.qd-sq-coderow .qd-sq-codeinput { flex: 1; }

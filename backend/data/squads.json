@@ -23,5 +23,14 @@
     "nudgesReceived": {
       "sqa-1794143526763@test.quadly": 1
     }
+  },
+  "7FF7UW": {
+    "name": "Night Owls",
+    "members": [
+      "sqv-1794144635695@test.quadly"
+    ],
+    "createdAt": "2026-11-08T13:30:38.655Z",
+    "nudgesSent": {},
+    "nudgesReceived": {}
   }
 }

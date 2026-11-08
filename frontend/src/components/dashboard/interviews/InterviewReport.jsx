@@ -124,23 +124,19 @@ export default function InterviewReport() {
           </div>
         ))}
 
-        <div className="qd-iv-cols">
-          <div className="qd-iv-room">
-            <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Top strengths</h3>
-            <ul className="qd-outline">{(rep.strengths ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
-          </div>
-          <div className="qd-iv-room">
-            <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Gaps to close</h3>
-            <ul className="qd-outline">{(rep.gaps ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
-          </div>
+        {/* One debrief card: strengths, gaps, and the next plan are one story. */}
+        <div className="qd-iv-room">
+          <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Top strengths</h3>
+          <ul className="qd-outline">{(rep.strengths ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
+          <h3 className="qd-iv-section">Gaps to close</h3>
+          <ul className="qd-outline">{(rep.gaps ?? []).map((x) => <li key={x}>{x}</li>)}</ul>
+          {rep.nextSteps?.length > 0 && (
+            <>
+              <h3 className="qd-iv-section">Your plan for the next attempt</h3>
+              <ul className="qd-outline">{rep.nextSteps.map((x) => <li key={x}>{x}</li>)}</ul>
+            </>
+          )}
         </div>
-
-        {rep.nextSteps?.length > 0 && (
-          <div className="qd-iv-room">
-            <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Your plan for the next attempt</h3>
-            <ul className="qd-outline">{rep.nextSteps.map((x) => <li key={x}>{x}</li>)}</ul>
-          </div>
-        )}
 
         <div className="qd-act__actions">
           <button type="button" className="qd-btn qd-btn--primary" onClick={() => gotoRoute('/app/interviews/setup')}>Run another interview</button>

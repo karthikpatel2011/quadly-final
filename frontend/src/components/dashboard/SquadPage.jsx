@@ -103,10 +103,11 @@ export default function SquadPage() {
       {notice && <p className="qd-sq-notice" role="status">{notice}</p>}
 
       {!squad ? (
-        <div className="qd-iv-cols">
-          <section className="qd-card qd-sq-panel" aria-label="Create a squad">
-            <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Start a squad</h3>
-            <p className="qd-muted">Get a six-character code and share it with up to three friends.</p>
+        <section className="qd-card qd-sq-join" aria-label="Start or join a squad">
+          <p className="qd-muted">Create a squad and share the code with up to three friends — or join theirs. Same streak, same rules.</p>
+
+          <div className="qd-sq-option">
+            <b className="qd-sq-optiontitle">Start a new one</b>
             <input
               className="qd-sq-input"
               placeholder="Squad name (optional)"
@@ -122,28 +123,31 @@ export default function SquadPage() {
             >
               {busy ? 'Working…' : 'Create my squad'}
             </button>
-          </section>
-          <section className="qd-card qd-sq-panel" aria-label="Join a squad">
-            <h3 className="qd-iv-section" style={{ marginTop: 0 }}>Join with a code</h3>
-            <p className="qd-muted">Ask your friend for their six-character squad code.</p>
-            <input
-              className="qd-sq-input qd-sq-codeinput"
-              placeholder="A1B2C3"
-              value={code}
-              maxLength={6}
-              onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
-            />
-            <button
-              type="button"
-              className="qd-btn qd-btn--block"
-              disabled={busy || code.trim().length !== 6}
-              onClick={() => act('/squad/join', { code: code.trim() }, 'You’re in the squad.')}
-            >
-              {busy ? 'Joining…' : 'Join squad'}
-            </button>
-          </section>
-        </div>
-      ) : (
+          </div>
+
+          <div className="qd-sq-divider" role="separator"><span>or join with a code</span></div>
+
+          <div className="qd-sq-option">
+            <div className="qd-sq-coderow">
+              <input
+                className="qd-sq-input qd-sq-codeinput"
+                placeholder="A1B2C3"
+                value={code}
+                maxLength={6}
+                onChange={(e) => setCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
+              />
+              <button
+                type="button"
+                className="qd-btn"
+                disabled={busy || code.trim().length !== 6}
+                onClick={() => act('/squad/join', { code: code.trim() }, 'You\u2019re in the squad.')}
+              >
+                Join
+              </button>
+            </div>
+          </div>
+        </section>
+            ) : (
         <>
           <section className="qd-card qd-sq-codecard" aria-label="Squad code">
             <div>
