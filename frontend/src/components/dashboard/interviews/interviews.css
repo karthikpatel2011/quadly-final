@@ -329,3 +329,181 @@
   .qd-iv-room { padding: 18px 14px; }
   .qd-iv-summary span { flex-basis: 110px; }
 }
+
+/* ============================================================
+   Interview Studio dashboard — warm obsidian + amber glow.
+   Rich in three places: the mode bento, the custom launcher, and
+   the telemetry footer. Everything else stays quiet.
+   ============================================================ */
+
+.qd-ivs {
+  position: relative;
+  padding: 30px clamp(14px, 3vw, 40px) 96px;
+  background:
+    radial-gradient(640px 240px at 50% -80px, rgba(245, 158, 11, 0.07), transparent 70%),
+    #0d0c11;
+}
+.qd-ivs-in { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; position: relative; }
+
+.qm-card {
+  background: linear-gradient(to-b, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-top-color: rgba(255, 255, 255, 0.18);
+  border-radius: 16px;
+  padding: 22px;
+  color: #e2e8f0;
+}
+.qm-title { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 26px; letter-spacing: -0.01em; color: #ffffff; }
+.qm-dim { margin: 0; color: rgba(255, 255, 255, 0.55); font-size: 13px; line-height: 1.6; }
+.qm-ctasmall { max-width: 160px; }
+
+.qd-ivs-head {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.qd-ivs-eyebrow {
+  margin: 0 0 2px;
+  font-family: var(--qd-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(251, 191, 36, 0.9);
+}
+.qd-ivs-title { margin: 2px 0 0; }
+.qd-ivs-sub { margin: 6px 0 0; max-width: 40rem; }
+
+.qd-ivs-engpill {
+  display: flex; align-items: center; gap: 10px;
+  max-width: 300px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+}
+.qd-ivs-engdot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #fbbf24;
+  animation: qd-engpulse 1.8s ease-in-out infinite;
+  flex: 0 0 auto;
+}
+.qd-ivs-engdot.is-ai { background: #34d399; animation: none; }
+@keyframes qd-engpulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .qd-ivs-engdot { animation: none; } }
+.qd-ivs-engpill b { display: block; font-size: 12.5px; color: #f4f4f5; }
+.qd-ivs-engnote { display: block; font-family: var(--qd-mono); font-size: 10.5px; color: rgba(255, 255, 255, 0.45); margin-top: 2px; }
+
+/* Bento: three mode cards */
+.qd-ivs-bento { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+.qd-ivs-card {
+  position: relative;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 18px;
+  text-align: left;
+  padding: 20px;
+  border-radius: 16px;
+  background: linear-gradient(to-b, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: inherit;
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s ease;
+  min-height: 150px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .qd-ivs-card:hover { border-color: rgba(255, 255, 255, 0.25); transform: translateY(-2px); }
+  .qd-ivs-card--featured:hover {
+    border-color: rgba(251, 191, 36, 0.6);
+    box-shadow: 0 0 35px -10px rgba(245, 158, 11, 0.3);
+  }
+}
+.qd-ivs-card--featured {
+  background: linear-gradient(to-b, rgba(245, 158, 11, 0.12), rgba(255, 255, 255, 0.02));
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.qd-ivs-cardtop { display: flex; align-items: center; gap: 10px; }
+.qd-ivs-arrow {
+  margin-left: auto;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 15px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+.qd-ivs-card:hover .qd-ivs-arrow { color: rgba(251, 191, 36, 0.9); transform: translateX(2px); }
+.qd-ivs-badgetxt,.qd-ivs-dur {
+  font-family: var(--qd-mono);
+  font-size: 11px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.qd-ivs-badgetxt {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fcd34d;
+}
+.qd-ivs-card:nth-child(n + 2) .qd-ivs-badgetxt {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+}
+.qd-ivs-dur { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); color: #94a3b8; }
+.qd-ivs-wave { display: inline-flex; align-items: flex-end; gap: 3px; height: 20px; }
+.qd-ivs-wave i { width: 3px; border-radius: 2px; background: rgba(251, 191, 36, 0.7); }
+.qd-ivs-wave i:nth-child(1) { height: 40%; }
+.qd-ivs-wave i:nth-child(2) { height: 80%; }
+.qd-ivs-wave i:nth-child(3) { height: 55%; }
+.qd-ivs-wave i:nth-child(4) { height: 95%; }
+.qd-ivs-wave i:nth-child(5) { height: 30%; }
+.qd-ivs-cardtxt { display: flex; flex-direction: column; gap: 4px; }
+.qd-ivs-cardtxt b { font-size: 14.5px; font-weight: 600; color: #ffffff; }
+.qd-ivs-cardtxt span { font-size: 11.5px; color: rgba(255, 255, 255, 0.5); line-height: 1.5; }
+
+/* Custom room launcher */
+.qd-ivs-custom {
+  display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+  padding: 16px 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.03);
+}
+.qd-ivs-custom p { margin: 0; font-size: 13px; color: rgba(255, 255, 255, 0.6); }
+.qd-ivs-cta {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 12px;
+  border: 0;
+  background: #f59e0b;
+  color: #000000;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 0 20px -5px rgba(245, 158, 11, 0.5);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .qd-ivs-cta:hover { background: #fbbf24; transform: translateY(-1px); }
+}
+.qd-ivs-cta:active { transform: scale(0.99); }
+
+/* Recent sessions + telemetry footer */
+.qd-ivs-recenthead { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.qd-ivs-recenttitle { margin: 0; font-size: 13.5px; font-weight: 500; color: rgba(255, 255, 255, 0.8); }
+.qd-ivs-telemetry {
+  font-family: var(--qd-mono);
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.4);
+  font-variant-numeric: tabular-nums;
+}
+.qd-ivs-empty {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.01);
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.45);
+}
+.qd-ivs-emptyarrow { color: rgba(255, 255, 255, 0.3); }
+
+.qd-ivs-score { color: #6ee7b7; border-color: rgba(52, 211, 153, 0.35); }
+.qd-ivs-resume { background: #f59e0b; border-color: #f59e0b; color: #000; font-weight: 600; }
+.qd-iv-session { background: linear-gradient(to-b, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.01)); border-color: rgba(255, 255, 255, 0.08); }

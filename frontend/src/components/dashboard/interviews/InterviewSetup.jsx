@@ -74,6 +74,14 @@ export default function InterviewSetup() {
   const [notice, setNotice] = useState('');
   const [creating, setCreating] = useState(false);
 
+  // Bento presets from the studio dashboard: technical deep-dive and the quick
+  // HR round land with their type and interviewer style pre-selected.
+  useEffect(() => {
+    const preset = new URLSearchParams(window.location.search).get('preset');
+    if (preset === 'technical') { setTypes(['Technical', 'System Design']); setPersona('strict'); }
+    if (preset === 'hr') { setTypes(['HR', 'Behavioral']); setPersona('friendly'); }
+  }, []);
+
   // device check
   const [devices, setDevices] = useState({ cam: 'idle', mic: 'idle' }); // idle|granted|denied
   const [micLevel, setMicLevel] = useState(0);
