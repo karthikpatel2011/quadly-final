@@ -3,8 +3,6 @@ import { apiFetch } from '../../lib/api.js';
 import { Icon } from './icons.jsx';
 import './dashboard.css';
 import Logo from '../Logo.jsx';
-import PracticePage from './PracticePage.jsx';
-import ReplayPage from './ReplayPage.jsx';
 import SquadPage from './SquadPage.jsx';
 import ContestssPage from './ContestsPage.jsx';
 import InterviewsDashboard from './interviews/InterviewsDashboard.jsx';
@@ -23,14 +21,6 @@ const THEME_KEY = 'quadly:theme';
 
 const NAV_ITEMS = [
   { id: 'app', label: 'Home' },
-  {
-    id: 'practice',
-    label: 'Practice',
-    children: [
-      { id: 'practice/daily', label: 'Daily practice' },
-      { id: 'practice/replay', label: 'Mistake replay' },
-    ],
-  },
   { id: 'squad', label: 'Squad' },
   {
     id: 'interviews',
@@ -59,7 +49,6 @@ function routeFromLocation() {
   if (path === '' || path === '/app') return 'app';
   const sub = path.replace(/^\/app\/?/, '');
   if (ROUTE_ALIASES[sub]) return ROUTE_ALIASES[sub];
-  if (sub === 'practice') return 'practice/daily';
   if (sub === 'interviews') return 'interviews/dash';
   for (const n of NAV_ITEMS) {
     if (n.id === sub || n.children?.some((c) => c.id === sub)) return sub;
@@ -70,7 +59,6 @@ function routeFromLocation() {
 
 function navPath(id) {
   if (id === 'app') return '/app';
-  if (id === 'practice/daily') return '/app/practice';
   if (id === 'interviews/mock') return '/app/interviews';
   return `/app/${id}`;
 }
@@ -348,8 +336,6 @@ export default function Dashboard() {
       )}
 
       {/* Home waits on the rebuilt feed; the two workspaces are live. */}
-      {route === 'practice/daily' && <main className="qd-home"><PracticePage /></main>}
-      {route === 'practice/replay' && <main className="qd-home"><ReplayPage /></main>}
       {route === 'squad' && <main className="qd-home"><SquadPage /></main>}
       {route === 'interviews/dash' && <main className="qd-ivrhome"><InterviewsDashboard /></main>}
       {route === 'interviews/setup' && <main className="qd-ivrhome"><InterviewSetup /></main>}
