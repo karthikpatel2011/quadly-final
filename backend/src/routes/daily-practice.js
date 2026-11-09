@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { z } from 'zod';
 import { readFile, writeFile, rename } from 'node:fs/promises';
 import { DatabaseSync } from 'node:sqlite';
 import { fileURLToPath } from 'node:url';
@@ -226,6 +227,15 @@ function buildSet(email, profile, bank, student, level) {
     }
   };
 
+  // Live-incident anchor: one flagged incident leads the queue for the day
+  // when the track/tier matches, never twice.
+  const incidentPool = byTrack.filter((a) => a.incident && !excludeIds.has(a.id)
+    && Math.abs(a.difficulty - level) <= 1);
+  if (incidentPool.length > 0) {
+    const pick = seededShuffle(incidentPool, seed + 7)[0];
+    push(pick);
+  }
+
   // Prefer never-seen activities, then recently-but-not-today mastered ones,
   // finally widen concepts/difficulty — the time still gets filled.
   fill(seededShuffle(pool.filter((a) => !recentGood.has(a.id)), seed));
@@ -358,6 +368,36 @@ async function bankById() {
   return { bank, byId: new Map(bank.map((a) => [a.id, a])) };
 }
 
+
+// User-set practice scope. Takes effect immediately when nothing has been
+// answered today; otherwise it queues for tomorrow's set (the frozen set is
+// never rewritten mid-day).
+router.post('/daily/prefs', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const schema = z.object({
+    tier: z.enum(['beginner', 'intermediate', 'expert']).optional(),
+    track: z.enum(['auto', 'Software Engineering', 'Cyber Security', 'AI & ML']).optional(),
+  });
+  const parsed = schema.safeParse(req.body || {});
+  if (!parsed.success) return res.status(400).json({ error: 'Unknown tier or track.' });
+  const state = await getState();
+  const s = studentFor(state, session.email);
+  const dayKey = istDayKey();
+  const answered = Object.keys(s.done[dayKey] || {}).length > 0;
+  s.prefs = s.prefs || {};
+  if (parsed.data.tier) s.prefs.tier = parsed.data.tier;
+  if (parsed.data.track) s.prefs.track = parsed.data.track;
+  s.prefs.at = new Date().toISOString();
+  let regenerated = false;
+  if (!answered) delete s.sets[dayKey]; // safe rebuild with the new scope
+  else regenerated = false;
+  await persistState(state).catch(() => {});
+  res.json({ ok: true, prefs: s.prefs, takesEffectToday: !answered });
+});
+
+export const TIER_LEVEL = { beginner: 1, intermediate: 2, expert: 3 };
+
 router.get('/health', (req, res) => res.json({ ok: true, feature: 'daily-practice' }));
 
 // Today's set: deterministic for (student, day), adaptive difficulty, with
@@ -375,7 +415,9 @@ router.get('/daily', async (req, res) => {
   const s = studentFor(state, session.email);
   const dayKey = istDayKey();
   const profile = session.account.profile || {};
-  const level = deriveLevel(s, profile);
+  const prefs = s.prefs || {};
+  const level = prefs.tier ? TIER_LEVEL[prefs.tier] : deriveLevel(s, profile);
+  const trackSel = prefs.track && prefs.track !== 'auto' ? prefs.track : (profile.track || 'Not sure');
 
   // Serve the frozen set when one exists; otherwise build once and freeze.
   let ids;
@@ -663,5 +705,95 @@ router.post('/replay/answer', async (req, res) => {
 
 // Pure selection/leveling rules, exported for the engine's tests.
 export { buildSet, deriveLevel, pickReview };
+
+
+// Skill radar — 100% derived from the student's own answers and misses.
+const AXIS_MAP = {
+  'js-loop-bounds': 'Debugging', 'js-slice-vs-splice': 'Debugging', 'js-guard-undefined': 'Debugging',
+  'py-missing-key': 'Debugging', 'node-econnrefused': 'Debugging', 'js-loop-bounds': 'Debugging',
+  'sql-left-join-filter': 'Architecture', 'sql-having-order': 'Architecture', 'js-event-loop': 'Architecture',
+  'http-stateless': 'Security', 'node-econnrefused': 'Debugging',
+  'py-list-aliasing': 'AI & Python', 'py-mutable-default': 'AI & Python', 'py-': 'AI & Python',
+  'sql-': 'SQL & Data', 'js-coercion-add': 'Debugging', 'js-const': 'Debugging',
+};
+function axisOf(concept) {
+  for (const key of Object.keys(AXIS_MAP)) {
+    if (String(concept || '').startsWith(key) || String(concept || '').includes(key)) return AXIS_MAP[key];
+  }
+  return 'Debugging';
+}
+router.get('/radar', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const { bank, byId } = await bankById();
+  const state = await getState();
+  const s = studentFor(state, session.email);
+  const axes = { 'Debugging': [0, 0], 'Architecture': [0, 0], 'Security': [0, 0], 'AI & Python': [0, 0], 'SQL & Data': [0, 0] };
+  for (const day of Object.keys(s.done || {})) {
+    for (const [id, rec] of Object.entries(s.done[day] || {})) {
+      const item = byId.get(id);
+      if (!item) continue;
+      const ax = axisOf(item.concept);
+      axes[ax][0] += rec.correct ? 1 : 0;
+      axes[ax][1] += 1;
+    }
+  }
+  for (const [concept] of Object.entries(s.conceptMiss || {})) {
+    const ax = axisOf(concept);
+    // a live miss counts as one unproven attempt
+  }
+  const series = Object.entries(axes).map(([name, [c, t]]) => ({
+    name, score: t > 0 ? Math.round((c / t) * 100) : null, attempts: t,
+  }));
+  res.json({ ok: true, series });
+});
+
+
+
+// Story sprint — multi-day chains are derived from bank items carrying a
+// `story` field (id); the day number is the numeric suffix of the item id
+// (…-1, …-2, …). Done = that activity has a recorded answer for this student.
+router.get('/story', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const { bank } = await bankById();
+  const state = await getState();
+  const mine = state[session.email]?.done || {};
+  const stories = {};
+  for (const a of bank) {
+    if (!a.story) continue;
+    const s2 = stories[a.story] = stories[a.story] || { id: a.story, items: [] };
+    s2.items.push(a);
+  }
+  const out = Object.values(stories).map((s2) => {
+    s2.items.sort((x, y) => (Number(String(x.id).split('-').pop()) - Number(String(y.id).split('-').pop())));
+    const doneDays = s2.items.filter((it) => {
+      for (const day of Object.keys(mine)) if (mine[day][it.id]) return true;
+      return false;
+    }).length;
+    return { id: s2.id, total: s2.items.length, done: doneDays, next: s2.items[Math.min(doneDays, s2.items.length - 1)]?.situation ?? null };
+  });
+  out.sort((x, y) => x.done - y.done);
+  res.json({ ok: true, stories: out });
+});
+
+router.get('/peer', async (req, res) => {
+  const session = requireUser(req, res);
+  if (!session) return;
+  const MIN_POOL = 20;
+  const state = await getState();
+  const day = istDayKey();
+  let attempts = 0; let correct = 0;
+  for (const [email, s2] of Object.entries(state)) {
+    const rec = s2.done?.[day] || {};
+    for (const r of Object.values(rec)) { attempts += 1; if (r.correct) correct += 1; }
+  }
+  if (attempts < MIN_POOL) return res.json({ ok: true, available: false, attempts });
+  const mine = state[session.email]?.done?.[day] || {};
+  const mineAtt = Object.keys(mine).length;
+  const rate = Math.round((correct / Math.max(1, attempts)) * 100);
+  const myRate = mineAtt ? Object.values(mine).filter((r) => r.correct).length / mineAtt : null;
+  res.json({ ok: true, available: true, attempts, rate, mineRate: myRate == null ? null : Math.round(myRate * 100) });
+});
 
 export default router;

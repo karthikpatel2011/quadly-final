@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import gsap from 'gsap';
 import { apiFetch } from '../../lib/api.js';
 import './practice.css';
 import './dashboard.css';
@@ -62,6 +63,12 @@ export default function PracticePage() {
   const [sql, setSql] = useState({});
   const [runs, setRuns] = useState({});
   const [busy, setBusy] = useState(false);
+  const dotRefs = useRef([]);
+  const cardRef = useRef(null);
+  const [story, setStory] = useState(null);
+  const [peer, setPeer] = useState(null);
+  const [radar, setRadar] = useState(null);
+  const [notice, setNotice] = useState('');
 
   const load = useCallback(() => {
     setPhase('loading');
@@ -81,6 +88,24 @@ export default function PracticePage() {
   }, []);
 
   useEffect(() => { load(); }, [load]);
+
+  const setPrefsPatch = async (patch, label) => {
+    setBusy(true);
+    try {
+      const r = await apiFetch('/practice/daily/prefs', {
+        method: 'POST', headers: authHeaders(), body: JSON.stringify(patch),
+      });
+      if (r.takesEffectToday) { load(true); loadMeta(); setNotice(label + ' - set regenerated.'); }
+      else setNotice(label + ' queued - your next set picks it up.');
+    } catch (err) { setNotice(err.message); } finally { setBusy(false); }
+  };
+
+  const loadMeta = useCallback(() => {
+    apiFetch('/practice/story', { headers: authHeaders() }).then((r) => setStory((r.stories ?? [])[0] ?? null)).catch(() => setStory(null));
+    apiFetch('/practice/peer', { headers: authHeaders() }).then((r) => setPeer(r)).catch(() => setPeer(null));
+    apiFetch('/practice/radar', { headers: authHeaders() }).then((r) => setRadar(r)).catch(() => setRadar(null));
+  }, []);
+  useEffect(() => { if (phase === 'ready') loadMeta(); }, [loadMeta, phase, data?.done, data?.level]);
 
   const items = data?.items ?? [];
   const item = items[index];
@@ -186,6 +211,18 @@ export default function PracticePage() {
   const unlockedMax = firstOpenIdx === -1 ? items.length - 1 : firstOpenIdx;
   const viewingLastFeedback = Boolean(freshResult);
 
+  // GSAP — smooth dot transitions + card swap on step change.
+  useEffect(() => {
+    if (phase !== 'ready') return;
+    const dot = dotRefs.current[index];
+    if (dot && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.fromTo(dot, { scale: 0.55 }, { scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.55)', overwrite: true });
+    }
+    if (cardRef.current && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.fromTo(cardRef.current, { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out', overwrite: true });
+    }
+  }, [index, item?.id, phase]);
+
   if (phase === 'loading') {
     return (
       <div className="qd-p">
@@ -257,37 +294,41 @@ export default function PracticePage() {
         </div>
       </header>
 
+      <section className="qd-scopebar" role="group" aria-label="Practice scope">
+        <span className="qd-scopebar__label">Tier</span>
+        {[['beginner', 'Beginner'], ['intermediate', 'Int'], ['expert', 'Expert']].map(([id, l]) => (
+          <button key={id} type="button" disabled={busy} className={data?.prefs?.tier === id ? 'is-on' : ''} onClick={() => setPrefsPatch({ tier: id }, l + ' tier')}>{l}</button>
+        ))}
+        <span className="qd-scopebar__label">Track</span>
+        {[['auto', 'Auto'], ['Software Engineering', 'CS'], ['Cyber Security', 'Cyber'], ['AI & ML', 'AI/ML']].map(([id, l]) => (
+          <button key={id} type="button" disabled={busy} className={data?.prefs?.track === id ? 'is-on' : ''} onClick={() => setPrefsPatch({ track: id }, l + ' track')}>{l}</button>
+        ))}
+      </section>
+
+      <nav className="qd-dotpager" aria-label="Activities">
+        {items.map((it, i) => {
+          const done = Boolean(it.answered || results[it.id]);
+          const active = i === index;
+          return (
+            <button
+              key={it.id}
+              type="button"
+              ref={(el) => { dotRefs.current[i] = el; }}
+              className={`qd-page__dot${active ? ' is-on' : ''}${done ? ' is-done' : ''}`}
+              aria-label={`Activity ${i + 1}: ${TYPE_LABELS[it.type]}${done ? ' (answered)' : ''}`}
+              aria-current={active ? 'step' : undefined}
+              disabled={i > unlockedMax}
+              onClick={() => goto(i)}
+            />
+          );
+        })}
+        <span className="qd-dotpager__count">{index + 1} / {items.length}</span>
+      </nav>
       <div className="qd-p__grid">
-        <aside className="qd-rail" aria-label="Today’s set">
-          <p className="qd-rail__cap">Today’s set</p>
-          <ol className="qd-rail__list">
-            {items.map((it, i) => {
-              const done = Boolean(it.answered || results[it.id]);
-              return (
-                <li key={it.id}>
-                  <button
-                    type="button"
-                    className={`qd-rail__item${i === index ? ' is-current' : ''}${done ? ' is-done' : ''}`}
-                    aria-current={i === index ? 'step' : undefined}
-                    disabled={i > unlockedMax}
-                    onClick={() => goto(i)}
-                  >
-                    <span className="qd-rail__badge" aria-hidden="true">{done ? '✓' : i + 1}</span>
-                    <span className="qd-rail__body">
-                      <span className="qd-rail__type">{TYPE_LABELS[it.type]}</span>
-                      <span className="qd-rail__meta">{it.minutes} min · {it.concept}</span>
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ol>
-          <p className="qd-rail__minutes">{data.servedMinutes} of {data.targetMinutes} practice minutes planned</p>
-        </aside>
 
         <div className="qd-p__main">
           {item && (
-            <section className="qd-act" aria-label={TYPE_LABELS[item.type]}>
+            <section ref={cardRef} className="qd-act" aria-label={TYPE_LABELS[item.type]}>
               <div className="qd-act__kicker">
                 <span className="qd-act__type">{TYPE_LABELS[item.type]}</span>
                 <DiffDots level={item.difficulty} />
