@@ -39,3 +39,9 @@ backend/data/practice-levels.json
 backend/data/practice-streaks.json
 backend/data/practice-ai-usage.json
 backend/data/practice-queue.json
+
+# Workplace per-student runtime state (progress, submissions, passports, chat quota)
+backend/data/workplace-progress.json
+backend/data/workplace-submissions.json
+backend/data/workplace-passports.json
+backend/data/workplace-chat.json
