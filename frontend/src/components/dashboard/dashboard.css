@@ -406,7 +406,7 @@
   grid-template-areas:
     "tasks tasks tasks tasks ask ask"
     "readiness readiness readiness readiness ask ask"
-    "practice practice practice drive drive interview"
+    "drive drive drive interview interview interview"
     "activity activity activity activity squad squad"
     "reviews reviews reviews launchpad launchpad launchpad";
   gap: 14px;
@@ -415,7 +415,6 @@
 .qd-tasks { grid-area: tasks; }
 .qd-ask { grid-area: ask; }
 .qd-readiness { grid-area: readiness; }
-.qd-practice-mini { grid-area: practice; }
 .qd-interview-mini { grid-area: interview; }
 .qd-activity { grid-area: activity; }
 .qd-squad { grid-area: squad; }
@@ -579,7 +578,7 @@
 /* ---------- responsive ---------- */
 @media (max-width: 960px) {
   .qd-home__grid { display: flex; flex-direction: column; }
-  .qd-tasks, .qd-ask, .qd-readiness, .qd-practice-mini, .qd-interview-mini,
+  .qd-tasks, .qd-ask, .qd-readiness, .qd-interview-mini,
   .qd-activity, .qd-squad, .qd-reviews, .qd-launchpad, .qd-drive-mini,
   .qd-syllabus, .qd-projects { display: block; }
   .qd-home__grid > * { grid-column: auto !important; grid-row: auto !important; }

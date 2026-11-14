@@ -133,7 +133,11 @@ test('pending join: token issued publicly, expires after 7 days, validated on us
   assert.equal(good.json.board.members.length, 2);
 });
 
-test('nudge caps: one per pair per day, three per sender, never to someone who finished', async () => {
+test('nudge caps: one per pair per day, three per sender, never to someone who finished', async (t) => {
+  // Nudges are refused during IST quiet hours (10 PM–7 AM) — pin the clock to
+  // 2 PM IST today so the caps are tested the same way at any real hour.
+  const pinned = new Date(`${new Date().toISOString().slice(0, 10)}T08:30:00.000Z`);
+  t.mock.timers.enable({ apis: ['Date'], now: pinned });
   const board = (await api(`/squads/${SQUAD_ID}/board`, { token: OWNER })).json.board;
   const other = board.members.find((m) => !m.isMe);
   const done = board.members.find((m) => m.doneToday);

@@ -55,7 +55,7 @@ const seedListing = () => {
 
 before(async () => {
   // Suite-owned stores reset.
-  for (const f of ['opportunity-tracker.json', 'ai-profile.json', 'plans.json', 'attempts.json']) {
+  for (const f of ['opportunity-tracker.json', 'ai-profile.json', 'plans.json']) {
     writeFileSync(dataDir + f, JSON.stringify({}, null, 2));
   }
   seedListing();

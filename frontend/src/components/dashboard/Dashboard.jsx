@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { apiFetch } from '../../lib/api.js';
 import { Icon } from './icons.jsx';
 import './dashboard.css';
+import './workspace.css';
 import Logo from '../Logo.jsx';
 import SquadPage from './SquadPage.jsx';
 import ContestssPage from './ContestsPage.jsx';
@@ -9,18 +10,30 @@ import InterviewsDashboard from './interviews/InterviewsDashboard.jsx';
 import InterviewSetup from './interviews/InterviewSetup.jsx';
 import InterviewRoom from './interviews/InterviewRoom.jsx';
 import InterviewReport from './interviews/InterviewReport.jsx';
+import PracticeHome from './practice/PracticeHome.jsx';
+import DrillPage from './practice/DrillPage.jsx';
+import IncidentRoom from './practice/IncidentRoom.jsx';
+import PostmortemPage from './practice/PostmortemPage.jsx';
+import RecordPage from './practice/RecordPage.jsx';
 
-/* Signed-in dashboard shell: chrome plus the routes that have shipped. Two
-   workspaces, kept deliberately separate (student's call): Practice = the
-   skill-repair loop (daily + mistakes); Interviews = anything interview-shaped
-   (the mock interview room and the Saturday mock drive). Unknown routes fall
-   back to Home; legacy paths keep working via ROUTE_ALIASES. The 401 gate and
-   the verified sign-out stay. */
+/* Signed-in dashboard shell: chrome plus the routes that have shipped, one
+   semantic group per workspace (student's call): Practice = the incident
+   + drill loop; Interviews = anything interview-shaped (the mock interview
+   room and the Saturday mock drive). Unknown routes fall back to Home. The
+   401 gate and the verified sign-out stay. */
 
 const THEME_KEY = 'quadly:theme';
 
 const NAV_ITEMS = [
   { id: 'app', label: 'Home' },
+  {
+    id: 'practice',
+    label: 'Practice',
+    children: [
+      { id: 'practice/home', label: 'Practice home' },
+      { id: 'practice/drill', label: 'Daily drill' },
+    ],
+  },
   { id: 'squad', label: 'Squad' },
   {
     id: 'interviews',
@@ -33,14 +46,11 @@ const NAV_ITEMS = [
   },
 ];
 
-const ROUTE_ALIASES = {
-  // Pre-split deep links keep working after the Practice/Interviews divider.
-  'practice/interviews': 'interviews/mock',
-  'practice/contests': 'interviews/drive',
-};
-
 // Real routes that live under a group but don't need a dropdown entry.
-const EXTRA_ROUTES = new Set(['interviews/setup', 'interviews/report']);
+const EXTRA_ROUTES = new Set([
+  'interviews/setup', 'interviews/report',
+  'practice/incident', 'practice/postmortem', 'practice/record',
+]);
 
 const NAV_LABELS = Object.fromEntries(NAV_ITEMS.flatMap((n) => [n, ...(n.children ?? [])]).map((n) => [n.id, n.label]));
 
@@ -48,8 +58,8 @@ function routeFromLocation() {
   const path = window.location.pathname.replace(/\/+$/, '');
   if (path === '' || path === '/app') return 'app';
   const sub = path.replace(/^\/app\/?/, '');
-  if (ROUTE_ALIASES[sub]) return ROUTE_ALIASES[sub];
   if (sub === 'interviews') return 'interviews/dash';
+  if (sub === 'practice') return 'practice/home';
   for (const n of NAV_ITEMS) {
     if (n.id === sub || n.children?.some((c) => c.id === sub)) return sub;
   }
@@ -60,6 +70,7 @@ function routeFromLocation() {
 function navPath(id) {
   if (id === 'app') return '/app';
   if (id === 'interviews/mock') return '/app/interviews';
+  if (id === 'practice/home') return '/app/practice';
   return `/app/${id}`;
 }
 
@@ -341,6 +352,11 @@ export default function Dashboard() {
       {route === 'interviews/setup' && <main className="qd-ivrhome"><InterviewSetup /></main>}
       {route === 'interviews/report' && <main className="qd-ivrhome"><InterviewReport /></main>}
       {route === 'interviews/drive' && <main className="qd-home"><ContestsPage /></main>}
+      {route === 'practice/home' && <main className="qd-prhome"><PracticeHome /></main>}
+      {route === 'practice/drill' && <main className="qd-prhome"><DrillPage /></main>}
+      {route === 'practice/incident' && <main className="qd-prhome"><IncidentRoom /></main>}
+      {route === 'practice/postmortem' && <main className="qd-prhome"><PostmortemPage /></main>}
+      {route === 'practice/record' && <main className="qd-prhome"><RecordPage /></main>}
       {route === 'app' && <main className="qd-home" aria-label="Home" />}
     </div>
   );

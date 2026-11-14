@@ -9,8 +9,8 @@ import careersRoutes from './routes/careers.js';
 import dashboardRoutes from './routes/dashboard.js';
 import intelRoutes from './routes/intel.js';
 import practiceRoutes from './routes/practice.js';
-// Daily Practice (PRD §6) — the per-day activity engine under /api/practice.
-import dailyPracticeRoutes from './routes/daily-practice.js';
+// Practice — the incident room, daily drill, and postmortem/defend engine
+// under /api/practice (state and scores live server-side).
 import skillsRoutes from './routes/skills.js';
 import driveRoutes from './routes/drive.js';
 import squadRoutes from './routes/squad.js';
@@ -42,7 +42,6 @@ export function createApp() {
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/intel', intelRoutes);
   app.use('/api/practice', practiceRoutes);
-  app.use('/api/practice', dailyPracticeRoutes);
   app.use('/api/skills', skillsRoutes);
   app.use('/api/drive', driveRoutes);
   app.use('/api/squads', squadRoutes); // Squad v2 (shareable codes, shared streak)

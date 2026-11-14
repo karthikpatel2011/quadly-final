@@ -16,10 +16,9 @@ import path from 'node:path';
 import { z } from 'zod';
 import { resolveSession, markOnboarded } from './auth.js';
 import { buildPayload } from './dashboard.js';
-import { dailyResultFor } from './practice.js';
+import { drillResultFor, drillCompletionsOnDay } from './practice.js';
 import { driveSummaryFor } from './drive.js';
 import { summaryFor as squadSummaryFor } from './squad.js';
-import { isMinor } from '../lib/moderation.js';
 
 const router = Router();
 
@@ -75,8 +74,8 @@ function istWhenText(iso) {
 
 // Task category → the real activity that completes it.
 const HREF_BY_CATEGORY = {
-  learn: 'practice/daily-15',
-  interview: 'practice/interviews',
+  learn: 'practice',
+  interview: 'interviews',
   ship: 'projects',
   apply: 'plan',
   network: 'squad',
@@ -189,39 +188,25 @@ router.get('/home', async (req, res) => {
     today = { status: 'error', data: null };
   }
 
-  // Section 2 — Today's challenge: the day's question drill for this student,
-  // plus how many classmates played it today (names only with consent).
+  // Section 2 — Today's practice: the day's drill for this student, plus how
+  // many classmates finished it today (a count only — no names at drill level).
   let challenge;
   try {
-    const drill = await dailyResultFor(email, date);
-    const attempts = readJSON('attempts.json', {});
-    const accounts = accountsMap();
-    const players = Object.keys(attempts).filter((e) => {
-      if (e === email) return false;
-      const day = attempts[e]?.[date];
-      return day && Object.keys(day).length > 0;
-    });
-    const collegeMates = players.filter((e) => (accounts[e]?.profile?.college || null) === college);
-    const playedAtCollege = collegeMates.length;
-    const topScorers = [];
-    for (const e of collegeMates) {
-      const acc = accounts[e];
-      const who = acc?.profile || {};
-      if (who.showName !== true || isMinor(who)) continue; // only opted-in, adult names
-      const r = await dailyResultFor(e, date);
-      if (r.answered === 0) continue;
-      topScorers.push({ name: who.name || 'a student', score: r.score, total: r.total });
-    }
-    topScorers.sort((a, b) => b.score - a.score);
+    const drill = await drillResultFor(email);
+    const players = await drillCompletionsOnDay(date);
+    const collegeMates = players.filter((e) => e !== email
+      && (accountsMap()[e]?.profile?.college || null) === college);
     challenge = {
       status: 'ok',
       data: {
-        title: 'Daily 15 — today’s question drill',
-        href: 'practice/daily-15',
-        minutes: 15,
-        result: drill.answered > 0 ? { score: drill.score, total: drill.total, done: drill.done } : null,
-        collegePlayedToday: playedAtCollege,
-        topScorers: topScorers.slice(0, 3),
+        title: drill.title ? `Daily drill — ${drill.title}` : 'Daily drill',
+        seasonName: drill.seasonName,
+        answered: drill.answeredToday,
+        correct: drill.correct,
+        takeaway: drill.takeaway,
+        href: 'practice/drill',
+        minutes: 5,
+        playedAtCollege: collegeMates.length,
       },
     };
   } catch {

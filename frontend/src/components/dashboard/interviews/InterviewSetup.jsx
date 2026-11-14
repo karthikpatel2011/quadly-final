@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { apiFetch } from '../../../lib/api.js';
-import '../practice.css';
+import '../workspace.css';
 import '../dashboard.css';
 import './interviews.css';
 

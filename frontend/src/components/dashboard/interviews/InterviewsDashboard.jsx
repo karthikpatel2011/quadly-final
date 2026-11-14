@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiFetch } from '../../../lib/api.js';
-import '../practice.css';
+import '../workspace.css';
 import './interviews.css';
 
 /* Interview Studio dashboard — warm obsidian surfaces, one amber glow, a
@@ -38,8 +38,8 @@ const MODES = [
   {
     preset: 'replay',
     title: 'Mistake replay',
-    sub: 'Defend and explain the exact concepts that tripped you up in Daily Practice.',
-    badge: '⚡ Weak-Spot Drill',
+    sub: 'Defend and explain the exact incidents and concepts you handled in Practice.',
+    badge: 'Weak-spot drill',
   },
 ];
 
@@ -131,7 +131,7 @@ export default function InterviewsDashboard() {
               key={m.preset}
               type="button"
               className={`qd-ivs-card${m.featured ? ' qd-ivs-card--featured' : ''}`}
-              onClick={() => (m.preset === 'replay' ? gotoRoute('/app/practice/replay') : gotoRoute(`/app/interviews/setup?preset=${m.preset}`))}
+              onClick={() => (m.preset === 'replay' ? gotoRoute('/app/practice') : gotoRoute(`/app/interviews/setup?preset=${m.preset}`))}
             >
               <span className="qd-ivs-cardtop">
                 {m.wave ? (

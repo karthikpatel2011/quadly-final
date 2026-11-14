@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { randomUUID, scryptSync, randomBytes, timingSafeEqual } from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync, mkdirSync, renameSync } from 'node:fs';
 import path from 'node:path';
+import { PRACTICE_FILES, dropStudentFromCache } from '../lib/practice/store.js';
 
 // Accounts now persist to backend/data/accounts.json (pre-beta store; the
 // documented migration target is Supabase). Passwords are salted + scrypt
@@ -167,13 +168,19 @@ router.delete('/account', (req, res) => {
 
   // Per-student rows in the student-owned stores.
   const dropKey = (doc) => { delete doc[email]; return doc; };
-  scrubFile('attempts.json', dropKey);
   scrubFile('interview-attempts.json', dropKey);
   scrubFile('opportunity-tracker.json', dropKey);
   scrubFile('home-views.json', dropKey);
   scrubFile('dashboard-state.json', dropKey);
   scrubFile('plans.json', dropKey);
   scrubFile('ai-profile.json', dropKey);
+  // Practice: every per-student document (DPDP — nothing survives the account).
+  for (const file of PRACTICE_FILES) scrubFile(file, dropKey);
+  scrubFile('practice-ai-usage.json', (doc) => {
+    if (doc && doc.students) delete doc.students[email];
+    return doc;
+  });
+  dropStudentFromCache(email); // live caches must forget the student too
   scrubFile('projects.json', (doc) => (Array.isArray(doc) ? doc.filter((p) => p.email !== email) : doc));
   scrubFile('onboarding-profiles.json', (doc) => (Array.isArray(doc) ? doc.filter((p) => p.email !== email) : doc));
   scrubFile('squads.json', (doc) => {
@@ -226,6 +233,16 @@ export function resolveSession(token) {  for (const [email, account] of accounts
     }
   }
   return null;
+}
+
+/** Admin-side account mutation (the plan setter lives in admin.js). The
+ *  mutator receives the live account object; falsy return = not found. */
+export function updateAccount(email, mutator) {
+  const account = accounts.get(String(email || '').toLowerCase());
+  if (!account) return null;
+  const out = mutator(account);
+  persistAccounts();
+  return out === undefined ? true : out;
 }
 
 export default router;

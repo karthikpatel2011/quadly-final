@@ -6,13 +6,11 @@ dist/
 
 # Never publish — personal data & runtime state (seeded content only is tracked)
 backend/data/accounts.json
-backend/data/attempts.json
 backend/data/interview-attempts.json
 backend/data/dashboard-state.json
 backend/data/onboarding-profiles.json
 backend/data/plans.json
 backend/data/home-views.json
-backend/data/post-interactions.json
 backend/data/notifications.json
 backend/data/mail.json
 backend/data/ai-profile.json
@@ -23,8 +21,7 @@ backend/data/avatars/
 # 1.5 GB research evidence store (source videos) — too heavy for GitHub
 design-intelligence/media/
 
-# Daily Practice per-student engine state (answers, sets, misses)
-backend/data/daily-practice-state.json
+# Practice per-student runtime state (attempts, postmortems, levels, streaks, AI quota counters)
 backend/data/interview-voice.json
 backend/data/opportunities.json
 backend/data/interview-sessions.json
@@ -34,3 +31,11 @@ backend/data/squad-nudges.json
 backend/data/squad-events.json
 backend/data/squad-pending.json
 backend/data/squad-attempts.json
+backend/data/practice-incident-attempts.json
+backend/data/practice-drill-attempts.json
+backend/data/practice-postmortems.json
+backend/data/practice-defend-attempts.json
+backend/data/practice-levels.json
+backend/data/practice-streaks.json
+backend/data/practice-ai-usage.json
+backend/data/practice-queue.json

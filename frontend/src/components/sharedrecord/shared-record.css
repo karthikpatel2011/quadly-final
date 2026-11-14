@@ -1,0 +1,74 @@
+/* Public shared work record — a quiet, landing-style page (always dark, like
+   every Quadly surface outside the app shell). Token values only. */
+
+.srec {
+  min-height: 100vh;
+  background: var(--color-page);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 var(--gutter) 64px;
+}
+.srec-top {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0 26px;
+}
+.srec-tag {
+  font-family: var(--qd-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.srec-card {
+  width: 100%;
+  max-width: 640px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.srec-skel { height: 320px; }
+.srec-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.srec-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.25;
+  color: var(--color-text);
+}
+.srec-dim { color: var(--color-text-muted); font-size: 13.5px; line-height: 1.55; margin: 0; }
+.srec-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 10px 2px;
+  border-top: 1px solid var(--color-border);
+  font-size: 13.5px;
+  color: var(--color-text);
+}
+.srec-row b { flex: 0 0 120px; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-muted); font-weight: 600; }
+.srec-row span { min-width: 0; line-height: 1.55; }
+.srec-pm { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--color-border); padding-top: 14px; }
+.srec-pm p { margin: 0; font-size: 13.5px; line-height: 1.6; color: var(--color-text); }
+.srec-foot { margin-top: 10px; }
+.srec-link { color: var(--color-primary); }
+@media (max-width: 540px) {
+  .srec-card { padding: 20px; }
+  .srec-row b { flex-basis: 92px; }
+}

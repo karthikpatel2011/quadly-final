@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiFetch } from '../../../lib/api.js';
-import '../practice.css';
+import '../workspace.css';
 import './interviews.css';
 
 /* Post-interview performance report — every claim is derived from the stored

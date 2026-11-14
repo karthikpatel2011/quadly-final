@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { apiFetch } from '../../lib/api.js';
-import './practice.css';
+import './workspace.css';
 import './dashboard.css';
 
 /* Contests — the weekly Mock Drive's schedule and seats. The full multi-student

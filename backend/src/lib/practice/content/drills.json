@@ -1,0 +1,435 @@
+{
+  "drills": [
+    {
+      "id": "drill-cert-01",
+      "scenarioId": "inc-cert-01",
+      "seasonId": "season-famous-outages",
+      "track": null,
+      "level": 1,
+      "moment": {
+        "kind": "log",
+        "title": "A store's checkout, Monday 9:38 am",
+        "lines": [
+          "09:38:02 – handshake failed: certificate verify failed (certificate expired)",
+          "09:38:04 – handshake failed: certificate verify failed (certificate expired)",
+          "09:39:11 – upstream charge aborted: TLS layer rejected before HTTP",
+          "09:39:40 – certificate verify failed — 4,214 occurrences this hour"
+        ],
+        "question": "What went wrong, and what would you check first?",
+        "options": [
+          {
+            "id": "o-cert-expired",
+            "label": "The site's TLS certificate expired — check the certificate's expiry and the renewal job"
+          },
+          {
+            "id": "o-payment-down",
+            "label": "The payment provider is down — reach out to the bank"
+          },
+          {
+            "id": "o-traffic",
+            "label": "A Monday traffic spike — scale up the checkout tier"
+          },
+          {
+            "id": "o-bad-deploy",
+            "label": "Someone shipped a bug on Friday — roll back the deploy"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The log names the exact failure at the TLS layer and repeats it for every request: the certificate expired. Latency was normal and requests fell to zero at once — nothing about load or a deploy. Checking expiry costs one command."
+      },
+      "takeaway": "An expired certificate fails every request at once — and one safe check tells you in seconds.",
+      "teaser": "A Monday where every payment dies mid-handshake — and the log says exactly why."
+    },
+    {
+      "id": "drill-cert-02",
+      "scenarioId": "inc-cert-01",
+      "seasonId": "season-famous-outages",
+      "track": null,
+      "level": 1,
+      "moment": {
+        "kind": "config",
+        "title": "The monitoring config, reviewed after the incident",
+        "lines": [
+          "# alerts.yaml — checkout service",
+          "  - name: latency-high     rule: p95 > 800ms for 5m",
+          "  - name: error-rate-high  rule: http_5xx > 1% for 5m",
+          "  - name: requests-fell    rule: rate < 50% of daily min for 10m",
+          "  # certificate checks: expires soon",
+          "  # \"the TLS exporter never got wired up — backlog ticket open\""
+        ],
+        "question": "Which failure would this config never catch in time, and what would you add?",
+        "options": [
+          {
+            "id": "o-add-expiry",
+            "label": "Certificate expiry — add an alert when a certificate is within N days of expiring"
+          },
+          {
+            "id": "o-add-5xx",
+            "label": "HTTP errors — the 5xx rule is missing a per-route break-out"
+          },
+          {
+            "id": "o-add-latency",
+            "label": "Slow pages — latency alerts should trigger at p95 > 400ms"
+          },
+          {
+            "id": "o-enough",
+            "label": "Nothing — this set would have caught the outage already"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The outage produced zero HTTP 5xx responses — connections died at the TLS handshake before HTTP. None of the three rules watch certificate state. An N-days-before-expiry alert is the classic fix: alert while you can still act calmly."
+      },
+      "takeaway": "Alert on certificates before they expire — not on the traffic they take down after.",
+      "teaser": "An alert file that watched everything except the one thing that broke."
+    },
+    {
+      "id": "drill-s3-01",
+      "scenarioId": "inc-s3-01",
+      "seasonId": "season-famous-outages",
+      "track": "Software Engineering",
+      "level": 3,
+      "moment": {
+        "kind": "log",
+        "title": "Storage maintenance log, 09:37 am",
+        "lines": [
+          "09:37:12 – playbook 'expire-old-servers' started (scheduled)",
+          "09:37:41 – subsystem REMOVE ran: 'removing a set of expired server entries from the index'",
+          "09:37:44 – index health: storage-node pool below minimum healthy threshold",
+          "09:37:52 – warnings: allocation requests have no free server to place data on"
+        ],
+        "question": "What went wrong here, and what would you check next?",
+        "options": [
+          {
+            "id": "o-typo-blast",
+            "label": "The removal removed far more entries than intended — compare the intended input against the change record"
+          },
+          {
+            "id": "o-disks",
+            "label": "Servers physically failed during maintenance — check hardware alerts"
+          },
+          {
+            "id": "o-playbook-bug",
+            "label": "The REMOVE subsystem has a bug — page its owner team"
+          },
+          {
+            "id": "o-cascade",
+            "label": "Retries overwhelmed the pool — throttle client traffic"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "All events collapse into ten seconds: REMOVE ran, then immediately the pool is below threshold. The subsystem did what it was told; the input told it to remove too much. Check the change record: intended vs actual removed — that's where the real incident's answer lived."
+      },
+      "takeaway": "When a maintenance step and an outage share a timestamp, read that step's change record first.",
+      "teaser": "A maintenance log where one line removed far more than anyone meant to."
+    },
+    {
+      "id": "drill-s3-02",
+      "scenarioId": "inc-s3-01",
+      "seasonId": "season-famous-outages",
+      "track": "Software Engineering",
+      "level": 3,
+      "moment": {
+        "kind": "metric",
+        "title": "Index pool utilization, minute by minute",
+        "data": [
+          {
+            "label": "09:30 — recorded pool",
+            "value": "410 nodes / 34% used"
+          },
+          {
+            "label": "09:37 — maintenance begins",
+            "value": "410 nodes / 34% used"
+          },
+          {
+            "label": "09:38 — recorded pool",
+            "value": "383 nodes / 96% used"
+          },
+          {
+            "label": "09:39 — actual nodes online",
+            "value": "409 (unchanged)"
+          }
+        ],
+        "question": "What does this chart actually tell you, and what is the fix?",
+        "options": [
+          {
+            "id": "o-view-vs-reality",
+            "label": "The index's view collapsed, not the hardware — restore the index's recorded entries"
+          },
+          {
+            "id": "o-lost-nodes",
+            "label": "27 nodes went offline — provision replacements now"
+          },
+          {
+            "id": "o-usage-spike",
+            "label": "Traffic multiplied 3x — add client-side backoff"
+          },
+          {
+            "id": "o-bad-metric",
+            "label": "The utilization metric is broken — ignore it and check latency"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The key line is the last one: actual nodes online are unchanged. Only the index's belief about the pool changed. 96% 'utilization' is an artifact of a shrunken denominator — restore the wrong entries and the numbers recover by themselves."
+      },
+      "takeaway": "When a metric collapses, ask whether reality changed — or only the system's view of reality.",
+      "teaser": "A capacity chart where only the system’s belief about reality collapsed."
+    },
+    {
+      "id": "drill-ml-01",
+      "scenarioId": "inc-ml-labels-01",
+      "seasonId": "season-famous-outages",
+      "track": "AI & ML",
+      "level": 3,
+      "moment": {
+        "kind": "metric",
+        "title": "Overnight evaluation, per-class accuracy",
+        "data": [
+          {
+            "label": "class 'animal-family'",
+            "value": "99.1% (unchanged)"
+          },
+          {
+            "label": "class 'c-people'",
+            "value": "71.4% (was 99.0%)"
+          },
+          {
+            "label": "overall model accuracy",
+            "value": "98.7% (barely moved)"
+          },
+          {
+            "label": "eval benchmark",
+            "value": "same held-out set as always"
+          }
+        ],
+        "question": "One class collapsed overnight while the average held steady. What went wrong, and what would you check next?",
+        "options": [
+          {
+            "id": "o-training-data",
+            "label": "Something in last night's training data targeted that class — inspect the new batch's sources and labels"
+          },
+          {
+            "id": "o-serving-drift",
+            "label": "Real-world photo content drifted — schedule a data drift audit"
+          },
+          {
+            "id": "o-eval-bug",
+            "label": "The benchmark broke — re-run with a fresh held-out set"
+          },
+          {
+            "id": "o-deploy-bug",
+            "label": "The model deploy broke that head — roll back the model"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The model in production was deployed days before the drop — nothing at the serving edge changed. What did change overnight was the retrain: its batch is the only overnight input. A per-class collapse with a stable average is the signature of poisoned or mislabeled data, not of drift (which degrades many classes gradually)."
+      },
+      "takeaway": "A sudden per-class collapse with a stable average is a training-data story, not an infrastructure story.",
+      "teaser": "An evaluation chart where one class fell off a cliff overnight."
+    },
+    {
+      "id": "drill-ml-02",
+      "scenarioId": "inc-ml-labels-01",
+      "seasonId": "season-famous-outages",
+      "track": "AI & ML",
+      "level": 3,
+      "moment": {
+        "kind": "config",
+        "title": "Ingestion pipeline config, two days before the incident",
+        "lines": [
+          "# training-sources.yaml",
+          "  sources:",
+          "    - id: curated-internal   review: human",
+          "    - id: partner-feed        review: human",
+          "    + id: scraped-bulk-bucket review: pipeline-smoke   # added last week",
+          "  gates:",
+          "    - schema-shape: pass required",
+          "    - row-limit: 2.5M/day",
+          "    - label_quality: required-if-configured   # never configured"
+        ],
+        "question": "The model degraded after the new source joined training. What gate was missing, and where does it belong?",
+        "options": [
+          {
+            "id": "o-label-quality-gate",
+            "label": "A label-quality gate — sample and review labels from any new source before it can enter the training set"
+          },
+          {
+            "id": "o-bigger-smoke",
+            "label": "A stronger pipeline smoke test — check more rows for schema validity"
+          },
+          {
+            "id": "o-smaller-limit",
+            "label": "A lower row limit — cap any single source at 100K rows a day"
+          },
+          {
+            "id": "o-remove-source",
+            "label": "Nothing — just never add sources without a two-week soak on shadow mode"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The new bucket passed schema checks, which say nothing about whether labels are true. The config even has a label_quality hook that was never configured. Size caps and shadow mode are useful, but the precise missing control is: humans sample labels from a new source before it shapes a model."
+      },
+      "takeaway": "Schema validation is not data validation — new data sources need a label-quality gate.",
+      "teaser": "A config that fed 2 million unreviewed images straight into training."
+    },
+    {
+      "id": "drill-sec-01",
+      "scenarioId": "inc-sec-phish-01",
+      "seasonId": "season-famous-outages",
+      "track": "Cyber Security",
+      "level": 3,
+      "moment": {
+        "kind": "log",
+        "title": "Auth audit log, 14:22",
+        "lines": [
+          "14:22 – password reset approved by the phone-based reset desk for 2 internal accounts",
+          "14:31 – those accounts logged in from 2 new networks, SMS second factor accepted",
+          "14:33 – MFA push approval in under 4 seconds — user was on a live call at the time (per calendar)",
+          "14:34 – 'delegate posting access' granted from those sessions to 9 verified accounts"
+        ],
+        "question": "Reading only this log: what is the most likely story, and what is the first safe move?",
+        "options": [
+          {
+            "id": "o-social-verify",
+            "label": "Staff were socially engineered over the phone — verify with them out-of-band and revoke the live sessions and grants"
+          },
+          {
+            "id": "o-api-key",
+            "label": "An API key leaked — rotate all platform keys and audit usage"
+          },
+          {
+            "id": "o-malware",
+            "label": "Malware on a staff laptop — image the machine and hunt persistence"
+          },
+          {
+            "id": "o-insider",
+            "label": "The staff members did it themselves — open an insider-threat case"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The 4-second MFA approval while the person was provably on a call is a textbook live-session relay — and resets approved by phone don't need malware or leaked keys. Insider is the least-evidence story: a calendar and a session trail say 'tricked', not 'traitor'. First move: out-of-band verify the humans, then cut the sessions and grants."
+      },
+      "takeaway": "A too-fast MFA approval from someone verifiably elsewhere means the human is being played in real time.",
+      "teaser": "An auth log where a 4-second MFA approval gives the whole story away."
+    },
+    {
+      "id": "drill-sec-02",
+      "scenarioId": "inc-sec-phish-01",
+      "seasonId": "season-famous-outages",
+      "track": "Cyber Security",
+      "level": 3,
+      "moment": {
+        "kind": "error",
+        "title": "Admin-tools audit trail, reviewed post-incident",
+        "lines": [
+          "ERROR audit-integrity: delegate grant S-114 → target verified accounts, no linked support ticket",
+          "ERROR audit-integrity: 9 grants in 11 minutes, all from one staff session, all missing ticket linkage",
+          "WARN   admin-tools: support-level session reached 'delegate posting access' — role allows it",
+          "INFO   posting-api: all 143 requests this window authorized correctly per existing rules"
+        ],
+        "question": "The audit trail shows grants with no tickets, and the API says everything was 'authorized correctly'. What does that reveal, and what is the fix?",
+        "options": [
+          {
+            "id": "o-rules-wrong",
+            "label": "The authorization rules themselves were too permissive — the fix is least-privilege on the tool and out-of-band ticket validation, not just revoking"
+          },
+          {
+            "id": "o-posting-bug",
+            "label": "The posting API has an auth bug — audit and patch its grant path"
+          },
+          {
+            "id": "o-audit-noise",
+            "label": "The audit tool is throwing false errors — fix the ticket-linkage check"
+          },
+          {
+            "id": "o-revoke-enough",
+            "label": "Revoking the grants is the complete fix — the system worked as designed"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The API followed its rules perfectly — the rules allowed a support-level session to delegate posting access for high-profile accounts with no ticket, no second approval, nothing. 'Authorized correctly' means the policy, not the outcome, was right. Revocation cleans today's mess; least-privilege plus out-of-band verification prevents tomorrow's."
+      },
+      "takeaway": "When abuse is 'authorized correctly', the vulnerability is the policy.",
+      "teaser": "A trail of account grants with no tickets behind them."
+    },
+    {
+      "id": "drill-knight-01",
+      "scenarioId": "inc-knight-01",
+      "seasonId": "season-famous-outages",
+      "track": null,
+      "level": 5,
+      "moment": {
+        "kind": "log",
+        "title": "Trading engine order log, 09:34",
+        "lines": [
+          "09:34:11 – parent order 8F-22 re-sent; identical size, identical symbol",
+          "09:34:12 – child orders burst (n=214); fills genuinely flowing",
+          "09:34:14 – log field 'position-complete': never set",
+          "09:34:15 – code path id: routine 'PP-2003-test' — nobody on the bridge recognizes it"
+        ],
+        "question": "What pattern is this log showing, and what would you check next?",
+        "options": [
+          {
+            "id": "o-old-code-woke",
+            "label": "Dormant test code is awake and its exit condition never fires — check last night's deployment record for flag reuse"
+          },
+          {
+            "id": "o-feed-stuck",
+            "label": "The market feed is stuck repeating ticks — check feed timestamps first"
+          },
+          {
+            "id": "o-logic-bug",
+            "label": "A new strategy shipped a loop bug — roll back the strategy module"
+          },
+          {
+            "id": "o-account-noise",
+            "label": "A client is algo-bombing through us — throttle their account"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "Three tells: the same parent endlessly re-sent, 'never set' on the completion flag, and a code path nobody recognizes. That is old code running with a broken exit — feed problems look like stale data, not identical bursts. The deployment record answers whether a flag repurpose (a routine prep change) woke it up."
+      },
+      "takeaway": "An exit condition that never fires turns old test code into an infinite, expensive loop.",
+      "teaser": "Order logs where the same parent sends forever and never completes."
+    },
+    {
+      "id": "drill-knight-02",
+      "scenarioId": "inc-knight-01",
+      "seasonId": "season-famous-outages",
+      "track": null,
+      "level": 5,
+      "moment": {
+        "kind": "change-list",
+        "title": "Overnight deployment record",
+        "lines": [
+          "deploy purpose: enable tomorrow's new order type (prep only, no algorithm change)",
+          "mechanism: reuse existing feature-flag id rather than define a new one",
+          "flag id: defined 2018 for a retired test routine; code never removed",
+          "deploy status: rolled to 7 of 8 replicas (host 8 not included in the batch)"
+        ],
+        "question": "Two landmines hide in this record. Which pair does the postmortem pin?",
+        "options": [
+          {
+            "id": "o-reuse-and-partial",
+            "label": "Reusing an old flag id (waking removed code) and a partially-applied deployment (7 of 8)"
+          },
+          {
+            "id": "o-timing-and-market",
+            "label": "Deploying during market hours and a choppy market with the feed lagged"
+          },
+          {
+            "id": "o-autoscale-and-limits",
+            "label": "No autoscaling on replicas and risk limits too tight for burst flow"
+          },
+          {
+            "id": "o-review-and-alerts",
+            "label": "No code review on the flag change and no alert for unusual order rate"
+          }
+        ],
+        "answerIndex": 0,
+        "why": "The record says the quiet part twice: an existing id was reused, which is what woke the dead routine; and one of eight replicas was excluded from the batch, which is what turns any rollback into a partial one. The other observations are real-but-secondary — none of them causes an endless order loop."
+      },
+      "takeaway": "Reused identifiers and partial deploys are the classic pair: old code wakes up, only most of the fleet agrees.",
+      "teaser": "A deploy record that reached seven servers out of eight."
+    }
+  ]
+}

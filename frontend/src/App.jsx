@@ -13,6 +13,7 @@ import AdminApp from './components/admin/AdminApp.jsx';
 import LegalPage from './components/legal/LegalPage.jsx';
 import AmbassadorProgram from './components/ambassador/AmbassadorProgram.jsx';
 import CareerPage from './components/careers/CareerPage.jsx';
+import SharedRecordPage from './components/sharedrecord/SharedRecordPage.jsx';
 
 const SECTIONS = [
   ['hero', HeroSection],
@@ -98,6 +99,12 @@ export default function App() {
 
   if (page === 'careers') {
     return <CareerPage />;
+  }
+
+  // Public read-only work record: /shared-record/<token> — no sign-in.
+  const sharedRecord = /^shared-record\/([a-f0-9]{16,})$/.exec(page);
+  if (sharedRecord) {
+    return <SharedRecordPage token={sharedRecord[1]} />;
   }
 
   // Dev QA mode: http://localhost:5173/?section=<name> renders one section only.

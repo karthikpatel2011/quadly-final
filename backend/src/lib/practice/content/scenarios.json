@@ -1,0 +1,1774 @@
+{
+  "scenarios": [
+    {
+      "id": "inc-cert-01",
+      "title": "Checkout stops mid-handshake",
+      "track": "Software Engineering",
+      "shared": true,
+      "level": 1,
+      "minutes": 5,
+      "parActions": 4,
+      "expectedEscalate": false,
+      "story": "It is 9:40 on a Monday. Your team runs the checkout service for a mid-size online store. At 9:37 every payment started failing — not some, all of them. The on-call channel pings you: orders have dropped to zero and the first customer tickets are arriving. You are the on-call engineer.",
+      "services": [
+        {
+          "id": "checkout-api",
+          "name": "Checkout API",
+          "role": "takes the cart and charges the card"
+        },
+        {
+          "id": "payment-gateway",
+          "name": "Payment gateway",
+          "role": "bank-side service that runs the charge"
+        },
+        {
+          "id": "cdn-edge",
+          "name": "Edge CDN",
+          "role": "serves the storefront itself"
+        },
+        {
+          "id": "monitoring",
+          "name": "Metrics stack",
+          "role": "dashboards and alerts"
+        }
+      ],
+      "timeline": [
+        {
+          "atMin": 0,
+          "text": "Alert: checkout success rate fell from 99.2% to 0% in two minutes. Severity: SEV-1."
+        }
+      ],
+      "events": [],
+      "actions": [
+        {
+          "id": "open-dashboard",
+          "label": "Open the service dashboard",
+          "group": "evidence",
+          "costMinutes": 2,
+          "reveal": {
+            "kind": "dashboard",
+            "title": "Checkout API — golden signals",
+            "lines": [
+              "requests/sec: 420 → 38 (dropping)",
+              "latency p95: 210ms — normal for this hour",
+              "error rate: responses ending in TLS alerts, not HTTP errors",
+              "payment-gateway: green, latency normal",
+              "cli browsed the storefront fine — only the charge step fails"
+            ],
+            "refutes": [
+              "rc-traffic-spike"
+            ]
+          }
+        },
+        {
+          "id": "read-logs-checkout",
+          "label": "Read the checkout API logs",
+          "group": "evidence",
+          "costMinutes": 5,
+          "reveal": {
+            "kind": "log",
+            "title": "checkout-api/error.log — last 10 minutes",
+            "lines": [
+              "09:38:02 – handshake failed: certificate verify failed (certificate expired)",
+              "09:38:04 – handshake failed: certificate verify failed (certificate expired)",
+              "09:39:11 – upstream charge aborted: TLS layer rejected before HTTP",
+              "09:39:40 – certificate verify failed (certificate expired) — 4,214 occurrences this hour"
+            ],
+            "supports": "rc-cert-expired",
+            "refutes": [
+              "rc-payment-down"
+            ]
+          }
+        },
+        {
+          "id": "check-recent-changes",
+          "label": "Check recent changes and deploys",
+          "group": "evidence",
+          "costMinutes": 3,
+          "reveal": {
+            "kind": "change-list",
+            "title": "Changes — last 7 days",
+            "lines": [
+              "deploys to checkout-api: none in 6 days (last: 2026-11-03, config-only)",
+              "payment-gateway: no version change for 3 weeks",
+              "infrastructure: certificate auto-renewal job ran 'last week' per schedule — logged exit code 1"
+            ],
+            "refutes": [
+              "rc-config-typo"
+            ]
+          }
+        },
+        {
+          "id": "compare-metrics",
+          "label": "Compare metrics across services",
+          "group": "evidence",
+          "costMinutes": 4,
+          "reveal": {
+            "kind": "metrics",
+            "title": "Cross-service comparison, 09:30–09:45",
+            "lines": [
+              "payment-gateway: healthy from its own logs, accepting test charges fine",
+              "cdn-edge: certificate presented is different and valid (expires in 61 days)",
+              "checkout-api certificate: issuer 'StoreFront CA', notAfter = yesterday 23:59",
+              "failure starts exactly when that certificate crossed its expiry"
+            ],
+            "supports": "rc-cert-expired",
+            "refutes": [
+              "rc-payment-down"
+            ]
+          }
+        },
+        {
+          "id": "run-expiry-check",
+          "label": "Run a safe certificate check",
+          "group": "check",
+          "costMinutes": 3,
+          "reveal": {
+            "kind": "output",
+            "title": "Manual check against checkout-api",
+            "lines": [
+              "> verify certificate on checkout-api:443",
+              "  subject: storename.example",
+              "  issuer: StoreFront CA",
+              "  notAfter: yesterday 23:59 UTC — EXPIRED",
+              "  auto-renewal path on disk: missing (job failed last week, no retry configured)"
+            ],
+            "supports": "rc-cert-expired"
+          }
+        },
+        {
+          "id": "rollback-last-deploy",
+          "label": "Roll back the last deploy",
+          "group": "change",
+          "costMinutes": 10,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Rollback attempt",
+            "lines": [
+              "nothing to roll back — checkout-api has had no deploy for 6 days",
+              "lock on deploy pipeline acquired and released; 10 minutes of the incident spent"
+            ]
+          }
+        },
+        {
+          "id": "scale-checkout",
+          "label": "Scale out checkout by 3x",
+          "group": "change",
+          "costMinutes": 8,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Scaling result",
+            "lines": [
+              "3 new instances came up healthy",
+              "all 5 instances now fail the same TLS handshake — same expired certificate on each",
+              "payment-gateway now sees 5x the retry traffic from us"
+            ]
+          }
+        }
+      ],
+      "rootCauses": [
+        {
+          "id": "rc-cert-expired",
+          "label": "The TLS certificate on checkout-api expired last night, so every charge is refused before HTTP",
+          "correct": true,
+          "keywords": [
+            "certificate",
+            "expired",
+            "tls",
+            "cert",
+            "renewal"
+          ]
+        },
+        {
+          "id": "rc-payment-down",
+          "label": "The payment gateway is down or refusing charges",
+          "correct": false,
+          "keywords": [
+            "payment",
+            "gateway",
+            "bank"
+          ]
+        },
+        {
+          "id": "rc-config-typo",
+          "label": "A typo in last week's config rollout broke checkout",
+          "correct": false,
+          "keywords": [
+            "config",
+            "typo",
+            "deploy"
+          ]
+        },
+        {
+          "id": "rc-traffic-spike",
+          "label": "A traffic spike is overwhelming checkout",
+          "correct": false,
+          "keywords": [
+            "traffic",
+            "spike",
+            "load"
+          ]
+        }
+      ],
+      "fixes": [
+        {
+          "id": "fix-renew-cert",
+          "label": "Reissue the certificate, deploy it to all checkout instances, and fix the renewal job with an expiry alert",
+          "safety": "safe",
+          "note": "Root cause addressed, plus a guard so the same night does not repeat — this is the fix the real team's postmortem pointed to."
+        },
+        {
+          "id": "fix-rollback",
+          "label": "Roll back the most recent deploy",
+          "safety": "noop",
+          "note": "There was no deploy — the certificate stays expired and checkout stays down."
+        },
+        {
+          "id": "fix-scale",
+          "label": "Scale checkout out 5x to push through the errors",
+          "safety": "harmful",
+          "note": "Every new instance carries the same expired certificate. You add load to the payment gateway and fix nothing."
+        }
+      ],
+      "hintLadder": [
+        "The dashboard shows requests failing while latency stays normal — that combination points away from load. Look at where exactly the requests die.",
+        "The logs name a very specific TLS problem. One cheap, safe check confirms the state of a certificate directly.",
+        "The failing certificate and the healthy CDN certificate are different files. Check when the checkout one expired, and who was supposed to renew it."
+      ],
+      "guidance": [
+        {
+          "afterActions": 0,
+          "text": "Start with the dashboard: does this look like load, latency, or errors? The answer narrows everything after."
+        },
+        {
+          "afterActions": 1,
+          "text": "Errors at the TLS layer usually mean one of two things: a certificate problem or a recent change. The logs and the change list will tell you which."
+        },
+        {
+          "afterActions": 2,
+          "text": "When you suspect a certificate, verify it directly — checking expiry is safe, cheap, and impossible to argue with."
+        }
+      ],
+      "defendQuestions": [
+        {
+          "id": "dq-cert-1",
+          "question": "Why did every payment fail at once instead of a few users seeing errors?",
+          "keyPoints": [
+            [
+              "all",
+              "every",
+              "whole"
+            ],
+            [
+              "certificate",
+              "cert",
+              "tls"
+            ],
+            [
+              "instances",
+              "nodes",
+              "each",
+              "shared"
+            ]
+          ]
+        },
+        {
+          "id": "dq-cert-2",
+          "question": "Scaling out made nothing better. Why, in terms of the certificate?",
+          "keyPoints": [
+            [
+              "same",
+              "each",
+              "every"
+            ],
+            [
+              "certificate",
+              "cert"
+            ],
+            [
+              "copy",
+              "instances",
+              "mounted",
+              "shared"
+            ]
+          ]
+        },
+        {
+          "id": "dq-cert-3",
+          "question": "What would you change so this class of failure announces itself before users do?",
+          "keyPoints": [
+            [
+              "expiry",
+              "expiring",
+              "renewal"
+            ],
+            [
+              "alert",
+              "monitor",
+              "notification",
+              "dashboard"
+            ],
+            [
+              "days",
+              "before",
+              "ahead",
+              "check"
+            ],
+            [
+              "automate",
+              "automatic"
+            ]
+          ]
+        }
+      ],
+      "lesson": "Certificates expire on a calendar, not on usage — and they fail closed. A quiet renewal job with a non-zero exit and no retry is a live incident waiting for its date. Alert on expiry windows, not on broken handshakes.",
+      "realAction": "In the real incident, the service's authentication certificate expired and locked users out for hours; the company said afterwards that an authentication certificate had expired and they were rotating it, adding expiry monitoring so the failure could not repeat silently. We simplified the scale: one service, one store, synthetic numbers.",
+      "source": {
+        "company": "Microsoft (Teams outage coverage)",
+        "url": "https://techcrunch.com/2020/02/03/microsoft-teams-has-been-down-this-morning/",
+        "title": "Microsoft Teams has been down this morning (TechCrunch, quoting Microsoft)"
+      },
+      "inspiredByNote": "Inspired by Microsoft's publicly reported February 2020 Teams outage, simplified. Every log line and number is synthetic.",
+      "status": "published",
+      "reviewedBy": "seed",
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "inc-s3-01",
+      "title": "A maintenance typo takes out object storage",
+      "track": "Software Engineering",
+      "shared": false,
+      "level": 3,
+      "minutes": 10,
+      "parActions": 5,
+      "expectedEscalate": true,
+      "story": "You are on-call for a large object-storage platform. At 9:37 am the scheduled maintenance playbook ran, and minutes later a third of the platform's requests started failing — and this platform backs half the web, so within minutes customer tickets and public reports pile up. The last maintenance step removed some expired servers from the index. Something in that step went wrong.",
+      "services": [
+        {
+          "id": "storage-index",
+          "name": "Storage index",
+          "role": "tracks every storage node and allocates capacity"
+        },
+        {
+          "id": "storage-nodes",
+          "name": "Storage nodes",
+          "role": "hold the data itself"
+        },
+        {
+          "id": "platform-dashboards",
+          "name": "Platform dashboards",
+          "role": "status pages and metrics — served from this same storage"
+        },
+        {
+          "id": "client-apps",
+          "name": "Customer apps",
+          "role": "customer services reading and writing files"
+        }
+      ],
+      "timeline": [
+        {
+          "atMin": 0,
+          "text": "Alert: error rate for object operations in the primary region jumped from 0.01% to 33%."
+        }
+      ],
+      "events": [
+        {
+          "atMin": 12,
+          "text": "Customer apps start timing out and retrying; their back-off is not working for some, so retry traffic multiplies."
+        },
+        {
+          "atMin": 25,
+          "text": "Your own dashboards and status page stop loading — they read from this storage system."
+        }
+      ],
+      "actions": [
+        {
+          "id": "check-status-boards",
+          "label": "Check the platform status boards",
+          "group": "evidence",
+          "costMinutes": 2,
+          "reveal": {
+            "kind": "dashboard",
+            "title": "Primary region — object operations",
+            "lines": [
+              "GET/PUT error rate: 0.01% → 33% and climbing",
+              "affected operations: reads and writes both, one region only",
+              "other regions: green, no error change",
+              "internal dashboards: partially degraded (they host their own files here)"
+            ],
+            "refutes": [
+              "rc-global-dns"
+            ]
+          }
+        },
+        {
+          "id": "read-storage-logs",
+          "label": "Read the storage index logs",
+          "group": "evidence",
+          "costMinutes": 5,
+          "reveal": {
+            "kind": "log",
+            "title": "storage-index/maintenance.log — this morning",
+            "lines": [
+              "09:37:12 – playbook 'expire-old-servers' started (scheduled)",
+              "09:37:41 – subsystem REMOVE ran: 'removing a set of expired server entries from the index'",
+              "09:37:44 – index health: storage-node pool below minimum healthy threshold",
+              "09:37:52 – warnings: allocation requests have no free server to place data on"
+            ],
+            "supports": "rc-bad-removal",
+            "refutes": [
+              "rc-traffic-spike",
+              "rc-disk-failures"
+            ]
+          }
+        },
+        {
+          "id": "inspect-change-log",
+          "label": "Inspect the exact change list from maintenance",
+          "group": "evidence",
+          "costMinutes": 4,
+          "reveal": {
+            "kind": "change-list",
+            "title": "Maintenance change detail",
+            "lines": [
+              "intended playbook input: remove 1 expired test server entry",
+              "actual input: one additional character in the server list argument",
+              "result: 27 entries removed instead of 1 — the index now records a far smaller pool than reality",
+              "change was applied to the live index without a dry-run step"
+            ],
+            "supports": "rc-bad-removal"
+          }
+        },
+        {
+          "id": "compare-capacity-metrics",
+          "label": "Compare capacity metrics before and after",
+          "group": "evidence",
+          "costMinutes": 3,
+          "reveal": {
+            "kind": "metrics",
+            "title": "Index pool utilization",
+            "lines": [
+              "09:30 — recorded pool: 410 nodes, utilization 34%",
+              "09:38 — recorded pool: 383 nodes, utilization 96%",
+              "actual physical nodes online: 409 (they never went anywhere)",
+              "the data still exists on disk; only the index's view of the pool collapsed"
+            ],
+            "supports": "rc-bad-removal",
+            "refutes": [
+              "rc-disk-failures"
+            ]
+          }
+        },
+        {
+          "id": "read-dns-records",
+          "label": "Check DNS resolution for the storage endpoints",
+          "group": "evidence",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "DNS spot checks",
+            "lines": [
+              "all storage endpoints resolve correctly from 4 vantage points",
+              "TTLs and records unchanged in 30 days — tempting to check, genuinely fine",
+              "errors are application-level 'capacity' errors, not DNS failure"
+            ],
+            "refutes": [
+              "rc-global-dns"
+            ]
+          }
+        },
+        {
+          "id": "restart-index",
+          "label": "Restart the storage-index subsystem",
+          "group": "change",
+          "costMinutes": 10,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Index restart",
+            "lines": [
+              "index restarted cleanly from ITS OWN recorded state",
+              "recorded state is the problem: pool still shows 383 nodes, utilization 96%",
+              "error rate unchanged; 10 sim-minutes spent"
+            ]
+          }
+        },
+        {
+          "id": "escalate-coordinator",
+          "label": "Escalate: declare SEV-1 and pull in the platform coordinator",
+          "group": "escalate",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "On-call coordination",
+            "lines": [
+              "coordinator joins; comms channel opened; cross-team work streamed (this regional dependency is bigger than one queue)",
+              "real time-out: severity page and public comms also depend on helpers because your own dashboards are degraded"
+            ]
+          }
+        }
+      ],
+      "rootCauses": [
+        {
+          "id": "rc-bad-removal",
+          "label": "A one-character typo in the removal input stripped far more server entries from the index than intended, so allocation believed most of the pool was gone",
+          "correct": true,
+          "keywords": [
+            "index",
+            "removal",
+            "remove",
+            "entries",
+            "typo",
+            "input",
+            "playbook"
+          ]
+        },
+        {
+          "id": "rc-global-dns",
+          "label": "A DNS problem is sending clients to dead endpoints",
+          "correct": false,
+          "keywords": [
+            "dns",
+            "resolution"
+          ]
+        },
+        {
+          "id": "rc-traffic-spike",
+          "label": "A customer's viral app spiked traffic past capacity",
+          "correct": false,
+          "keywords": [
+            "traffic",
+            "spike",
+            "viral"
+          ]
+        },
+        {
+          "id": "rc-disk-failures",
+          "label": "A wave of disk failures removed real storage capacity",
+          "correct": false,
+          "keywords": [
+            "disk",
+            "hardware",
+            "nodes down"
+          ]
+        }
+      ],
+      "fixes": [
+        {
+          "id": "fix-restore-entries",
+          "label": "Restore the removed index entries from the index configuration backup and re-run allocation",
+          "safety": "safe",
+          "note": "The data never left disk; rebuilding the index's view restores placement. This mirrors what the real team did: restart with a correct, smaller set of steps and let the subsystem rebuild capacity from its records."
+        },
+        {
+          "id": "fix-wait-autoscaler",
+          "label": "Let the autoscaler add new nodes until the pool recovers",
+          "safety": "noop",
+          "note": "Provisioning a third of a region takes days. The index is lying about existing nodes — new ones do not fix the view."
+        },
+        {
+          "id": "fix-wipe-and-rebuild",
+          "label": "Delete the index and rebuild it from scratch to fix the corruption",
+          "safety": "harmful",
+          "note": "You do not rebuild the one component every request consults during an outage. It prolongs the incident and risks the entry data you need for recovery."
+        }
+      ],
+      "hintLadder": [
+        "One region only, both reads and writes — that points at something all operations share, not at any single customer or disk.",
+        "The maintenance window and the failure start line up to the minute. What exactly did the playbook change, and what does its change record show?",
+        "Compare what the index believes (its recorded pool) against what physically exists. If they disagree, the fix is about the index's view, not the hardware."
+      ],
+      "guidance": [],
+      "defendQuestions": [
+        {
+          "id": "dq-s3-1",
+          "question": "Retries from customer apps made the outage worse. Why did their retries multiply the damage?",
+          "keyPoints": [
+            [
+              "retry",
+              "retries",
+              "backoff",
+              "back-off"
+            ],
+            [
+              "capacity",
+              "fewer",
+              "smaller",
+              "pool"
+            ],
+            [
+              "storm",
+              "multiply",
+              "queue",
+              "load"
+            ]
+          ]
+        },
+        {
+          "id": "dq-s3-2",
+          "question": "Why did waiting on the autoscaler fail as a strategy here?",
+          "keyPoints": [
+            [
+              "index",
+              "view",
+              "recorded",
+              "believed"
+            ],
+            [
+              "days",
+              "slow",
+              "provision"
+            ],
+            [
+              "physical",
+              "existing",
+              "real"
+            ]
+          ]
+        },
+        {
+          "id": "dq-s3-3",
+          "question": "The dashboards themselves went down. What does that tell you to change for next time?",
+          "keyPoints": [
+            [
+              "dependency",
+              "depend",
+              "storage",
+              "own"
+            ],
+            [
+              "out-of-band",
+              "external",
+              "separate"
+            ],
+            [
+              "degraded",
+              "status",
+              "visibility",
+              "monitor"
+            ]
+          ]
+        }
+      ],
+      "lesson": "The bigger the blast radius of a maintenance tool, the more its inputs deserve a dry-run, a size guard, and a human-readable preview. 'Remove 1' and 'remove 27' should not both pass without a pause.",
+      "realAction": "In the real incident, a mistyped command made a maintenance subsystem remove a much larger set of server entries than intended; capacity plummeted, retries cascaded across customer applications, and even the company's own dashboards degraded because they depended on the affected storage. Recovery meant restoring the index and letting capacity rebuild. We simplified to one typo, one region, synthetic numbers.",
+      "source": {
+        "company": "Amazon Web Services",
+        "url": "https://aws.amazon.com/message/41926/",
+        "title": "Summary of the Amazon S3 Service Disruption in the Northern Virginia (US-EAST-1) Region"
+      },
+      "inspiredByNote": "Inspired by AWS's public postmortem of the February 2017 S3 disruption, simplified. Every log line and number is synthetic.",
+      "status": "published",
+      "reviewedBy": "seed",
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "inc-ml-labels-01",
+      "title": "The tagging model starts labeling people wrongly",
+      "track": "AI & ML",
+      "shared": false,
+      "level": 3,
+      "minutes": 10,
+      "parActions": 5,
+      "expectedEscalate": true,
+      "story": "You are the on-call for a photo app's ML platform. At 8 am the human-review queue reports that new uploads are getting an offensive, wildly wrong label for a group of users, and the overnight evaluation alert fired: accuracy for one label family collapsed after the nightly retrain. Users are already posting screenshots. You need to find what changed and stop the harm.",
+      "services": [
+        {
+          "id": "labeling-model",
+          "name": "Labeling model",
+          "role": "assigns tags to uploaded photos"
+        },
+        {
+          "id": "training-pipeline",
+          "name": "Training pipeline",
+          "role": "nightly retrain on new labeled data"
+        },
+        {
+          "id": "eval-service",
+          "name": "Evaluation service",
+          "role": "runs held-out quality checks after each retrain"
+        },
+        {
+          "id": "review-queue",
+          "name": "Human review queue",
+          "role": "flagged predictions reviewed by people"
+        }
+      ],
+      "timeline": [
+        {
+          "atMin": 0,
+          "text": "Alert: overnight evaluation failed — label-class accuracy for one family dropped from 99.1% to 71.4%. Two user reports of offensive tags arrived in the same window."
+        }
+      ],
+      "events": [
+        {
+          "atMin": 15,
+          "text": "A user posts a screenshot of a wrong label on a public forum; staff confirm the report is real."
+        },
+        {
+          "atMin": 28,
+          "text": "The review queue floods: hundreds of photos flagged by users for the same label family."
+        }
+      ],
+      "actions": [
+        {
+          "id": "open-eval-dashboard",
+          "label": "Open the evaluation dashboard",
+          "group": "evidence",
+          "costMinutes": 2,
+          "reveal": {
+            "kind": "dashboard",
+            "title": "Overnight eval — per-class accuracy",
+            "lines": [
+              "class 'animal-family': accuracy 99.1% (unchanged)",
+              "class 'c-people': accuracy 71.4% — was 99.0% yesterday",
+              "overall model accuracy: 98.7% — barely moved (one class collapsed)",
+              "eval ran on the same held-out set as always — the benchmark itself is fine"
+            ],
+            "supports": "rc-dirty-batch",
+            "refutes": [
+              "rc-eval-broken"
+            ]
+          }
+        },
+        {
+          "id": "read-serving-logs",
+          "label": "Read the model serving logs",
+          "group": "evidence",
+          "costMinutes": 4,
+          "reveal": {
+            "kind": "log",
+            "title": "labeling-model/serve.log — this morning",
+            "lines": [
+              "model version in production: same as yesterday (deploy was 5 days ago)",
+              "request latency and error rates: normal",
+              "wrong-label predictions show ordinary, confident model outputs — no crash, no fallback path",
+              "mislabels cluster on photos containing the same subject type"
+            ],
+            "refutes": [
+              "rc-deploy-bug"
+            ]
+          }
+        },
+        {
+          "id": "check-recent-changes",
+          "label": "Check recent changes and deploys",
+          "group": "evidence",
+          "costMinutes": 3,
+          "reveal": {
+            "kind": "change-list",
+            "title": "Platform changes — last 48 hours",
+            "lines": [
+              "model deploys: none for 5 days",
+              "serving config: unchanged",
+              "training pipeline: nightly retrain job ran 02:00; a new data source bucket was added to the ingestion config 2 days ago",
+              "the new bucket passed only a pipeline-smoke check, not a label-quality review"
+            ],
+            "supports": "rc-dirty-batch",
+            "refutes": [
+              "rc-deploy-bug"
+            ]
+          }
+        },
+        {
+          "id": "inspect-training-batch",
+          "label": "Inspect the new training batch",
+          "group": "evidence",
+          "costMinutes": 6,
+          "reveal": {
+            "kind": "metrics",
+            "title": "Nightly training batch composition",
+            "lines": [
+              "batch size: 2.4M labeled images (usual: 300K)",
+              "new source bucket contributed 2.1M of them — added without label review",
+              "random sample of 50 from the new bucket: 11 labels are wrong, 3 are abusive",
+              "the mislabeled rows correlate exactly with the eval class that collapsed"
+            ],
+            "supports": "rc-dirty-batch",
+            "refutes": [
+              "rc-feature-drift"
+            ]
+          }
+        },
+        {
+          "id": "sample-live-predictions",
+          "label": "Run a safe sample check on live predictions",
+          "group": "check",
+          "costMinutes": 4,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Manual sample — 100 fresh uploads",
+            "lines": [
+              "9 of 100 uploads carry the wrong label; every one contains the same subject type",
+              "confidence scores are high — the model is sure, and wrong",
+              "serving stack is healthy; the model's judgment is the thing that changed"
+            ],
+            "supports": "rc-dirty-batch"
+          }
+        },
+        {
+          "id": "pause-auto-tagging",
+          "label": "Pause auto-tagging for new uploads",
+          "group": "change",
+          "costMinutes": 5,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Feature flag: auto-tag OFF",
+            "lines": [
+              "no new labels are generated; user-facing harm stops growing",
+              "uploads continue; labels queue for later human pass",
+              "this is containment, not the fix — the poisoned batch is still in the model"
+            ]
+          }
+        },
+        {
+          "id": "rollback-model",
+          "label": "Roll back to the previous model build",
+          "group": "change",
+          "costMinutes": 10,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Model rollback",
+            "lines": [
+              "previous build restored; the immediate mislabels stop",
+              "that build was trained on the same pipeline — tomorrow's retrain will re-learn from the same poisoned bucket",
+              "rollback treats the symptom, not the source"
+            ]
+          }
+        },
+        {
+          "id": "escalate-trust-review",
+          "label": "Escalate: bring in the safety review queue and notify the platform lead",
+          "group": "escalate",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Escalation",
+            "lines": [
+              "trust-and-safety reviewers start an emergency label pass on flagged uploads",
+              "platform lead wakes the data- ingestion owner; public-response draft started",
+              "an ML quality incident with user-facing harm needs humans in the loop, not just an engineer"
+            ]
+          }
+        }
+      ],
+      "rootCauses": [
+        {
+          "id": "rc-dirty-batch",
+          "label": "A newly added, unreviewed data source poured mislabeled images into the nightly training batch, and the retrained model learned the wrong associations",
+          "correct": true,
+          "keywords": [
+            "training",
+            "data",
+            "batch",
+            "mislabeled",
+            "labels",
+            "unreviewed",
+            "poison"
+          ]
+        },
+        {
+          "id": "rc-deploy-bug",
+          "label": "A bug in the last model deploy broke predictions for that class",
+          "correct": false,
+          "keywords": [
+            "deploy",
+            "serve",
+            "release",
+            "bug"
+          ]
+        },
+        {
+          "id": "rc-feature-drift",
+          "label": "Real-world photo content drifted faster than the model could handle",
+          "correct": false,
+          "keywords": [
+            "drift",
+            "distribution",
+            "real-world"
+          ]
+        },
+        {
+          "id": "rc-eval-broken",
+          "label": "The evaluation benchmark itself is broken and the alarm is a false one",
+          "correct": false,
+          "keywords": [
+            "eval",
+            "benchmark",
+            "held-out",
+            "false alarm"
+          ]
+        }
+      ],
+      "fixes": [
+        {
+          "id": "fix-clean-retrain",
+          "label": "Keep tagging paused, remove the unreviewed source, retrain on verified data, and add a label-quality gate before any new source can enter training",
+          "safety": "safe",
+          "note": "Contains the harm, removes the cause, and adds the missing check so an unreviewed bucket cannot reach training again."
+        },
+        {
+          "id": "fix-rollback-only",
+          "label": "Restore the previous model build and move on",
+          "safety": "noop",
+          "note": "The pipeline that poisoned last night's batch will poison tonight's too. Nothing upstream changed."
+        },
+        {
+          "id": "fix-word-filter",
+          "label": "Ship an emergency filter that hides just the offensive label word everywhere",
+          "safety": "harmful",
+          "note": "It silences the visible symptom and leaves the model blind to a whole concept — the kind of shortcut that reads as a fix today and becomes its own incident later."
+        }
+      ],
+      "hintLadder": [
+        "One class collapsed while overall accuracy barely moved — that is a data story, not an infrastructure story.",
+        "The model in production did not change for five days. Ask instead what the model learned from overnight.",
+        "Compare the new training batch against the usual one — size, sources, and who (or what) reviewed the labels."
+      ],
+      "guidance": [],
+      "defendQuestions": [
+        {
+          "id": "dq-ml-1",
+          "question": "Why did rolling back the model not fix the root cause?",
+          "keyPoints": [
+            [
+              "pipeline",
+              "retrain",
+              "nightly",
+              "same"
+            ],
+            [
+              "data",
+              "batch",
+              "bucket",
+              "source"
+            ],
+            [
+              "again",
+              "next",
+              "re-learn",
+              "relearn",
+              "repeat"
+            ]
+          ]
+        },
+        {
+          "id": "dq-ml-2",
+          "question": "You paused auto-tagging first instead of fixing the model. Why is containment worth it even before the cause is known?",
+          "keyPoints": [
+            [
+              "stop",
+              "contain",
+              "pause",
+              "limit"
+            ],
+            [
+              "harm",
+              "users",
+              "hurt",
+              "visible"
+            ],
+            [
+              "time",
+              "buy",
+              "investigate",
+              "space"
+            ]
+          ]
+        },
+        {
+          "id": "dq-ml-3",
+          "question": "What gate belongs between any new data source and the training set?",
+          "keyPoints": [
+            [
+              "review",
+              "quality",
+              "verified",
+              "human"
+            ],
+            [
+              "sample",
+              "audit",
+              "check",
+              "inspect"
+            ],
+            [
+              "threshold",
+              "pass",
+              "gate",
+              "approve"
+            ]
+          ]
+        }
+      ],
+      "lesson": "A model is only as trustworthy as the pipeline that feeds it. Any data source must clear the same quality bar as the code that ships — reviewed, sampled, and gated — because bad labels do not crash anything; they quietly become behavior.",
+      "realAction": "In the real incident, a widely used photo app mislabeled a group of people with an offensive tag; the company apologized publicly, said it was appalled, and worked on labels for that class. Follow-up reporting years later found the visible label had been blocked rather than fully fixed, which is exactly the shortcut our edge teaches against. We changed the cause to an unreviewed data source and made every number synthetic.",
+      "source": {
+        "company": "Google (Photos labeling incident, follow-up reporting)",
+        "url": "https://www.wired.com/story/when-it-comes-to-gorillas-google-photos-remains-blind/",
+        "title": "When It Comes to Gorillas, Google Photos Remains Blind (WIRED)"
+      },
+      "inspiredByNote": "Inspired by Google Photos' publicly reported 2015 labeling failure and its public follow-up, simplified. Every model, dataset, and number is synthetic.",
+      "status": "published",
+      "reviewedBy": "seed",
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "inc-sec-phish-01",
+      "title": "Verified accounts start posting a scam",
+      "track": "Cyber Security",
+      "shared": false,
+      "level": 3,
+      "minutes": 12,
+      "parActions": 5,
+      "expectedEscalate": true,
+      "story": "You are the on-call for platform security at a social platform. At 3:02 pm, reports flood in: several well-known verified accounts are posting the same cryptocurrency scam, one after another. Nothing was deployed today. Your job is purely defensive: figure out how the accounts are being abused and contain it, then say what you would harden.",
+      "services": [
+        {
+          "id": "auth-service",
+          "name": "Auth service",
+          "role": "logins, password resets, sessions"
+        },
+        {
+          "id": "admin-tools",
+          "name": "Internal support tools",
+          "role": "let support staff act on accounts"
+        },
+        {
+          "id": "posting-api",
+          "name": "Posting API",
+          "role": "publishes posts from apps and internal tools"
+        },
+        {
+          "id": "support-desk",
+          "name": "Support desk",
+          "role": "first to see user reports"
+        }
+      ],
+      "timeline": [
+        {
+          "atMin": 0,
+          "text": "Alert from the support desk: 6+ high-profile accounts posted the same scam post within minutes. Screenshots included. Nothing deployed today."
+        }
+      ],
+      "events": [
+        {
+          "atMin": 10,
+          "text": "Two more verified accounts post the same scam; press notices."
+        },
+        {
+          "atMin": 20,
+          "text": "Your integrity team asks for a answer: is this the app, the accounts, or our own tooling?"
+        }
+      ],
+      "actions": [
+        {
+          "id": "check-support-queue",
+          "label": "Check the support-desk queue",
+          "group": "evidence",
+          "costMinutes": 2,
+          "reveal": {
+            "kind": "dashboard",
+            "title": "Support desk — scam reports",
+            "lines": [
+              "reports of the same scam post: 9 high-profile accounts, 14 minutes",
+              "all posts carry identical text; users flag them within a minute of posting",
+              "no new tickets about password problems from those accounts' owners",
+              "support can still log in and work — the abuse is specific, not general"
+            ],
+            "refutes": [
+              "rc-deploy-weakness"
+            ]
+          }
+        },
+        {
+          "id": "read-auth-logs",
+          "label": "Read the auth-service logs",
+          "group": "evidence",
+          "costMinutes": 5,
+          "reveal": {
+            "kind": "log",
+            "title": "auth-service/audit.log — this afternoon",
+            "lines": [
+              "14:22 – password reset approved by the phone-based reset desk for 2 internal accounts",
+              "14:31 – those accounts logged in from 2 new networks, SMS second factor accepted",
+              "14:33 – MFA push approval in under 4 seconds — user was on a live call at the time (per calendar)",
+              "no failed-attempt bursts anywhere: this was not a credentials guess, it was credentials handed over"
+            ],
+            "supports": "rc-social-engineering",
+            "refutes": [
+              "rc-api-key-leak",
+              "rc-deploy-weakness"
+            ]
+          }
+        },
+        {
+          "id": "check-change-log",
+          "label": "Check today's change and deploy log",
+          "group": "evidence",
+          "costMinutes": 2,
+          "once": false,
+          "reveal": {
+            "kind": "change-list",
+            "title": "Changes — platform, last 24 hours",
+            "lines": [
+              "deployments: none today (last deploy: 4 days ago, no auth changes in it)",
+              "auth config: unchanged for 3 weeks",
+              "nothing about today's failure involves new code"
+            ],
+            "refutes": [
+              "rc-deploy-weakness"
+            ]
+          }
+        },
+        {
+          "id": "trace-admin-tools",
+          "label": "Trace what the internal tools did under those sessions",
+          "group": "evidence",
+          "costMinutes": 6,
+          "reveal": {
+            "kind": "log",
+            "title": "admin-tools/audit.log — 14:33 onward",
+            "lines": [
+              "14:34 – 'delegate posting access' granted from staff session S-114 → target verified accounts (9 in 11 minutes)",
+              "14:36 – posts published via a path that reflects staff-tool provenance, not the public apps",
+              "the tool trusted the staff session fully; a support-level login could reach these actions at all",
+              "all 9 scam posts trace back through delegate grants, not through any of the owners' own devices"
+            ],
+            "supports": "rc-social-engineering",
+            "refutes": [
+              "rc-insider"
+            ]
+          }
+        },
+        {
+          "id": "inspect-api-traffic",
+          "label": "Inspect posting-API traffic for leaked credentials",
+          "group": "evidence",
+          "costMinutes": 4,
+          "once": false,
+          "reveal": {
+            "kind": "metrics",
+            "title": "Posting API — credential path analysis",
+            "lines": [
+              "posts in question: all authorized by staff-tool delegate tokens, none by app client credentials",
+              "no single API key in use across the 9 posts; app credentials nowhere in the chain",
+              "posting API itself: functioned exactly per its rules — the rules were the problem"
+            ],
+            "refutes": [
+              "rc-api-key-leak"
+            ]
+          }
+        },
+        {
+          "id": "session-inventory",
+          "label": "Run a live session inventory for the affected staff accounts",
+          "group": "check",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Active sessions — 2 staff accounts",
+            "lines": [
+              "each account shows 2 live sessions right now: office + unknown network",
+              "unknown networks match the 14:31 logins exactly",
+              "delegate grants from those sessions: 9, all revocable from this console"
+            ],
+            "supports": "rc-social-engineering"
+          }
+        },
+        {
+          "id": "rotate-passwords",
+          "label": "Force a password rotation on the two staff accounts",
+          "group": "change",
+          "costMinutes": 5,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Credential rotation",
+            "lines": [
+              "passwords rotated; the desk plans to re-verify the humans later",
+              "existing sessions survive a rotation and stay logged in by design",
+              "one more scam post just went out — rotation alone did not contain anything"
+            ]
+          }
+        },
+        {
+          "id": "revoke-sessions-grants",
+          "label": "Revoke the live sessions and every delegate grant they created",
+          "group": "change",
+          "costMinutes": 4,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Session + grant revocation",
+            "lines": [
+              "both unknown-network sessions terminated; 9 delegate grants revoked",
+              "posting through the internal path stops; owners' own apps unaffected (their sessions were never touched)",
+              "support's legitimate access continues through a fresh login — least privilege would say the tool should not have allowed this in the first place"
+            ],
+            "supports": "rc-social-engineering"
+          }
+        },
+        {
+          "id": "escalate-security",
+          "label": "Escalate: declare a security incident and pull in integrity + comms",
+          "group": "escalate",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Incident declaration",
+            "lines": [
+              "security incident declared; integrity team joins; owner-outreach list assembled",
+              "comms drafts the public note; platform lead restricted some account features platform-wide during response, as the real incident did",
+              "the reset desk pauses phone-based resets until the process is re-verified — the path that was abused"
+            ]
+          }
+        }
+      ],
+      "rootCauses": [
+        {
+          "id": "rc-social-engineering",
+          "label": "Staff were tricked by phone-based social engineering into resetting credentials, and the attackers used that access with internal tools to post and delegate over these accounts",
+          "correct": true,
+          "keywords": [
+            "social",
+            "phishing",
+            "vishing",
+            "phone",
+            "staff",
+            "reset",
+            "internal",
+            "tools"
+          ]
+        },
+        {
+          "id": "rc-api-key-leak",
+          "label": "A leaked API key lets outsiders post directly",
+          "correct": false,
+          "keywords": [
+            "api",
+            "key",
+            "leak",
+            "token leak"
+          ]
+        },
+        {
+          "id": "rc-deploy-weakness",
+          "label": "A recent deploy quietly weakened authentication",
+          "correct": false,
+          "keywords": [
+            "deploy",
+            "release",
+            "regression"
+          ]
+        },
+        {
+          "id": "rc-insider",
+          "label": "An employee is deliberately posting the scams",
+          "correct": false,
+          "keywords": [
+            "insider",
+            "employee",
+            "malicious",
+            "traitor"
+          ]
+        }
+      ],
+      "fixes": [
+        {
+          "id": "fix-contain-harden",
+          "label": "Revoke every affected session and delegate grant, force credential resets with phishing-resistant MFA, restrict the internal tool's override path pending review, and add voice-verification for password resets",
+          "safety": "safe",
+          "note": "Contain first, then close the specific path that was abused, then make the same trick structurally harder. This mirrors the real response: sessions and access were cut and the platform limited the affected surfaces during the incident."
+        },
+        {
+          "id": "fix-delete-posts",
+          "label": "Delete the scam posts and suspend the affected accounts",
+          "safety": "noop",
+          "note": "The attackers still hold access and the accounts are victims — deleting posts removes evidence and restores nothing while new scam posts go out."
+        },
+        {
+          "id": "fix-platform-offline",
+          "label": "Take posting offline platform-wide until you fully understand the incident",
+          "safety": "harmful",
+          "note": "A contained, targeted problem does not justify taking the entire platform's voice offline — the blast radius should match the blast."
+        }
+      ],
+      "hintLadder": [
+        "Nothing new shipped and the pattern hits famous accounts first — check how access is gained, not what code runs.",
+        "Password resets sound harmless in logs. Check who could be talked into approving one, and what the reset process actually verifies.",
+        "Compare the few compromised accounts' session trail to everyone else's. Then check what the internal tools allow a support-authenticated session to do, and go cut that access off."
+      ],
+      "guidance": [],
+      "defendQuestions": [
+        {
+          "id": "dq-sec-1",
+          "question": "Why is phone-verifiable, SMS-based second factor not enough against this kind of attack?",
+          "keyPoints": [
+            [
+              "realtime",
+              "phishing",
+              "phish",
+              "trick",
+              "relay"
+            ],
+            [
+              "sms",
+              "text",
+              "phone"
+            ],
+            [
+              "phishing-resistant",
+              "hardware",
+              "key",
+              "app-based"
+            ]
+          ]
+        },
+        {
+          "id": "dq-sec-2",
+          "question": "The first tempting story was a malicious insider. Why is that both wrong and harmful as a default explanation?",
+          "keyPoints": [
+            [
+              "evidence",
+              "log",
+              "session",
+              "shows"
+            ],
+            [
+              "impersonation",
+              "external",
+              "social",
+              "tricked"
+            ],
+            [
+              "blameless",
+              "presumption",
+              "trust",
+              "morale"
+            ]
+          ]
+        },
+        {
+          "id": "dq-sec-3",
+          "question": "After containment, what one control change buys the most against phone-based credential attacks?",
+          "keyPoints": [
+            [
+              "verify",
+              "callback",
+              "out-of-band",
+              "confirmation"
+            ],
+            [
+              "mfa",
+              "phishing-resistant",
+              "hardware",
+              "fido"
+            ],
+            [
+              "process",
+              "procedure",
+              "reset",
+              "approval"
+            ]
+          ]
+        }
+      ],
+      "lesson": "People are part of your authentication chain. When a support process can be talked into a reset, attackers do not need your code to be broken — the fix is verification out-of-band, tighter least-privilege on internal tools, and a session-kill switch that works at incident speed. And assume attack, not malice, about your colleagues.",
+      "realAction": "In the real incident, attackers targeted a small number of employees by phone, manipulating them into providing credentials and/or resetting authentication; the attackers then used internal tools to post from, and delegate over, high-profile accounts, and the company cut off that access while limiting some account features platform-wide during response. We simplified: one containment arc, synthetic logs, no attack instructions — this scenario is defensive and educational only, like all our content.",
+      "source": {
+        "company": "Twitter",
+        "url": "https://blog.twitter.com/en_us/topics/company/2020/an-update-on-our-security-incident",
+        "title": "An update on our security incident (official company post)"
+      },
+      "inspiredByNote": "Inspired by Twitter's public July 2020 security-incident update, simplified. All logs, names, and numbers are synthetic.",
+      "status": "published",
+      "reviewedBy": "seed",
+      "createdAt": "2026-11-09"
+    },
+    {
+      "id": "inc-knight-01",
+      "title": "A quiet redeploy wakes up eight-year-old code",
+      "track": "Software Engineering",
+      "shared": true,
+      "level": 5,
+      "minutes": 15,
+      "parActions": 6,
+      "timeLimitMinutes": 30,
+      "expectedEscalate": true,
+      "story": "You are the on-call engineer for a market-making desk's autonomous trading engine. At 9:30 am the market opened normally. At 9:33 the deployment pipeline finished last night's prep for tomorrow's new order-type feature — a routine change handled by an automated system. At 9:34 your order flow explodes and the desk's P&L starts moving like nothing anyone has seen. You are watching the dashboard while the desk stares at you.",
+      "services": [
+        {
+          "id": "order-gateway",
+          "name": "Order gateway",
+          "role": "your single pipe to the exchange"
+        },
+        {
+          "id": "smarts-engine",
+          "name": "Trading engine",
+          "role": "8 replicas that decide what and when to send"
+        },
+        {
+          "id": "market-feed",
+          "name": "Market feed",
+          "role": "live prices from the exchange"
+        },
+        {
+          "id": "desk-risk",
+          "name": "Risk monitors",
+          "role": "position limits and P&L display"
+        }
+      ],
+      "timeline": [
+        {
+          "atMin": 0,
+          "text": "SEV-1 from the desk: order rate is 100x normal on a handful of symbols and positions are building fast. The engine did exactly what its rules said — the rules changed under it."
+        }
+      ],
+      "events": [
+        {
+          "atMin": 5,
+          "text": "The desk asks on the bridge: 'are we testing a new strategy?' Nobody is."
+        },
+        {
+          "atMin": 12,
+          "text": "The exchange's market operations call about repeated quotes on 4 symbols from your firm."
+        },
+        {
+          "atMin": 20,
+          "text": "P&L swings past the desk's worst-case chart. Every minute of noise costs money."
+        }
+      ],
+      "actions": [
+        {
+          "id": "open-live-dashboard",
+          "label": "Open the live order and risk dashboard",
+          "group": "evidence",
+          "costMinutes": 2,
+          "reveal": {
+            "kind": "dashboard",
+            "title": "Order flow + risk, real time",
+            "lines": [
+              "order rate: 100x normal, concentrated in 4 symbols",
+              "child orders: repeating in identical bursts, same size, same pattern",
+              "fills: genuinely filling — this is real money",
+              "overall market: choppy morning, but only our symbols show this pattern (noise, not signal)"
+            ],
+            "refutes": [
+              "rc-market-move"
+            ]
+          }
+        },
+        {
+          "id": "read-order-logs",
+          "label": "Read the engine's order logs",
+          "group": "evidence",
+          "costMinutes": 5,
+          "reveal": {
+            "kind": "log",
+            "title": "smarts-engine/orders.log — 09:34 onward",
+            "lines": [
+              "same parent order re-sent every few hundred milliseconds; hundreds of children each",
+              "log field 'position-complete': never set — the loop's exit condition never fires",
+              "the code path printing these lines identifies an old internal routine nobody recognizes on the bridge",
+              "engine replicas: all 8 report the same looping behavior"
+            ],
+            "supports": "rc-stale-flag",
+            "refutes": [
+              "rc-data-breach",
+              "rc-market-move"
+            ]
+          }
+        },
+        {
+          "id": "inspect-deploy-record",
+          "label": "Inspect the overnight deployment record",
+          "group": "evidence",
+          "costMinutes": 5,
+          "reveal": {
+            "kind": "change-list",
+            "title": "Deploy record — last night's prep",
+            "lines": [
+              "prep purpose: enable tomorrow's new order type — no algorithm change intended",
+              "mechanism: reuse an EXISTING feature-flag id rather than define a new one",
+              "the flag id: defined in 2018 for a test routine, retired but never removed from the codebase",
+              "deploy status: rolled to 7 of 8 replicas (host 8 not in the batch)",
+              "deploy trigger: automated pipeline — no human on the desk touched anything this morning"
+            ],
+            "supports": "rc-stale-flag",
+            "refutes": [
+              "rc-trader-error"
+            ]
+          }
+        },
+        {
+          "id": "trace-flag-history",
+          "label": "Trace the flag's 2018 definition",
+          "group": "evidence",
+          "costMinutes": 6,
+          "reveal": {
+            "kind": "log",
+            "title": "Flag audit trail",
+            "lines": [
+              "2018 — flag created for an internal test routine whose exit condition needed manual completion marking",
+              "2021 — routine removed from the product backlog but its code stayed in the codebase",
+              "this morning — repurposing the id turned the dormant routine back ON in production",
+              "the test routine's exit path ('position-complete') was never wired to the live order gateway: matching the historical failure exactly"
+            ],
+            "supports": "rc-stale-flag"
+          }
+        },
+        {
+          "id": "compare-replica-stats",
+          "label": "Compare the 8 engine replicas",
+          "group": "evidence",
+          "costMinutes": 4,
+          "once": false,
+          "reveal": {
+            "kind": "metrics",
+            "title": "Replica-by-replica",
+            "lines": [
+              "replicas 1-7: running this morning's prep, looping old routine, sending burst orders",
+              "replica 8: did NOT receive the deploy — it is idle-confused, still expecting flag state from yesterday",
+              "the deployed 7 agree with each other and disagree with reality",
+              "any fix that touches code must land on all 8 or the mismatch becomes its own incident"
+            ],
+            "supports": "rc-stale-flag"
+          }
+        },
+        {
+          "id": "check-market-feed",
+          "label": "Sanity-check the market feed",
+          "group": "check",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Feed health",
+            "lines": [
+              "2 symbols show 300ms slower quotes — tempting, but symmetric across all firms, not just us",
+              "our burst pattern exists only where our engine is sending",
+              "feed looks regular enough; this is a decoy in the noise on a choppy morning"
+            ],
+            "refutes": [
+              "rc-data-breach"
+            ]
+          }
+        },
+        {
+          "id": "kill-order-gateway",
+          "label": "Stop sending: suspend the order gateway",
+          "group": "change",
+          "costMinutes": 4,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Gateway suspended",
+            "lines": [
+              "outbound orders stop; fills stop; the money-bleeding stops",
+              "exchange still visible; market data still healthy — you restart whenever ready",
+              "the desk exhales. Containment first, then cause"
+            ]
+          }
+        },
+        {
+          "id": "undeploy-prep-rollback",
+          "label": "Roll back last night's flag-prep change",
+          "group": "change",
+          "costMinutes": 10,
+          "once": true,
+          "reveal": {
+            "kind": "output",
+            "title": "Rollback of the prep change",
+            "lines": [
+              "rollout plan re-runs against the same batch list: replicas 1-7 only",
+              "the dormant routine turns off on 7 replicas; replica 8 still disagrees with the fleet",
+              "if you halted here the week's real postmortem line would read 'partially applied changes are their own failure mode'"
+            ]
+          }
+        },
+        {
+          "id": "escalate-exchange-desk",
+          "label": "Escalate: bring in market operations and the desk lead now",
+          "group": "escalate",
+          "costMinutes": 3,
+          "once": false,
+          "reveal": {
+            "kind": "output",
+            "title": "Fleet-wide escalation",
+            "lines": [
+              "desk lead + exchange market-ops on the bridge; they can suspend your firm's symbols if this worsens",
+              "risk and comms teams start the regulatory clock and the client-call list",
+              "at this scale with an exchange watching you, nobody investigates alone"
+            ]
+          }
+        }
+      ],
+      "rootCauses": [
+        {
+          "id": "rc-stale-flag",
+          "label": "Last night's prep reused an old feature-flag id, switching ON dormant test code whose exit path was never functional in production — and it reached only 7 of 8 replicas",
+          "correct": true,
+          "keywords": [
+            "flag",
+            "stale",
+            "reused",
+            "dead code",
+            "dormant",
+            "replicas",
+            "deploy",
+            "batch"
+          ]
+        },
+        {
+          "id": "rc-data-breach",
+          "label": "A breach or compromise moved market data or our own systems",
+          "correct": false,
+          "keywords": [
+            "breach",
+            "compromise",
+            "hack",
+            "attacker"
+          ]
+        },
+        {
+          "id": "rc-market-move",
+          "label": "A genuine market move drove the flow",
+          "correct": false,
+          "keywords": [
+            "market",
+            "volatility",
+            "macro"
+          ]
+        },
+        {
+          "id": "rc-trader-error",
+          "label": "A trader fat-fingered a parameter on the desk",
+          "correct": false,
+          "keywords": [
+            "trader",
+            "human error",
+            "fat-finger",
+            "someone messed"
+          ]
+        }
+      ],
+      "fixes": [
+        {
+          "id": "fix-deploy-all-clean",
+          "label": "Keep the gateway paused, roll the correct code to every replica including host 8, delete the dormant routine and its flag, and only then resume",
+          "safety": "safe",
+          "note": "Contains the bleeding first, then makes the whole fleet consistent, then removes the corpse so it can never wake again. Only now does order flow resume."
+        },
+        {
+          "id": "fix-rollback-7",
+          "label": "Roll back the change as it was deployed — on the same 7 replicas",
+          "safety": "noop",
+          "note": "The rollback plan inherits the same batch list. Replica 8 stays inconsistent and the fleet remains in mixed state — you paused the pain, not the cause."
+        },
+        {
+          "id": "fix-widen-risk-limits",
+          "label": "Leave the flags alone and raise the risk limits so the flow fits within policy",
+          "safety": "harmful",
+          "note": "You would be tuning the guardrails around a fire because the fire is inconvenient. The money keeps leaving, only slower and with permission."
+        }
+      ],
+      "hintLadder": [
+        "The desk is shouting about flow, not latency. Ask which component decides what to send, and what could have changed its decision this morning without any new algorithm.",
+        "Nothing in the morning's noise answers this. The order logs and the deployment record are the quietest and highest-signal artifacts you own."
+      ],
+      "guidance": [],
+      "defendQuestions": [
+        {
+          "id": "dq-knight-1",
+          "question": "Why did a 'feature-prep' change with no algorithm change send the engine haywire? Explain the flag reuse.",
+          "keyPoints": [
+            [
+              "reused",
+              "old",
+              "existing flag"
+            ],
+            [
+              "dormant",
+              "dead",
+              "old code",
+              "test"
+            ],
+            [
+              "exit",
+              "completion",
+              "never",
+              "loop"
+            ]
+          ]
+        },
+        {
+          "id": "dq-knight-2",
+          "question": "The rollback also went to 7 of 8 hosts. Why is a partial rollback its own failure?",
+          "keyPoints": [
+            [
+              "eight",
+              "all",
+              "seven"
+            ],
+            [
+              "inconsistent",
+              "mismatch",
+              "mixed",
+              "drift"
+            ],
+            [
+              "deploy",
+              "batch",
+              "host"
+            ]
+          ]
+        },
+        {
+          "id": "dq-knight-3",
+          "question": "What two guards from this incident generalize to any deploy system?",
+          "keyPoints": [
+            [
+              "dead code",
+              "remove",
+              "cleanup",
+              "delete"
+            ],
+            [
+              "all replicas",
+              "fleet",
+              "every host",
+              "verify"
+            ],
+            [
+              "new flag",
+              "fresh id",
+              "do not reuse"
+            ]
+          ]
+        }
+      ],
+      "lesson": "Dead code with a live switch is not dead. Deploy tooling that reuses flags, code, names, or servers introduces coupling that outlives everything you knew when you wrote it — and any change that can land on some machines but not all is a split-brain waiting for a schedule. Kill the first symptom (stop sending), make the fleet consistent, and delete the bodies.",
+      "realAction": "In the real incident, a technician's deployment of new code to one production server was missed, an old flag was repurposed, and dormant eight-year-old code started sending millions of order statuses into the market; in under an hour the firm lost more money than it had earned in some entire years, and the public record (a regulator's order) treats it as a risk-control and deployment failure, not anyone's malice. We simplified the mechanics and made every number synthetic.",
+      "source": {
+        "company": "Knight Capital Group",
+        "url": "https://www.sec.gov/files/litigation/admin/2013/34-70694.pdf",
+        "title": "SEC Administrative Order 34-70694 (public record)"
+      },
+      "inspiredByNote": "Inspired by the publicly documented 2012 Knight Capital trading failure (SEC administrative record), simplified. Every number, log, and chart is synthetic.",
+      "status": "published",
+      "reviewedBy": "seed",
+      "createdAt": "2026-11-09"
+    }
+  ]
+}

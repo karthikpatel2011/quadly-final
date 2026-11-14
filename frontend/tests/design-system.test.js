@@ -20,11 +20,13 @@ describe('design-system guardrails', () => {
     }
   });
 
-  it('keeps the practice/interviews surface classes defined where they live', () => {
-    const practiceCss = readFileSync(join(root, 'src/components/dashboard/practice.css'), 'utf8');
-    for (const cls of ['.qd-rail__item', '.qd-code', '.qd-fb', '.qd-mic', '.qd-bar', '.qd-sql', '.qd-outline']) {
-      expect(practiceCss).toContain(cls);
+  it('keeps the workspace/interviews surface classes defined where they live', () => {
+    const workspace = readFileSync(join(root, 'src/components/dashboard/workspace.css'), 'utf8');
+    for (const cls of ['.qd-p', '.qd-p__head', '.qd-bar', '.qd-sql', '.qd-outline', '.qd-linkish']) {
+      expect(workspace).toContain(cls);
     }
+    // The old Daily Practice player stylesheet is gone for good.
+    expect(existsSync(join(root, 'src/components/dashboard/practice.css'))).toBe(false);
   });
 
   it('keeps the shipped brand assets in place', () => {

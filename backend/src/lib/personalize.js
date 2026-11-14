@@ -8,6 +8,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { llmAvailable, llmComplete } from './llm.js';
 import { getPlan } from './plangenerator.js';
+import { drillDaysFor } from './practice/store.js';
 
 const DATA_DIR = fileURLToPath(new URL('../../data/', import.meta.url));
 const FILE = DATA_DIR + 'ai-profile.json';
@@ -207,9 +208,9 @@ export async function computePersonalization(session) {
     ? await (async () => { try { return getPlan(session.email); } catch { return null; } })()
     : null;
 
-  // Small real activity reads — counts only.
-  const attempts = await readFileSafe(DATA_DIR + 'attempts.json', {});
-  const drills = Object.keys(attempts[session.email] || {}).length;
+  // Small real activity reads — counts only. Drill days come from the
+  // Practice store (the old Daily 15 attempts file is gone).
+  const drills = await drillDaysFor(session.email);
   const iview = await readFileSafe(DATA_DIR + 'interview-attempts.json', {});
   const iviewMine = iview[session.email] || {};
   const projectsRaw = await readFileSafe(DATA_DIR + 'projects.json', []);

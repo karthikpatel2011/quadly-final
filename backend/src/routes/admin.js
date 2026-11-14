@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { randomUUID } from 'node:crypto';
 import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
+import { updateAccount } from './auth.js';
 
 // Admin sessions are in-memory tokens issued by POST /login. Sign-in
 // credentials come from backend/.env (ADMIN_EMAIL / ADMIN_PASSWORD).
@@ -332,4 +333,30 @@ router.post('/opportunities/:id/delete', async (req, res) => {
   if (!items.some((i) => i.id === req.params.id)) return res.status(404).json({ error: 'No such listing.' });
   await writeJSON('opportunities.json', items.filter((i) => i.id !== req.params.id));
   res.json({ ok: true });
+});
+
+// ── Student plans ──
+// No billing system exists yet, so the plan is set by hand here (the
+// entitlement layer in lib/entitlement.js reads account.plan).
+
+router.post('/students/:email/plan', async (req, res) => {
+  const plan = String(req.body?.plan || '').trim().toLowerCase();
+  if (!['free', 'pro'].includes(plan)) {
+    return res.status(400).json({ error: 'Plan must be free or pro.' });
+  }
+  const ok = updateAccount(req.params.email, (account) => {
+    account.plan = plan;
+    return true;
+  });
+  if (!ok) return res.status(404).json({ error: 'No account with that email.' });
+  res.json({ ok: true, email: String(req.params.email).toLowerCase(), plan });
+});
+
+router.get('/students/plans', async (req, res) => {
+  const rows = await readJSON('accounts.json', {});
+  const plans = {};
+  for (const [email, account] of Object.entries(rows)) {
+    plans[email] = account?.plan === 'pro' ? 'pro' : 'free';
+  }
+  res.json({ ok: true, plans });
 });

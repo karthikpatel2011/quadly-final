@@ -6,9 +6,9 @@ import { isMinor } from '../src/lib/moderation.js';
 
 // Home V1 contract: a calm personal page over read-adapters only (no posting).
 // Covers: section shape + independence, official-item visibility by college
-// and time window, "New" marking, leaderboard-name consent, verified task
-// completion through the Daily 15, avatar upload at the 2 MB boundary, and
-// student data isolation.
+// and time window, "New" marking, the drill section (counts, never names),
+// verified task completion through the Daily Drill, avatar upload at the 2 MB
+// boundary, and student data isolation.
 
 const { createApp } = await import('../src/app.js');
 
@@ -60,7 +60,7 @@ before(async () => {
   reset('official-items.json', []);
   reset('official-audit.json', []);
   reset('home-views.json', {});
-  reset('attempts.json', {});
+  reset('practice-drill-attempts.json', {});
   reset('interview-attempts.json', {});
   reset('projects.json', []);
 
@@ -136,44 +136,43 @@ test('official items: college scoping, time window, New marking, then seen', asy
   assert.ok(!aThird.json.collegeWeek.data.notices.some((n) => n.title === 'Old notice'));
 });
 
-test('leaderboard names appear only with consent and never for minors', async () => {
-  // B plays the drill today; A opted in would see B — but B has no consent,
-  // so the top-scorers list stays empty while the played-count may include B
-  // only when colleges match (they do not here, so both are zero for A).
-  const play = async (token) => {
-    const d = await api('/practice/daily15', { token });
-    for (const q of d.json.questions) {
-      await api('/practice/daily15', { method: 'POST', token, body: { qid: q.id, answerIndex: 0 } });
-    }
-    return d;
-  };
-  await play(B);
-  const bHome = await api('/home', { token: B });
-  assert.equal(bHome.json.challenge.data.collegePlayedToday, 0, 'Radford has no other players');
-  assert.deepEqual(bHome.json.challenge.data.topScorers, [], 'no consent → no names');
+test('today’s drill section shows counts only — a classmate who played is never named', async () => {
+  // B answers today's drill; the section carries only counts and B's own
+  // result — the payload never contains another student's name or email.
+  const today = await api('/practice/drill/today', { token: B });
+  assert.equal(today.status, 200);
+  const answer = await api(`/practice/drill/${today.json.drill.id}/answer`, {
+    method: 'POST', token: B, body: { optionIndex: 0 },
+  });
+  assert.equal(answer.status, 200);
+  assert.equal(answer.json.already, false);
 
-  // Opt B in; still only B's own college-mates count (none at Radford here).
-  const consent = await api('/profile/show-name', { method: 'POST', token: B, body: { show: true } });
-  assert.equal(consent.status, 200);
-  const list = await api('/profile/show-name', { token: B });
-  assert.equal(list.json.showName, true);
+  const bHome = await api('/home', { token: B });
+  const ch = bHome.json.challenge.data;
+  assert.equal(ch.answered, true, 'the drill shows as done for the student who played');
+  assert.equal(ch.playedAtCollege, 0, 'Radford has no other players');
+  const raw = JSON.stringify(bHome.json.challenge);
+  assert.ok(!raw.includes('Bhuvan'), 'the drill section never names the player');
+  assert.ok(!raw.includes(`hb${stamp}`), 'the drill section never carries an email');
+
+  // A (different college) sees her own untouched drill state, not B's.
+  const aHome = await api('/home', { token: A });
+  assert.equal(aHome.json.challenge.data.answered, false);
+  assert.equal(aHome.json.challenge.data.playedAtCollege, 0);
 });
 
-test('verified completion: finishing the Daily 15 marks the learn task with its result', async () => {
-  const play = async (token) => {
-    const d = await api('/practice/daily15', { token });
-    for (const q of d.json.questions) {
-      await api('/practice/daily15', { method: 'POST', token, body: { qid: q.id, answerIndex: 0 } });
-    }
-    const s = await api('/practice/daily15/summary', { token });
-    return { done: s.json.done, score: s.json.score, total: s.json.total };
-  };
-  const res = await play(A);
-  assert.equal(res.done, true);
+test('verified completion: answering the Daily Drill marks the learn task with a result', async () => {
+  const today = await api('/practice/drill/today', { token: A });
+  const answer = await api(`/practice/drill/${today.json.drill.id}/answer`, {
+    method: 'POST', token: A, body: { optionIndex: today.json.drill.moment.options.length - 1 },
+  });
+  assert.equal(answer.status, 200);
+  assert.equal(answer.json.markedTask, true, 'the drill recorded the verified completion');
+
   const home = await api('/home', { token: A });
   const learn = home.json.today.data.missions.find((m) => m.category === 'learn');
-  assert.equal(learn.done, true, 'the drill recorded the verified completion');
-  assert.match(learn.result, /Passed \d+\/\d+/);
+  assert.equal(learn.done, true, 'the drill marks the day’s learn mission as done');
+  assert.match(learn.result, /Daily drill/, 'the mission result names the drill honestly');
 });
 
 test('avatar: upload stores and serves privately; delete clears the custom pick; 2 MB gate works', async () => {

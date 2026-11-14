@@ -1,0 +1,138 @@
+/* Shared workspace styles — the base layer the Interviews, Mock Drive, and
+   Squad screens build on. Previously these selectors lived in the old
+   Daily Practice player stylesheet; only the rules the live screens use
+   moved over here (see docs/DESIGN-SYSTEM.md — every value from tokens). */
+
+.qd-p {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.qd-p__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.qd-p__head .qd-kicker { margin-bottom: 6px; }
+
+/* Kicker + tiny pill (used by the workspace surfaces; the shell only ships
+   .qd-pill base today) */
+.qd-p .qd-kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--qd-muted);
+}
+
+.qd-p .qd-pill--tiny {
+  font-size: 11px;
+  padding: 2px 9px;
+  opacity: 0.9;
+}
+
+.qd-p__head .qd-h2 { margin: 0 0 6px; }
+.qd-p__head .qd-muted { margin: 0; max-width: 46ch; }
+.qd-pills { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+.qd-p__err { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; }
+
+.qd-outline { margin: 8px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.qd-outline li { color: var(--qd-muted); font-size: 13.5px; line-height: 1.5; }
+
+.qd-linkish { border: 0; background: none; padding: 0; color: var(--qd-muted); font-family: var(--font-body); font-size: 12.5px; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.qd-linkish:hover:not(:disabled) { color: var(--qd-text); }
+.qd-linkish:disabled { opacity: 0.5; cursor: default; }
+
+.qd-bar { height: 6px; border-radius: var(--radius-pill); background: var(--qd-surface-2); overflow: hidden; margin: 10px 0 4px; }
+.qd-bar i { display: block; height: 100%; border-radius: inherit; background: var(--qd-primary); }
+
+/* Mock drive (contests) */
+.qd-drive { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 20px 22px; }
+.qd-drive__day { margin: 0 0 4px; font-family: var(--font-display); font-weight: 600; font-size: 17px; }
+.qd-drive__cta { display: flex; align-items: center; gap: 10px; }
+.qd-live { color: var(--color-success); border-color: var(--color-success); }
+
+.qd-p__note { padding: 14px 18px; }
+.qd-p__note .qd-muted { margin: 0; font-size: 13px; line-height: 1.55; }
+
+/* Action rows under a card */
+.qd-act__actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+
+/* ---- interview stage surfaces (setup + report screens) ---- */
+.qd-ivrhome { width: 100%; padding: 18px calc(var(--gutter) + 8px) 96px; }
+
+.qd-ivr {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.qd-iv-room {
+  background: var(--qd-surface-2);
+  border: 1px solid var(--qd-border);
+  border-radius: var(--radius-panel);
+  padding: 26px 30px 30px;
+  box-shadow: var(--qd-shadow);
+}
+
+.qd-iv-question {
+  margin: 4px 0 26px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(19px, 2.5vw, 25px);
+  line-height: 1.4;
+  color: var(--qd-text);
+  max-width: 42ch;
+}
+
+.qd-iv-words { align-self: center; font-size: 12px; color: var(--qd-muted); font-variant-numeric: tabular-nums; }
+
+.qd-iv-chip {
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: var(--qd-primary-soft);
+  color: var(--qd-primary-on-soft);
+  font-family: var(--font-body);
+  font-size: 12px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: filter 0.15s ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .qd-iv-chip:hover:not(:disabled) { filter: brightness(1.12); }
+}
+.qd-iv-chip:disabled { opacity: 0.55; cursor: default; }
+
+/* Free-text answer area (setup resume paste + report notes) */
+.qd-sql {
+  width: 100%;
+  min-height: 96px;
+  padding: 12px 14px;
+  background: var(--qd-surface-2);
+  border: 1px solid var(--qd-border);
+  border-radius: 12px;
+  color: var(--qd-text);
+  font-family: var(--qd-mono);
+  font-size: 13.5px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.qd-sql:focus { outline: none; border-color: var(--qd-primary); }
+
+/* Feedback note under a report section */
+.qd-fb__note { margin: 8px 0 0; color: var(--qd-muted); font-size: 13.5px; line-height: 1.55; }
+
+@media (max-width: 620px) {
+  .qd-iv-room { padding: 20px 18px 22px; }
+}

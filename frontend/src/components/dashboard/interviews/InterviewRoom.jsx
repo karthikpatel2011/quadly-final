@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { apiFetch } from '../../../lib/api.js';
-import '../practice.css';
+import '../workspace.css';
 import './interviews.css';
 
 /* The live interview room — a full-screen, Zoom-shaped stage: the interviewer
