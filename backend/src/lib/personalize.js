@@ -102,6 +102,17 @@ export function cleanTargetDate(value) {
   const d = new Date(s + 'T00:00:00Z');
   return Number.isNaN(d.getTime()) ? null : s;
 }
+// WhatsApp nudge number: optional leading +, then 8–15 digits (E.164 range).
+// Anything shorter, longer, or non-numeric counts as "no number given" — the
+// field is always optional and the student can clear it any time.
+export function cleanPhone(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return null;
+  const plus = raw.startsWith('+');
+  const digits = raw.replace(/\D/g, '');
+  if (digits.length < 8 || digits.length > 15) return null;
+  return (plus ? '+' : '') + digits;
+}
 
 // Interest → the opportunity categories it maps to (for the opportunities
 // matcher and the roadmap explainer). Kept small and legible.

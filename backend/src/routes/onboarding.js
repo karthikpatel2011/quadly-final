@@ -7,7 +7,7 @@ import {
   INTEREST_OPTIONS, GOAL_OPTIONS, STAGE_OPTIONS, TIME_OPTIONS,
   cleanList, cleanStage, cleanTime,
   cleanTrack, cleanYear, cleanDailyTime, cleanPracticeTime,
-  cleanSelfRating, cleanTargetDate, cleanRole,
+  cleanSelfRating, cleanTargetDate, cleanRole, cleanPhone,
 } from '../lib/personalize.js';
 
 const DATA_DIR = fileURLToPath(new URL('../../data/', import.meta.url));
@@ -45,6 +45,9 @@ function profilePatch(b = {}) {
   if (b.practiceTime !== undefined) patch.practiceTime = cleanPracticeTime(b.practiceTime);
   if (b.targetDate !== undefined) patch.targetDate = cleanTargetDate(b.targetDate);
   if (b.selfRating !== undefined) patch.selfRating = cleanSelfRating(b.selfRating);
+  // The WhatsApp nudge number is optional end to end; an invalid one simply
+  // means "no number" — onboarding never blocks on it.
+  if (b.phone !== undefined) patch.phone = cleanPhone(b.phone);
   return patch;
 }
 
@@ -143,6 +146,9 @@ router.post('/', async (req, res) => {
     practiceTime: patch.practiceTime ?? null,
     targetDate: patch.targetDate ?? null,
     selfRating: patch.selfRating ?? null,
+    // Only ride along when the request carried it — a final submit without a
+    // phone must not wipe the number the draft already saved.
+    ...(patch.phone !== undefined ? { phone: patch.phone } : {}),
     // Legacy mirror: the dashboard/plan generators read target.role.
     target: { role: patch.role ?? null, company: '' },
     ambassador: null,
@@ -214,6 +220,8 @@ router.put('/', (req, res) => {
   if (b.practiceTime !== undefined) profile.practiceTime = cleanPracticeTime(b.practiceTime);
   if (b.targetDate !== undefined) profile.targetDate = cleanTargetDate(b.targetDate);
   if (b.selfRating !== undefined) profile.selfRating = cleanSelfRating(b.selfRating);
+  // Empty string clears the nudge number; an invalid one is stored as "none".
+  if (b.phone !== undefined) profile.phone = cleanPhone(b.phone);
   if (b.target !== undefined) {
     profile.target = {
       company: str(b.target?.company, 60) || '',

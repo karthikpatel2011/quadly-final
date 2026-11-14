@@ -703,3 +703,46 @@
 @media (max-width: 960px) {
   .qd-fl > .qd-fl-b, .qd-fl > .qd-fl-c { grid-column: 1 / -1; }
 }
+
+/* ---------- Home V1: the single-student feed of real cards ---------- */
+.qd-rail { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* A mission row is information first; when the workspace that completes it
+   exists, the whole row is the way in. Rows without a home never fake one. */
+.qd-task__go {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.qd-task__go--flat { cursor: default; }
+button.qd-task__go::after {
+  content: '›';
+  margin-left: auto;
+  align-self: center;
+  color: var(--qd-muted);
+  font-size: 18px;
+}
+button.qd-task__go:hover .qd-task__title { color: var(--qd-primary); }
+
+/* Private wins — verified only, so the tick is green by the design rules. */
+.qd-wins {
+  list-style: none;
+  margin: 0 0 10px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.qd-wins li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; line-height: 1.5; }
+.qd-wins__check { color: var(--color-success); flex: none; display: grid; place-items: center; margin-top: 2px; }

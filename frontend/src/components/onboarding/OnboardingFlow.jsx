@@ -70,7 +70,18 @@ function prettyDate(iso) {
 }
 
 const DRAFT_KEY = 'quadly:onboardingDraft';
-const DRAFT_FIELDS = ['name', 'college', 'track', 'role', 'year', 'dailyTime', 'practiceTime', 'targetDate', 'selfRating'];
+const DRAFT_FIELDS = ['name', 'college', 'track', 'role', 'year', 'dailyTime', 'practiceTime', 'targetDate', 'selfRating', 'phone'];
+
+// The optional WhatsApp nudge number — same rule as the backend's cleanPhone:
+// optional leading +, then 8–15 digits. Empty is always valid.
+function cleanPhoneInput(value) {
+  const raw = String(value ?? '').trim();
+  if (!raw) return { cleaned: '', valid: true };
+  const plus = raw.startsWith('+');
+  const digits = raw.replace(/\D/g, '');
+  const valid = digits.length >= 8 && digits.length <= 15;
+  return { cleaned: valid ? (plus ? '+' : '') + digits : raw, valid };
+}
 
 function readToken() {
   try {
@@ -93,6 +104,8 @@ export default function OnboardingFlow() {
   const [targetDate, setTargetDate] = useState('');
   const [targetMode, setTargetMode] = useState('');
   const [selfRating, setSelfRating] = useState('');
+  const [phone, setPhone] = useState('');
+  const [phoneError, setPhoneError] = useState(false);
   const [save, setSave] = useState('idle'); // idle|saving|saved|error
   const [planPreview, setPlanPreview] = useState(null);
   const [why, setWhy] = useState([]);
@@ -132,6 +145,7 @@ export default function OnboardingFlow() {
         setTargetMode('custom');
       }
       if (draft.selfRating) setSelfRating(draft.selfRating);
+      if (draft.phone) setPhone(draft.phone);
     };
     let local = {};
     try {
@@ -206,6 +220,7 @@ export default function OnboardingFlow() {
         practiceTime,
         targetDate,
         selfRating,
+        phone: cleanPhoneInput(phone).cleaned,
       }),
     })
       .then((res) => {
@@ -438,7 +453,8 @@ export default function OnboardingFlow() {
           </div>
         );
 
-      case 'window':
+      case 'window': {
+        const phoneCheck = cleanPhoneInput(phone);
         return (
           <div className="ob-step">
             <h1 className="ob-question">When in the day will you practice?</h1>
@@ -453,7 +469,6 @@ export default function OnboardingFlow() {
                   onClick={() => {
                     setPracticeTime(t);
                     saveField('practiceTime', t);
-                    go('target');
                   }}
                 >
                   {t}
@@ -461,8 +476,65 @@ export default function OnboardingFlow() {
               ))}
             </div>
             <p className="ob-hint">Same time each day is the whole trick — your plan is built around this window.</p>
+
+            <div className="ob-nudge">
+              <label className="ob-nudge__label" htmlFor="ob-nudge-input">
+                Want a nudge at that time? <span>(optional)</span>
+              </label>
+              <input
+                id="ob-nudge-input"
+                className="ob-input"
+                type="tel"
+                autoComplete="tel"
+                inputMode="tel"
+                placeholder="WhatsApp number, e.g. +91 98765 43210"
+                value={phone}
+                onChange={(e) => {
+                  setPhone(e.target.value);
+                  setPhoneError(false);
+                }}
+                maxLength={20}
+              />
+              <p className={`ob-hint${phoneError ? ' ob-hint--error' : ''}`}>
+                {phoneError
+                  ? 'That number looks short or long — check it, or leave it empty.'
+                  : 'One short message a day at your window. Reply STOP to stop, anytime.'}
+              </p>
+            </div>
+
+            <div className="ob-row">
+              <button
+                type="button"
+                className="ob-btn ob-btn--half"
+                disabled={!practiceTime}
+                onClick={() => {
+                  if (phone.trim() && !phoneCheck.valid) {
+                    setPhoneError(true);
+                    return;
+                  }
+                  saveField('phone', phoneCheck.cleaned);
+                  go('target');
+                }}
+              >
+                Continue
+              </button>
+              <button
+                type="button"
+                className="ob-btn ob-btn--half ob-btn--ghost"
+                onClick={() => {
+                  setPracticeTime('');
+                  setPhone('');
+                  saveField('practiceTime', '');
+                  saveField('phone', '');
+                  go('target');
+                }}
+              >
+                Skip this one
+              </button>
+            </div>
           </div>
         );
+      }
 
       case 'target':
         return (
@@ -571,6 +643,11 @@ export default function OnboardingFlow() {
                   <span>Window</span> {practiceTime}
                 </p>
               )}
+              {phone.trim() && (
+                <p>
+                  <span>Nudge</span> WhatsApp at your window
+                </p>
+              )}
               {targetDate && (
                 <p>
                   <span>Target</span> {targetNote || prettyDate(targetDate)}
@@ -597,6 +674,10 @@ export default function OnboardingFlow() {
                 </ul>
               )}
             </div>
+            <p className="ob-free">
+              You start on the free plan — the daily drill is always included, and a few
+              incidents a week. No card, no clock.
+            </p>
             <p className={`ob-hint ${save === 'error' ? 'ob-hint--error' : 'ob-hint--ok'}`}>
               {save === 'saving' && 'Saving…'}
               {save === 'saved' && 'Saved ✓ — every answer stays yours to change.'}

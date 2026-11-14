@@ -15,6 +15,7 @@ import DrillPage from './practice/DrillPage.jsx';
 import IncidentRoom from './practice/IncidentRoom.jsx';
 import PostmortemPage from './practice/PostmortemPage.jsx';
 import RecordPage from './practice/RecordPage.jsx';
+import Home from './Home.jsx';
 
 /* Signed-in dashboard shell: chrome plus the routes that have shipped, one
    semantic group per workspace (student's call): Practice = the incident
@@ -357,7 +358,7 @@ export default function Dashboard() {
       {route === 'practice/incident' && <main className="qd-prhome"><IncidentRoom /></main>}
       {route === 'practice/postmortem' && <main className="qd-prhome"><PostmortemPage /></main>}
       {route === 'practice/record' && <main className="qd-prhome"><RecordPage /></main>}
-      {route === 'app' && <main className="qd-home" aria-label="Home" />}
+      {route === 'app' && <Home />}
     </div>
   );
 }

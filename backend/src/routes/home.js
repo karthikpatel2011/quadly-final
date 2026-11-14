@@ -157,6 +157,7 @@ router.get('/home', async (req, res) => {
       category: m.category,
       categoryLabel: { learn: 'Learn', interview: 'Interview', ship: 'Ship', apply: 'Apply', network: 'Network' }[m.category] || m.category,
       title: m.title,
+      detail: m.detail || null,
       minutes: m.minutes || 15,
       done: Boolean(m.done),
       result: m.result || null,
