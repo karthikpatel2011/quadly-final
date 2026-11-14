@@ -11,6 +11,9 @@ import intelRoutes from './routes/intel.js';
 import practiceRoutes from './routes/practice.js';
 // Practice — the incident room, daily drill, and postmortem/defend engine
 // under /api/practice (state and scores live server-side).
+// Workplace — the simulated first job (Setu Freight) under /api/workplace:
+// Company Academy, seeded tickets, deterministic evaluator, voice defend.
+import workplaceRoutes from './routes/workplace.js';
 import skillsRoutes from './routes/skills.js';
 import driveRoutes from './routes/drive.js';
 import squadRoutes from './routes/squad.js';
@@ -42,6 +45,7 @@ export function createApp() {
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/intel', intelRoutes);
   app.use('/api/practice', practiceRoutes);
+  app.use('/api/workplace', workplaceRoutes);
   app.use('/api/skills', skillsRoutes);
   app.use('/api/drive', driveRoutes);
   app.use('/api/squads', squadRoutes); // Squad v2 (shareable codes, shared streak)

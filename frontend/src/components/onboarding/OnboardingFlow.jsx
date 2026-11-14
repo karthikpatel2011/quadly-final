@@ -675,8 +675,8 @@ export default function OnboardingFlow() {
               )}
             </div>
             <p className="ob-free">
-              You start on the free plan — the daily drill is always included, and a few
-              incidents a week. No card, no clock.
+              You start on the free plan — the daily drill and Week 1 of your job simulation are
+              always included. No card, no clock.
             </p>
             <p className={`ob-hint ${save === 'error' ? 'ob-hint--error' : 'ob-hint--ok'}`}>
               {save === 'saving' && 'Saving…'}

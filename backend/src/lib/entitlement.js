@@ -23,3 +23,17 @@ export function practiceEntitlements(account) {
     defendStep: pro,                     // the interview-skill proof step
   };
 }
+
+// Workplace — the simulated first job. Free students get the full first week
+// (the habit-forming stretch) plus guided/standard tiers; pro unlocks the
+// whole starter story and the expert tier. The Voice Defend step is never
+// paywalled: it is the anti-cheat proof, not a luxury.
+export function workplaceEntitlements(account) {
+  const pro = planTier(account) === 'pro';
+  return {
+    plan: pro ? 'pro' : 'free',
+    weeks: pro ? 2 : 1,
+    tiers: pro ? ['guided', 'standard', 'expert'] : ['guided', 'standard'],
+    voiceDefend: true,
+  };
+}

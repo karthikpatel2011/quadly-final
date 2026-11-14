@@ -1,0 +1,152 @@
+/* Workplace — the simulated first job. Design system rules hold: true-black
+   via tokens, ONE accent used sparingly, hairline borders, zero gradients or
+   glows, one idea per card, numbers carry the hierarchy, thin-stroke icons
+   only. Verified is green; nothing else colored. */
+
+.qd-wp { display: flex; flex-direction: column; gap: 14px; max-width: 1100px; }
+
+/* ---- start screen: the pitch + tier pick, one card, one decision ---- */
+.qd-wp-start { display: flex; flex-direction: column; gap: 14px; }
+.qd-wp-start__company { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.qd-wp-start__brief { color: var(--qd-muted); font-size: 13.5px; line-height: 1.6; max-width: 640px; }
+.qd-wp-tiers { display: flex; flex-direction: column; gap: 8px; margin: 4px 0 2px; }
+.qd-wp-tier {
+  display: flex; align-items: flex-start; gap: 12px; text-align: left;
+  border: 1px solid var(--qd-border); background: var(--qd-surface-2);
+  border-radius: 12px; padding: 12px 14px; cursor: pointer;
+  font-family: var(--font-body); color: var(--qd-text);
+  transition: border-color 150ms ease;
+}
+.qd-wp-tier:hover { border-color: var(--qd-primary); }
+.qd-wp-tier.is-on { border-color: var(--qd-primary); }
+.qd-wp-tier b { font-size: 14px; }
+.qd-wp-tier span { display: block; color: var(--qd-muted); font-size: 12.5px; margin-top: 2px; }
+.qd-wp-tier:disabled { opacity: 0.55; cursor: not-allowed; }
+
+/* ---- episode head: week counter carries the hierarchy ---- */
+.qd-wp-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.qd-wp-head__count { font-family: var(--font-mono, ui-monospace, monospace); font-size: 22px; font-weight: 600; }
+.qd-wp-head__count small { color: var(--qd-muted); font-size: 12px; font-weight: 400; }
+.qd-wp-head__title { font-family: var(--font-display); font-size: 20px; font-weight: 600; letter-spacing: -0.01em; }
+.qd-wp-head__spacer { flex: 1; }
+
+/* ---- the 3-step spine ---- */
+.qd-wp-steps { display: flex; gap: 6px; align-items: center; }
+.qd-wp-step-dot {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--qd-muted);
+  border: 1px solid var(--qd-border); border-radius: var(--radius-pill);
+  padding: 4px 11px; background: transparent;
+}
+.qd-wp-step-dot.is-on { color: var(--qd-primary-on-soft); background: var(--qd-primary-soft); border-color: transparent; font-weight: 600; }
+.qd-wp-step-dot.is-done { color: var(--color-success); border-color: var(--qd-border); }
+.qd-wp-step-dot .qd-ic { width: 13px; height: 13px; }
+
+/* ---- academy lesson ---- */
+.qd-wp-lesson { display: flex; flex-direction: column; gap: 10px; }
+.qd-wp-lesson p { color: var(--qd-text); font-size: 14px; line-height: 1.65; }
+.qd-wp-lesson__kicker { color: var(--qd-muted); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+.qd-wp-quiz { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+.qd-wp-quiz__q { font-size: 14px; font-weight: 600; }
+.qd-wp-quiz__opt {
+  text-align: left; border: 1px solid var(--qd-border); background: var(--qd-surface-2);
+  color: var(--qd-text); border-radius: 10px; padding: 10px 14px; cursor: pointer;
+  font-family: var(--font-body); font-size: 13.5px; line-height: 1.45;
+  transition: border-color 150ms ease;
+}
+.qd-wp-quiz__opt:hover { border-color: var(--qd-primary); }
+.qd-wp-quiz__opt.is-pick { border-color: var(--qd-primary); }
+.qd-wp-quiz__opt.is-right { border-color: var(--color-success); }
+.qd-wp-quiz__opt.is-wrong { border-color: var(--color-danger); }
+.qd-wp-quiz__why { color: var(--qd-muted); font-size: 12.5px; line-height: 1.5; }
+
+/* ---- ticket: chat thread + code, side by side on wide screens ---- */
+.qd-wp-ticket { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+@media (max-width: 960px) { .qd-wp-ticket { grid-template-columns: minmax(0, 1fr); } }
+.qd-wp-thread { display: flex; flex-direction: column; gap: 10px; max-height: 420px; overflow-y: auto; padding: 2px; }
+.qd-wp-msg { max-width: 88%; padding: 10px 13px; border-radius: 13px; font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; }
+.qd-wp-msg--them { align-self: flex-start; background: var(--qd-surface-2); border: 1px solid var(--qd-border); border-bottom-left-radius: 4px; }
+.qd-wp-msg--me { align-self: flex-end; background: var(--qd-ramp-500); color: #fff; border-bottom-right-radius: 4px; }
+.qd-wp-msg__who { display: block; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--qd-muted); margin-bottom: 4px; }
+.qd-wp-msg--me .qd-wp-msg__who { color: rgba(255, 255, 255, 0.75); }
+.qd-wp-chatrow { display: flex; gap: 8px; margin-top: 4px; }
+
+/* code viewer — line numbers, no syntax coloring, no IDE cosplay */
+.qd-wp-code { background: var(--qd-surface-2); border: 1px solid var(--qd-border); border-radius: 12px; overflow: hidden; }
+.qd-wp-code__file { display: flex; align-items: center; gap: 8px; padding: 8px 14px; border-bottom: 1px solid var(--qd-border); font-family: var(--font-mono, ui-monospace, monospace); font-size: 11.5px; color: var(--qd-muted); }
+.qd-wp-code__body { margin: 0; padding: 12px 0; overflow-x: auto; font-family: var(--font-mono, ui-monospace, monospace); font-size: 12.5px; line-height: 1.7; }
+.qd-wp-code__line { display: flex; }
+.qd-wp-code__line span:first-child { flex: none; width: 40px; text-align: right; padding-right: 14px; color: var(--qd-muted); opacity: 0.6; user-select: none; }
+.qd-wp-code__line span:last-child { white-space: pre; padding-right: 16px; }
+
+.qd-wp-ask { border-top: 1px solid var(--qd-border); padding-top: 12px; margin-top: 4px; display: flex; flex-direction: column; gap: 10px; }
+.qd-wp-ask__label { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--qd-muted); }
+.qd-wp-choices { display: flex; flex-direction: column; gap: 8px; }
+.qd-wp-choices .qd-wp-quiz__opt.is-pick { border-color: var(--qd-primary); }
+
+/* ---- defend: mic + transcript, typed fallback always visible ---- */
+.qd-wp-defend { display: flex; flex-direction: column; gap: 12px; }
+.qd-wp-defend__row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.qd-wp-mic {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 1px solid var(--qd-border); background: var(--qd-surface-2); color: var(--qd-text);
+  border-radius: var(--radius-pill); padding: 9px 16px; cursor: pointer; font-family: var(--font-body); font-size: 13.5px;
+}
+.qd-wp-mic:hover { border-color: var(--qd-primary); }
+.qd-wp-mic.is-rec { border-color: var(--color-danger); color: var(--color-danger); }
+.qd-wp-mic:disabled { opacity: 0.5; cursor: not-allowed; }
+.qd-wp-transcript {
+  background: var(--qd-surface-2); border: 1px solid var(--qd-border); border-radius: 12px;
+  padding: 12px 14px; min-height: 84px; font-size: 13.5px; line-height: 1.6; color: var(--qd-text);
+}
+.qd-wp-transcript textarea {
+  width: 100%; min-height: 84px; resize: vertical; border: none; background: transparent;
+  color: inherit; font: inherit; outline: none;
+}
+.qd-wp-defend__hint { color: var(--qd-muted); font-size: 12.5px; line-height: 1.5; }
+
+/* ---- scorecard: numbers carry the hierarchy; verified is green ---- */
+.qd-wp-score { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.qd-wp-score__num { font-family: var(--font-display); font-size: 44px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; }
+.qd-wp-score__num.is-pass { color: var(--color-success); }
+.qd-wp-score__meta { display: flex; flex-direction: column; gap: 4px; }
+.qd-wp-axes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 18px; margin-top: 12px; }
+@media (max-width: 720px) { .qd-wp-axes { grid-template-columns: minmax(0, 1fr); } }
+.qd-wp-axis { display: flex; flex-direction: column; gap: 4px; }
+.qd-wp-axis__top { display: flex; justify-content: space-between; font-size: 12px; color: var(--qd-muted); }
+.qd-wp-axis__top b { font-family: var(--font-mono, ui-monospace, monospace); color: var(--qd-text); }
+.qd-wp-axis__bar { height: 4px; border-radius: 999px; background: var(--qd-surface-2); overflow: hidden; }
+.qd-wp-axis__fill { height: 100%; border-radius: 999px; background: var(--qd-primary); }
+.qd-wp-axis__fill.is-pass { background: var(--color-success); }
+.qd-wp-checks { list-style: none; display: flex; flex-direction: column; gap: 6px; margin: 12px 0 0; padding: 0; }
+.qd-wp-checks li { display: flex; gap: 8px; align-items: flex-start; font-size: 12.5px; color: var(--qd-muted); line-height: 1.5; }
+.qd-wp-checks .qd-ic { width: 14px; height: 14px; flex: none; margin-top: 2px; }
+.qd-wp-checks .is-pass { color: var(--color-success); }
+.qd-wp-checks .is-fail { color: var(--color-danger); }
+.qd-wp-manager { border-left: 2px solid var(--qd-primary); padding: 4px 0 4px 14px; margin-top: 12px; font-size: 13.5px; line-height: 1.6; }
+
+/* ---- work record: episode rail + passport ---- */
+.qd-wp-record { display: flex; flex-direction: column; gap: 12px; }
+.qd-wp-eprow {
+  display: flex; align-items: center; gap: 14px; padding: 11px 2px;
+  border-bottom: 1px solid var(--qd-border);
+}
+.qd-wp-eprow:last-child { border-bottom: none; }
+.qd-wp-eprow__day { font-family: var(--font-mono, ui-monospace, monospace); font-size: 12px; color: var(--qd-muted); width: 74px; flex: none; }
+.qd-wp-eprow__title { flex: 1; font-size: 14px; font-weight: 500; min-width: 0; }
+.qd-wp-eprow__score { font-family: var(--font-mono, ui-monospace, monospace); font-size: 14px; }
+.qd-wp-eprow__score.is-pass { color: var(--color-success); }
+.qd-wp-eprow__score.is-try { color: var(--qd-muted); }
+.qd-wp-star { display: flex; flex-direction: column; gap: 6px; padding: 12px 14px; background: var(--qd-surface-2); border-radius: 12px; }
+.qd-wp-star b { font-size: 13.5px; }
+.qd-wp-star p { font-size: 12.5px; color: var(--qd-muted); line-height: 1.55; }
+.qd-wp-label {
+  display: inline-block; align-self: flex-start;
+  font-size: 10.5px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--color-success); border: 1px solid var(--qd-border);
+  border-radius: var(--radius-pill); padding: 4px 10px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qd-wp-tier, .qd-wp-quiz__opt, .qd-wp-mic { transition: none; }
+}

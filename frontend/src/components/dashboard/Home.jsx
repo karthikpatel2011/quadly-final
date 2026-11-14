@@ -68,6 +68,7 @@ function MissionRow({ mission }) {
 export default function Home() {
   const [phase, setPhase] = useState('loading'); // loading | ready | error
   const [data, setData] = useState(null);
+  const [wp, setWp] = useState(null); // GET /workplace/today — null = not started
   const ctrlRef = useRef(null);
 
   const load = useCallback(() => {
@@ -75,10 +76,14 @@ export default function Home() {
     const ctrl = new AbortController();
     ctrlRef.current = ctrl;
     setPhase('loading');
-    apiFetch('/home', { headers: authHeaders(), signal: ctrl.signal })
-      .then((res) => {
+    Promise.all([
+      apiFetch('/home', { headers: authHeaders(), signal: ctrl.signal }),
+      apiFetch('/workplace/today', { headers: authHeaders(), signal: ctrl.signal }).catch(() => null),
+    ])
+      .then(([home, workplace]) => {
         if (ctrl.signal.aborted) return;
-        setData(res);
+        setData(home);
+        setWp(workplace);
         setPhase('ready');
       })
       .catch((err) => {
@@ -159,6 +164,43 @@ export default function Home() {
       </section>
 
       <div className="qd-fl">
+        {/* Today at work — the simulation is the core; the card leads the feed
+            with the manager's message and one CTA. Hidden when it isn't real. */}
+        {wp?.progress && wp.today && (
+          <section className="qd-card qd-fl-a" aria-label="Today at work">
+            <div className="qd-card__head">
+              <h2 className="qd-card__title">Today at work — {wp.story?.company}</h2>
+              <span className="qd-badge">Week {wp.today.weekOf.week} of {wp.today.weekOf.of} · ~{wp.today.minutes} min</span>
+            </div>
+            <p className="qd-front__text">
+              <b>{wp.today.personaName}:</b> {wp.today.managerLine}
+            </p>
+            <p className="qd-front__author">{wp.today.weekday} · {wp.today.title} · job simulation, not work experience</p>
+            <div className="qd-caught__actions">
+              <button type="button" className="qd-btn qd-btn--primary" onClick={() => gotoRoute('/app/workplace')}>
+                Open Workplace
+              </button>
+            </div>
+          </section>
+        )}
+        {wp?.progress === null && (
+          <section className="qd-card qd-fl-a" aria-label="Start your job simulation">
+            <div className="qd-card__head">
+              <h2 className="qd-card__title">Your job simulation is waiting</h2>
+              <span className="qd-badge">Week 1 free</span>
+            </div>
+            <p className="qd-front__text">
+              Two weeks at a fictional company — a lesson, a ticket, a spoken defend, a verified
+              scorecard. Training, clearly labelled; never sold as work experience.
+            </p>
+            <div className="qd-caught__actions">
+              <button type="button" className="qd-btn qd-btn--primary" onClick={() => gotoRoute('/app/workplace')}>
+                Start at the Workplace
+              </button>
+            </div>
+          </section>
+        )}
+
         <section className="qd-card qd-fl-b" aria-label="Today’s plan">
           <div className="qd-card__head">
             <h2 className="qd-card__title">Today</h2>

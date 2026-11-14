@@ -15,6 +15,7 @@ import DrillPage from './practice/DrillPage.jsx';
 import IncidentRoom from './practice/IncidentRoom.jsx';
 import PostmortemPage from './practice/PostmortemPage.jsx';
 import RecordPage from './practice/RecordPage.jsx';
+import WorkplaceHome from './workplace/WorkplaceHome.jsx';
 import Home from './Home.jsx';
 
 /* Signed-in dashboard shell: chrome plus the routes that have shipped, one
@@ -28,11 +29,11 @@ const THEME_KEY = 'quadly:theme';
 const NAV_ITEMS = [
   { id: 'app', label: 'Home' },
   {
-    id: 'practice',
-    label: 'Practice',
+    id: 'workplace',
+    label: 'Workplace',
     children: [
-      { id: 'practice/home', label: 'Practice home' },
-      { id: 'practice/drill', label: 'Daily drill' },
+      { id: 'workplace/today', label: 'Today at work' },
+      { id: 'workplace/record', label: 'Work record' },
     ],
   },
   { id: 'squad', label: 'Squad' },
@@ -47,10 +48,12 @@ const NAV_ITEMS = [
   },
 ];
 
-// Real routes that live under a group but don't need a dropdown entry.
+// Real routes that live under a group but don't need a dropdown entry. The
+// practice surface keeps its routes so Home's daily-drill card still lands —
+// Workplace owns the nav; the drill stays the 5-minute habit on tap.
 const EXTRA_ROUTES = new Set([
   'interviews/setup', 'interviews/report',
-  'practice/incident', 'practice/postmortem', 'practice/record',
+  'practice/incident', 'practice/postmortem', 'practice/record', 'practice/drill', 'practice/home',
 ]);
 
 const NAV_LABELS = Object.fromEntries(NAV_ITEMS.flatMap((n) => [n, ...(n.children ?? [])]).map((n) => [n.id, n.label]));
@@ -60,7 +63,7 @@ function routeFromLocation() {
   if (path === '' || path === '/app') return 'app';
   const sub = path.replace(/^\/app\/?/, '');
   if (sub === 'interviews') return 'interviews/dash';
-  if (sub === 'practice') return 'practice/home';
+  if (sub === 'workplace') return 'workplace/today';
   for (const n of NAV_ITEMS) {
     if (n.id === sub || n.children?.some((c) => c.id === sub)) return sub;
   }
@@ -71,6 +74,7 @@ function routeFromLocation() {
 function navPath(id) {
   if (id === 'app') return '/app';
   if (id === 'interviews/mock') return '/app/interviews';
+  if (id === 'workplace/today') return '/app/workplace';
   if (id === 'practice/home') return '/app/practice';
   return `/app/${id}`;
 }
@@ -358,6 +362,8 @@ export default function Dashboard() {
       {route === 'practice/incident' && <main className="qd-prhome"><IncidentRoom /></main>}
       {route === 'practice/postmortem' && <main className="qd-prhome"><PostmortemPage /></main>}
       {route === 'practice/record' && <main className="qd-prhome"><RecordPage /></main>}
+      {route === 'workplace/today' && <main className="qd-home"><WorkplaceHome tab="today" /></main>}
+      {route === 'workplace/record' && <main className="qd-home"><WorkplaceHome tab="record" /></main>}
       {route === 'app' && <Home />}
     </div>
   );
